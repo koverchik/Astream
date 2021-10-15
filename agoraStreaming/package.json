@@ -6,12 +6,23 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "start2": "react-native start --port 8899",
+    "android2": "react-native run-android --port 8899 --deviceId=J5AXHM00P8989W5",
+    "clean": "cd android && ./gradlew clean && cd .. ",
     "test": "jest",
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-navigation/native": "^6.0.6",
+    "@react-navigation/stack": "^6.0.11",
+    "eslint-plugin-react": "^7.26.1",
     "react": "17.0.2",
-    "react-native": "0.66.0"
+    "react-native": "0.66.0",
+    "react-native-agora": "^3.5.0",
+    "react-native-gesture-handler": "^1.10.3",
+    "react-native-get-random-values": "^1.7.0",
+    "react-native-safe-area-context": "^3.3.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
