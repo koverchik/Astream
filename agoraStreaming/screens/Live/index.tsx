@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   Text,
   Platform,
@@ -6,7 +6,7 @@ import {
   PermissionsAndroid,
   ActivityIndicator,
 } from 'react-native';
-import {createStyles} from './style.js';
+import {createStyles} from './style';
 
 import RtcEngine, {
   ChannelProfile,
@@ -14,8 +14,9 @@ import RtcEngine, {
   RtcLocalView,
   RtcRemoteView,
 } from 'react-native-agora';
+import {LiveScreenProps} from './types';
 
-export default function Live(props) {
+export const Live: FC<LiveScreenProps> = props => {
   console.log(props.route.params.channel);
 
   async function requestCameraAndAudioPermission() {
@@ -41,11 +42,10 @@ export default function Live(props) {
   const [joined, setJoined] = useState(false);
   const isBroadcaster = props.route.params.type === 'create';
 
-  const AgoraEngine = useRef();
+  const AgoraEngine = useRef<RtcEngine>();
   const Style = createStyles();
 
-  const changeStateChannel = (channel, uid, elapsed) => {
-    console.log('JoinChannelSuccess', channel, uid, elapsed);
+  const changeStateChannel = () => {
     setJoined(true);
   };
   const init = async () => {
@@ -64,21 +64,19 @@ export default function Live(props) {
       const uid = isBroadcaster ? 1 : 0;
       if (Platform.OS === 'android') await requestCameraAndAudioPermission();
       init().then(() =>
-        AgoraEngine.current.joinChannel(
-          null,
-          props.route.params.channel,
-          null,
-          uid,
-        ),
+        AgoraEngine.current != undefined
+          ? AgoraEngine.current.joinChannel(
+              null,
+              props.route.params.channel,
+              null,
+              uid,
+            )
+          : null,
       );
     })();
     return () => {
       console.log('exit');
-      AgoraEngine.current.removeEventListener(
-        'JoinChannelSuccess',
-        changeStateChannel,
-      );
-      AgoraEngine.current.destroy();
+      AgoraEngine.current != undefined ? AgoraEngine.current.destroy() : null;
     };
   }, []);
 
@@ -111,4 +109,4 @@ export default function Live(props) {
       )}
     </View>
   );
-}
+};

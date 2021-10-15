@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import {Text, View, TextInput, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {createStyles} from './style.js';
+import {createStyles} from './style';
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
+import {HomeScreenProps, StackNavigationPropNavigation} from './types';
 
-export default function Home() {
-  const navigation = useNavigation();
+export const Home: FC<HomeScreenProps> = () => {
+  const navigation = useNavigation<StackNavigationPropNavigation>();
   const [joinChannel, setJoinChannel] = useState('');
 
   const Styles = createStyles();
@@ -43,4 +44,4 @@ export default function Home() {
       </View>
     </View>
   );
-}
+};

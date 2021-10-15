@@ -1,13 +1,12 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-
-import Home from './screens/Home';
-import Live from './screens/Live';
+import {Home} from '../Home';
+import {Live} from '../Live';
 
 const Stack = createStackNavigator();
 
-export default function App() {
+export const Navigation = () => {
   const options = {headerShown: false};
   return (
     <NavigationContainer>
@@ -17,4 +16,4 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
