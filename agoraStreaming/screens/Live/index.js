@@ -1,31 +1,23 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  StyleSheet,
   Text,
   Platform,
   View,
   PermissionsAndroid,
   ActivityIndicator,
-  Dimensions,
-  Share,
-  TouchableOpacity,
 } from 'react-native';
+import {createStyles} from './style.js';
 
 import RtcEngine, {
   ChannelProfile,
   ClientRole,
   RtcLocalView,
   RtcRemoteView,
-  VideoRemoteState,
 } from 'react-native-agora';
-
-const dimensions = {
-  width: Dimensions.get('window').width,
-  height: Dimensions.get('window').height,
-};
 
 export default function Live(props) {
   console.log(props.route.params.channel);
+
   async function requestCameraAndAudioPermission() {
     try {
       const granted = await PermissionsAndroid.requestMultiple([
@@ -50,7 +42,12 @@ export default function Live(props) {
   const isBroadcaster = props.route.params.type === 'create';
 
   const AgoraEngine = useRef();
+  const Style = createStyles();
 
+  const changeStateChannel = (channel, uid, elapsed) => {
+    console.log('JoinChannelSuccess', channel, uid, elapsed);
+    setJoined(true);
+  };
   const init = async () => {
     AgoraEngine.current = await RtcEngine.create(
       'fecf7537eab9494b9612e782053cc546',
@@ -59,58 +56,54 @@ export default function Live(props) {
     AgoraEngine.current.setChannelProfile(ChannelProfile.LiveBroadcasting);
     if (isBroadcaster)
       AgoraEngine.current.setClientRole(ClientRole.Broadcaster);
-    AgoraEngine.current.addListener(
-      'JoinChannelSuccess',
-      (channel, uid, elapsed) => {
-        console.log('JoinChannelSuccess', channel, uid, elapsed);
-        setJoined(true);
-      },
-    );
+    AgoraEngine.current.addListener('JoinChannelSuccess', changeStateChannel);
   };
+
   useEffect(() => {
     (async () => {
       const uid = isBroadcaster ? 1 : 0;
       if (Platform.OS === 'android') await requestCameraAndAudioPermission();
-      init()
-        .then(() =>
-          AgoraEngine.current.joinChannel(
-            null,
-            props.route.params.channel,
-            null,
-            uid,
-          ),
-        )
-        .catch(e => console.log(e));
-      console.log('init');
+      init().then(() =>
+        AgoraEngine.current.joinChannel(
+          null,
+          props.route.params.channel,
+          null,
+          uid,
+        ),
+      );
     })();
     return () => {
       console.log('exit');
+      AgoraEngine.current.removeEventListener(
+        'JoinChannelSuccess',
+        changeStateChannel,
+      );
       AgoraEngine.current.destroy();
     };
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={Style.container}>
       {!joined ? (
         <>
           <ActivityIndicator
             size={60}
             color="#222"
-            style={styles.activityIndicator}
+            style={Style.activityIndicator}
           />
-          <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
+          <Text style={Style.loadingText}>Joining Stream, Please Wait</Text>
         </>
       ) : (
         <>
           {isBroadcaster ? (
             <RtcLocalView.SurfaceView
-              style={styles.fullscreen}
+              style={Style.fullscreen}
               channelId={props.route.params.channel}
             />
           ) : (
             <RtcRemoteView.SurfaceView
               uid={1}
-              style={styles.fullscreen}
+              style={Style.fullscreen}
               channelId={props.route.params.channel}
             />
           )}
@@ -119,20 +112,3 @@ export default function Live(props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    fontSize: 18,
-    color: '#222',
-  },
-  activityIndicator: {},
-  fullscreen: {
-    width: dimensions.width,
-    height: dimensions.height,
-  },
-});
