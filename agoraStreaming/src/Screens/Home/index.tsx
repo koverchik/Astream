@@ -1,45 +1,55 @@
 import React, {FC, useState} from 'react';
 import {Text, View, TextInput, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {createStyles} from './style';
+import {styles} from './style';
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
-import {HomeScreenProps, StackNavigationPropNavigation} from './types';
+import {
+  HomeScreenProps,
+  LiveType,
+  StackNavigationPropNavigation,
+} from './types';
+const INIT_CHANNEL_ID = '';
 
 export const Home: FC<HomeScreenProps> = () => {
   const navigation = useNavigation<StackNavigationPropNavigation>();
-  const [joinChannel, setJoinChannel] = useState('');
 
-  const Styles = createStyles();
+  const [channelId, setChannelId] = useState(INIT_CHANNEL_ID);
+
+  const isLiveDisabled = channelId === INIT_CHANNEL_ID;
 
   const createLive = () =>
-    navigation.navigate('Live', {type: 'create', channel: uuid()});
+    navigation.navigate('Live', {type: LiveType.CREATE, channel: uuid()});
+
   const joinLive = () =>
-    navigation.navigate('Live', {type: 'join', channel: joinChannel});
+    navigation.navigate('Live', {
+      type: LiveType.JOIN,
+      channel: INIT_CHANNEL_ID,
+    });
 
   return (
-    <View style={Styles.container}>
-      <Text style={Styles.title}>Livestream App</Text>
-      <View style={Styles.createContainer}>
-        <TouchableOpacity style={Styles.button} onPress={createLive}>
-          <Text style={Styles.buttonText}>Start</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Livestream App</Text>
+      <View style={styles.createContainer}>
+        <TouchableOpacity style={styles.button} onPress={createLive}>
+          <Text style={styles.buttonText}>Start</Text>
         </TouchableOpacity>
       </View>
-      <View style={Styles.joinContainer}>
+      <View style={styles.joinContainer}>
         <TextInput
-          value={joinChannel}
-          onChangeText={setJoinChannel}
+          value={channelId}
+          onChangeText={setChannelId}
           placeholder="Enter Livestream Id"
-          style={Styles.joinChannelInput}
+          style={styles.joinChannelInput}
         />
         <TouchableOpacity
           onPress={joinLive}
-          disabled={joinChannel === ''}
+          disabled={isLiveDisabled}
           style={[
-            Styles.button,
-            {backgroundColor: joinChannel === '' ? '#555555' : '#78b0ff'},
+            styles.button,
+            {backgroundColor: isLiveDisabled ? '#555555' : '#78b0ff'},
           ]}>
-          <Text style={Styles.buttonText}>Join</Text>
+          <Text style={styles.buttonText}>Join</Text>
         </TouchableOpacity>
       </View>
     </View>

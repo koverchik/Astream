@@ -6,7 +6,7 @@ import {
   PermissionsAndroid,
   ActivityIndicator,
 } from 'react-native';
-import {createStyles} from './style';
+import {styles} from './style';
 
 import RtcEngine, {
   ChannelProfile,
@@ -15,6 +15,7 @@ import RtcEngine, {
   RtcRemoteView,
 } from 'react-native-agora';
 import {LiveScreenProps} from './types';
+import {LiveType} from '../Home/types';
 
 export const Live: FC<LiveScreenProps> = props => {
   console.log(props.route.params.channel);
@@ -40,14 +41,15 @@ export const Live: FC<LiveScreenProps> = props => {
     }
   }
   const [joined, setJoined] = useState(false);
-  const isBroadcaster = props.route.params.type === 'create';
+
+  const isBroadcaster = props.route.params.type === LiveType.CREATE;
 
   const AgoraEngine = useRef<RtcEngine>();
-  const Style = createStyles();
 
   const changeStateChannel = () => {
     setJoined(true);
   };
+
   const init = async () => {
     AgoraEngine.current = await RtcEngine.create(
       'fecf7537eab9494b9612e782053cc546',
@@ -60,48 +62,41 @@ export const Live: FC<LiveScreenProps> = props => {
   };
 
   useEffect(() => {
-    (async () => {
-      const uid = isBroadcaster ? 1 : 0;
-      if (Platform.OS === 'android') await requestCameraAndAudioPermission();
-      init().then(() =>
-        AgoraEngine.current != undefined
-          ? AgoraEngine.current.joinChannel(
-              null,
-              props.route.params.channel,
-              null,
-              uid,
-            )
-          : null,
-      );
-    })();
+    const uid = isBroadcaster ? 1 : 0;
+    if (Platform.OS === 'android') requestCameraAndAudioPermission();
+    init().then(() =>
+      AgoraEngine.current?.joinChannel(
+        null,
+        props.route.params.channel,
+        null,
+        uid,
+      ),
+    );
+
     return () => {
       console.log('exit');
-      AgoraEngine.current != undefined ? AgoraEngine.current.destroy() : null;
+      AgoraEngine.current?.destroy();
     };
   }, []);
 
   return (
-    <View style={Style.container}>
+    <View style={styles.container}>
       {!joined ? (
         <>
-          <ActivityIndicator
-            size={60}
-            color="#222"
-            style={Style.activityIndicator}
-          />
-          <Text style={Style.loadingText}>Joining Stream, Please Wait</Text>
+          <ActivityIndicator size={60} color="#222" />
+          <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
         </>
       ) : (
         <>
           {isBroadcaster ? (
             <RtcLocalView.SurfaceView
-              style={Style.fullscreen}
+              style={styles.fullscreen}
               channelId={props.route.params.channel}
             />
           ) : (
             <RtcRemoteView.SurfaceView
               uid={1}
-              style={Style.fullscreen}
+              style={styles.fullscreen}
               channelId={props.route.params.channel}
             />
           )}

@@ -11,3 +11,8 @@ export type StackNavigationPropNavigation = StackNavigationProp<
   RootStackParamList,
   HomeStackScreens.Home
 >;
+
+export enum LiveType {
+  CREATE = 'create',
+  JOIN = 'join',
+}
