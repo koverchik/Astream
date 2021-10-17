@@ -24,7 +24,7 @@ export const Home: FC<HomeScreenProps> = () => {
   const joinLive = () =>
     navigation.navigate('Live', {
       type: LiveType.JOIN,
-      channel: INIT_CHANNEL_ID,
+      channel: channelId,
     });
 
   return (

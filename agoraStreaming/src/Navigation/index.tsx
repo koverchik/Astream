@@ -8,6 +8,7 @@ const Stack = createStackNavigator();
 
 export const Navigation = () => {
   const options = {headerShown: false};
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
