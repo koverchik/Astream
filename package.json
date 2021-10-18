@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@react-native-firebase/app": "^12.9.2",
-    "@react-native-firebase/database": "^12.9.2"
-  }
-}

@@ -1200,7 +1200,7 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/eslint-plugin/-/eslint-plugin-1.1.0.tgz"
   "version" "1.1.0"
 
-"@react-native-firebase/app@^12.9.2":
+"@react-native-firebase/app@^12.9.2", "@react-native-firebase/app@12.9.2":
   "integrity" "sha512-aZ32taypvRGini7wynqbFTDppnFrBUsZAVcqB3ePY5tYi7DTTGK62UxIUGDuQ66BsHv7AULMOTj87RT1s37EHA=="
   "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-12.9.2.tgz"
   "version" "12.9.2"
@@ -1208,6 +1208,11 @@
     "@expo/config-plugins" "^4.0.2"
     "opencollective-postinstall" "^2.0.1"
     "superstruct" "^0.6.2"
+
+"@react-native-firebase/database@^12.9.2":
+  "integrity" "sha512-Nj25Ua2PGKtmmL3jIYRBw5hIS8SeqLWQCEmpZ5+cbQm5YgfBW8KOoF4mBxjyoqg9RZVqJMIx3TFBoqTpP7ekgQ=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/database/-/database-12.9.2.tgz"
+  "version" "12.9.2"
 
 "@react-native/assets@1.0.0":
   "integrity" "sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ=="
