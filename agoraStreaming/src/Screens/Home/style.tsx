@@ -6,6 +6,8 @@ type HomeScreenStyles = {
   createContainer: ViewStyle;
   joinContainer: ViewStyle;
   joinChannelInput: TextStyle;
+  itemChannel: ViewStyle;
+  buttonTextChannel: TextStyle;
   button: TextStyle;
   buttonText: TextStyle;
 };
@@ -43,6 +45,15 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     paddingHorizontal: 20,
     fontSize: 17,
     textAlign: 'center',
+  },
+  itemChannel: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  buttonTextChannel: {
+    color: 'black',
   },
   button: {
     width: '100%',

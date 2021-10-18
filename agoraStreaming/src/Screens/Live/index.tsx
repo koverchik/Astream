@@ -16,9 +16,11 @@ import RtcEngine, {
 } from 'react-native-agora';
 import {LiveScreenProps} from './types';
 import {LiveType} from '../../Navigation/types';
+import database from '@react-native-firebase/database';
 
 export const Live: FC<LiveScreenProps> = props => {
-  console.log(props.route.params.channel);
+  const idChannel = props.route.params.channel;
+  // console.log(idChannel);
 
   async function requestCameraAndAudioPermission() {
     try {
@@ -46,6 +48,8 @@ export const Live: FC<LiveScreenProps> = props => {
 
   const AgoraEngine = useRef<RtcEngine>();
 
+  const newReference = database().ref('/channels').push();
+
   const changeStateChannel = () => {
     setJoined(true);
   };
@@ -61,9 +65,18 @@ export const Live: FC<LiveScreenProps> = props => {
     AgoraEngine.current.addListener('JoinChannelSuccess', changeStateChannel);
   };
 
+  const addNewChannel = async () => {
+    newReference
+      .set({
+        name: idChannel,
+      })
+      .then(() => console.log('Data updated.'));
+  };
+
   useEffect(() => {
     const uid = isBroadcaster ? 1 : 0;
     if (Platform.OS === 'android') requestCameraAndAudioPermission();
+
     init().then(() =>
       AgoraEngine.current?.joinChannel(
         null,
@@ -72,7 +85,7 @@ export const Live: FC<LiveScreenProps> = props => {
         uid,
       ),
     );
-
+    isBroadcaster ? addNewChannel() : null;
     return () => {
       console.log('exit');
       AgoraEngine.current?.destroy();
