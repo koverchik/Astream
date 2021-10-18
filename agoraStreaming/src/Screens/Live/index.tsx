@@ -15,7 +15,7 @@ import RtcEngine, {
   RtcRemoteView,
 } from 'react-native-agora';
 import {LiveScreenProps} from './types';
-import {LiveType} from '../Home/types';
+import {LiveType} from '../../Navigation/types';
 
 export const Live: FC<LiveScreenProps> = props => {
   console.log(props.route.params.channel);

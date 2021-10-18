@@ -1,5 +1,5 @@
 {
-  "dependencies": {
+  "devDependencies": {
     "@types/uuid": "^8.3.1"
   }
 }

@@ -4,12 +4,9 @@ import {useNavigation} from '@react-navigation/native';
 import {styles} from './style';
 import 'react-native-get-random-values';
 import {v4 as uuid} from 'uuid';
-import {
-  HomeScreenProps,
-  LiveType,
-  StackNavigationPropNavigation,
-} from './types';
+import {HomeScreenProps, StackNavigationPropNavigation} from './types';
 const INIT_CHANNEL_ID = '';
+import {LiveType} from '../../Navigation/types';
 
 export const Home: FC<HomeScreenProps> = () => {
   const navigation = useNavigation<StackNavigationPropNavigation>();

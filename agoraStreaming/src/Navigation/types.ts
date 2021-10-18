@@ -1,6 +1,11 @@
+export enum LiveType {
+  CREATE = 'create',
+  JOIN = 'join',
+}
+
 export type RootStackParamList = {
   Home: undefined;
-  Live: {type: 'create' | 'join'; channel: string};
+  Live: {type: LiveType; channel: string};
 };
 
 export enum HomeStackScreens {
