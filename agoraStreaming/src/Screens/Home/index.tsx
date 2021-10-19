@@ -13,6 +13,7 @@ import {
 
 import {LiveType} from '../../Navigation/types';
 import database from '@react-native-firebase/database';
+import {ListChannels} from '../../Components/ListChannels';
 
 const INIT_CHANNEL_ID = '';
 
@@ -31,6 +32,7 @@ export const Home: FC<HomeScreenProps> = () => {
       .once('value')
       .then(snapshot => {
         setListChannels(Object.values(snapshot.val()));
+        console.log(listChannels);
       });
   }, []);
 
@@ -58,17 +60,11 @@ export const Home: FC<HomeScreenProps> = () => {
         </TouchableOpacity>
       </View>
 
+      <ListChannels
+        data={listChannels}
+        choseChannelAndJoinLive={choseChannelAndJoinLive}
+      />
       <View style={styles.joinContainer}>
-        {listChannels.map(data => {
-          return (
-            <TouchableOpacity
-              key={data.name}
-              style={styles.itemChannel}
-              onPress={() => choseChannelAndJoinLive(data.name)}>
-              <Text style={styles.buttonTextChannel}>{data.name}</Text>
-            </TouchableOpacity>
-          );
-        })}
         <TextInput
           value={channelId}
           onChangeText={setChannelId}

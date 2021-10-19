@@ -20,7 +20,7 @@ import database from '@react-native-firebase/database';
 
 export const Live: FC<LiveScreenProps> = props => {
   const idChannel = props.route.params.channel;
-  // console.log(idChannel);
+  console.log(idChannel);
 
   async function requestCameraAndAudioPermission() {
     try {
@@ -65,11 +65,14 @@ export const Live: FC<LiveScreenProps> = props => {
     AgoraEngine.current.addListener('JoinChannelSuccess', changeStateChannel);
   };
 
-  const addNewChannel = async () => {
+  const addNewChannel = () => {
     newReference
-      .set({
-        name: idChannel,
-      })
+      .set(
+        {
+          name: idChannel,
+        },
+        e => console.log(e),
+      )
       .then(() => console.log('Data updated.'));
   };
 

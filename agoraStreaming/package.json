@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "start2": "react-native start --port 8899",
-    "android2": "react-native run-android --port 8899 --deviceId=J5AXHM00P8989W5",
+    "android2": "react-native run-android --port 8899 --deviceId=17eb05ed",
     "clean": "cd android && ./gradlew clean && cd .. ",
     "test": "jest",
     "lint": "eslint ."
