@@ -5,6 +5,7 @@ import {
   View,
   PermissionsAndroid,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {styles} from './style';
 
@@ -17,6 +18,8 @@ import RtcEngine, {
 import {LiveScreenProps} from './types';
 import {LiveType} from '../../Navigation/types';
 import database from '@react-native-firebase/database';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationPropNavigation} from '../Home/types';
 
 export const Live: FC<LiveScreenProps> = props => {
   const idChannel = props.route.params.channel;
@@ -44,14 +47,30 @@ export const Live: FC<LiveScreenProps> = props => {
   }
   const [joined, setJoined] = useState(false);
 
+  const [error, setError] = useState(false);
+
   const isBroadcaster = props.route.params.type === LiveType.CREATE;
 
   const AgoraEngine = useRef<RtcEngine>();
 
   const newReference = database().ref('/channels').push();
 
+  const navigation = useNavigation<StackNavigationPropNavigation>();
+
+  const goHome = () => navigation.navigate('Home');
+
   const changeStateChannel = () => {
     setJoined(true);
+  };
+
+  const errorAlert = (message: string) => {
+    Alert.alert('Error', message, [
+      {
+        text: 'Cancel',
+        onPress: () => goHome(),
+        style: 'cancel',
+      },
+    ]);
   };
 
   const init = async () => {
@@ -62,7 +81,11 @@ export const Live: FC<LiveScreenProps> = props => {
     AgoraEngine.current.setChannelProfile(ChannelProfile.LiveBroadcasting);
     if (isBroadcaster)
       AgoraEngine.current.setClientRole(ClientRole.Broadcaster);
+    // AgoraEngine.current.getConnectionState(res => console.log(res));
     AgoraEngine.current.addListener('JoinChannelSuccess', changeStateChannel);
+    AgoraEngine.current.addListener('ConnectionStateChanged', e =>
+      console.log(e),
+    );
   };
 
   const addNewChannel = () => {
@@ -80,14 +103,20 @@ export const Live: FC<LiveScreenProps> = props => {
     const uid = isBroadcaster ? 1 : 0;
     if (Platform.OS === 'android') requestCameraAndAudioPermission();
 
-    init().then(() =>
-      AgoraEngine.current?.joinChannel(
-        null,
-        props.route.params.channel,
-        null,
-        uid,
-      ),
-    );
+    init()
+      .then(() =>
+        AgoraEngine.current?.joinChannel(
+          null,
+          props.route.params.channel,
+          null,
+          uid,
+        ),
+      )
+      .catch(e => {
+        setError(true);
+        errorAlert(e.message);
+      });
+
     isBroadcaster ? addNewChannel() : null;
     return () => {
       console.log('exit');
@@ -98,10 +127,12 @@ export const Live: FC<LiveScreenProps> = props => {
   return (
     <View style={styles.container}>
       {!joined ? (
-        <>
-          <ActivityIndicator size={60} color="#222" />
-          <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
-        </>
+        error ? null : (
+          <>
+            <ActivityIndicator size={60} color="#222" />
+            <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
+          </>
+        )
       ) : (
         <>
           {isBroadcaster ? (
