@@ -14,8 +14,9 @@ import RtcEngine, {
   ClientRole,
   RtcLocalView,
   RtcRemoteView,
+  UserOfflineReason,
 } from 'react-native-agora';
-import {LiveScreenProps} from './types';
+import {LiveScreenProps, Members} from './types';
 import {LiveType} from '../../Navigation/types';
 import database from '@react-native-firebase/database';
 import {useNavigation} from '@react-navigation/native';
@@ -81,11 +82,26 @@ export const Live: FC<LiveScreenProps> = props => {
     AgoraEngine.current.setChannelProfile(ChannelProfile.LiveBroadcasting);
     if (isBroadcaster)
       AgoraEngine.current.setClientRole(ClientRole.Broadcaster);
-    // AgoraEngine.current.getConnectionState(res => console.log(res));
+
     AgoraEngine.current.addListener('JoinChannelSuccess', changeStateChannel);
-    AgoraEngine.current.addListener('ConnectionStateChanged', e =>
-      console.log(e),
+    AgoraEngine.current.addListener('UserOffline', (uid, reason) =>
+      closeChannel(uid, reason),
     );
+  };
+
+  const closeChannel = (uid: number, reason: UserOfflineReason) => {
+    if (uid === Members.Broadcaster && reason === UserOfflineReason.Quit) {
+      setJoined(false);
+      setError(true);
+      errorAlert('The user left the current channel.');
+    }
+    if (uid === Members.Broadcaster && reason === UserOfflineReason.Dropped) {
+      setJoined(false);
+      setError(true);
+      errorAlert(
+        'User dropped offline, no data is received within a long period of time.',
+      );
+    }
   };
 
   const addNewChannel = () => {
