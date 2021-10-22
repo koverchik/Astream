@@ -46,6 +46,7 @@ export const Live: FC<LiveScreenProps> = props => {
       console.warn(err);
     }
   }
+
   const [joined, setJoined] = useState(false);
 
   const [error, setError] = useState(false);
@@ -94,17 +95,20 @@ export const Live: FC<LiveScreenProps> = props => {
       setJoined(false);
       setError(true);
       errorAlert('The user left the current channel.');
+      leaveChannel();
     }
     if (uid === Members.Broadcaster && reason === UserOfflineReason.Dropped) {
       setJoined(false);
       setError(true);
+      leaveChannel();
       errorAlert(
         'User dropped offline, no data is received within a long period of time.',
       );
+      leaveChannel();
     }
   };
 
-  const addNewChannel = () => {
+  const addNewChannelInDB = () => {
     newReference
       .set(
         {
@@ -115,29 +119,30 @@ export const Live: FC<LiveScreenProps> = props => {
       .then(() => console.log('Data updated.'));
   };
 
+  const leaveChannel = async () => {
+    if (isBroadcaster) {
+      await database().ref(`/channels/${newReference.key}`).remove();
+    }
+    AgoraEngine.current?.destroy();
+  };
+
   useEffect(() => {
     const uid = isBroadcaster ? 1 : 0;
     if (Platform.OS === 'android') requestCameraAndAudioPermission();
 
     init()
-      .then(() =>
-        AgoraEngine.current?.joinChannel(
-          null,
-          props.route.params.channel,
-          null,
-          uid,
-        ),
-      )
+      .then(() => {
+        AgoraEngine.current?.joinChannel(null, idChannel, null, uid);
+        isBroadcaster ? addNewChannelInDB() : null;
+      })
       .catch(e => {
         setError(true);
         errorAlert(e.message);
       });
 
-    isBroadcaster ? addNewChannel() : null;
     return () => {
       console.log('exit');
-      database().ref(`/channels/${newReference.key}`).remove();
-      AgoraEngine.current?.destroy();
+      leaveChannel();
     };
   }, []);
 
@@ -155,13 +160,13 @@ export const Live: FC<LiveScreenProps> = props => {
           {isBroadcaster ? (
             <RtcLocalView.SurfaceView
               style={styles.fullscreen}
-              channelId={props.route.params.channel}
+              channelId={idChannel}
             />
           ) : (
             <RtcRemoteView.SurfaceView
               uid={1}
               style={styles.fullscreen}
-              channelId={props.route.params.channel}
+              channelId={idChannel}
             />
           )}
         </>

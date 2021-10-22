@@ -15,72 +15,46 @@ import {LiveType} from '../../Navigation/types';
 import database from '@react-native-firebase/database';
 import {ListChannels} from '../../Components/ListChannels';
 
-const INIT_CHANNEL_ID = '';
-
 export const Home: FC<HomeScreenProps> = () => {
   const navigation = useNavigation<StackNavigationPropNavigation>();
 
-  const [channelId, setChannelId] = useState(INIT_CHANNEL_ID);
-
   const [listChannels, setListChannels] = useState<ListChannelsType[]>([]);
-
-  const isLiveDisabled = channelId === INIT_CHANNEL_ID;
 
   useEffect(() => {
     database()
       .ref('/channels')
-      .once('value')
-      .then(snapshot => {
-        setListChannels(Object.values(snapshot.val()));
-        console.log(listChannels);
+      .on('value', snapshot => {
+        console.log(snapshot.val());
+        if (snapshot.val() != null) {
+          setListChannels(Object.values(snapshot.val()));
+        }
       });
   }, []);
 
   const createLive = () =>
     navigation.navigate('Live', {type: LiveType.CREATE, channel: uuid()});
 
-  const joinLive = () =>
+  const choseChannelAndJoinLive = (idChannel: string) => {
     navigation.navigate('Live', {
       type: LiveType.JOIN,
-      channel: channelId,
+      channel: idChannel,
     });
-
-  const choseChannelAndJoinLive = (idChannel: string) => {
-    setChannelId(idChannel);
-    joinLive();
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Livestream App</Text>
-
       <View style={styles.createContainer}>
         <TouchableOpacity style={styles.button} onPress={createLive}>
           <Text style={styles.buttonText}>Start</Text>
         </TouchableOpacity>
       </View>
-
-      <ListChannels
-        data={listChannels}
-        choseChannelAndJoinLive={choseChannelAndJoinLive}
-      />
-      <View style={styles.joinContainer}>
-        <TextInput
-          value={channelId}
-          onChangeText={setChannelId}
-          placeholder="Enter Livestream Id"
-          style={styles.joinChannelInput}
+      {listChannels ? (
+        <ListChannels
+          data={listChannels}
+          choseChannelAndJoinLive={choseChannelAndJoinLive}
         />
-        <TouchableOpacity
-          onPress={joinLive}
-          disabled={isLiveDisabled}
-          style={[
-            styles.button,
-            {backgroundColor: isLiveDisabled ? '#555555' : '#78b0ff'},
-          ]}>
-          <Text style={styles.buttonText}>Join</Text>
-        </TouchableOpacity>
-      </View>
+      ) : null}
     </View>
   );
 };
