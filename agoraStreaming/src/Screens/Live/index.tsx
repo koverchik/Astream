@@ -1,12 +1,5 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
-import {
-  Text,
-  Platform,
-  View,
-  PermissionsAndroid,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
+import React, {FC, useEffect, useRef, useState, Fragment} from 'react';
+import {Text, Platform, View, ActivityIndicator} from 'react-native';
 import {styles} from './style';
 
 import RtcEngine, {
@@ -21,31 +14,12 @@ import {LiveType} from '../../Navigation/types';
 import database from '@react-native-firebase/database';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationPropNavigation} from '../Home/types';
+import {errorAlert} from './Helpers/alert';
+import {requestCameraAndAudioPermission} from './Helpers/permission';
 
 export const Live: FC<LiveScreenProps> = props => {
   const idChannel = props.route.params.channel;
   console.log(idChannel);
-
-  async function requestCameraAndAudioPermission() {
-    try {
-      const granted = await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-      ]);
-      if (
-        granted['android.permission.RECORD_AUDIO'] ===
-          PermissionsAndroid.RESULTS.GRANTED &&
-        granted['android.permission.CAMERA'] ===
-          PermissionsAndroid.RESULTS.GRANTED
-      ) {
-        console.log('You can use the cameras & mic');
-      } else {
-        console.log('Permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  }
 
   const [joined, setJoined] = useState(false);
 
@@ -63,16 +37,6 @@ export const Live: FC<LiveScreenProps> = props => {
 
   const changeStateChannel = () => {
     setJoined(true);
-  };
-
-  const errorAlert = (message: string) => {
-    Alert.alert('Error', message, [
-      {
-        text: 'Cancel',
-        onPress: () => goHome(),
-        style: 'cancel',
-      },
-    ]);
   };
 
   const init = async () => {
@@ -94,7 +58,7 @@ export const Live: FC<LiveScreenProps> = props => {
     if (uid === Members.Broadcaster && reason === UserOfflineReason.Quit) {
       setJoined(false);
       setError(true);
-      errorAlert('The user left the current channel.');
+      errorAlert('The user left the current channel.', goHome);
       leaveChannel();
     }
     if (uid === Members.Broadcaster && reason === UserOfflineReason.Dropped) {
@@ -103,6 +67,7 @@ export const Live: FC<LiveScreenProps> = props => {
       leaveChannel();
       errorAlert(
         'User dropped offline, no data is received within a long period of time.',
+        goHome,
       );
       leaveChannel();
     }
@@ -128,7 +93,9 @@ export const Live: FC<LiveScreenProps> = props => {
 
   useEffect(() => {
     const uid = isBroadcaster ? 1 : 0;
-    if (Platform.OS === 'android') requestCameraAndAudioPermission();
+    if (Platform.OS === 'android') {
+      requestCameraAndAudioPermission();
+    }
 
     init()
       .then(() => {
@@ -137,7 +104,7 @@ export const Live: FC<LiveScreenProps> = props => {
       })
       .catch(e => {
         setError(true);
-        errorAlert(e.message);
+        errorAlert(e.message, goHome);
       });
 
     return () => {
@@ -146,17 +113,19 @@ export const Live: FC<LiveScreenProps> = props => {
     };
   }, []);
 
+  if (!error && !joined) {
+    return (
+      <View>
+        <ActivityIndicator size={60} color="#222" />
+        <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      {!joined ? (
-        error ? null : (
-          <>
-            <ActivityIndicator size={60} color="#222" />
-            <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
-          </>
-        )
-      ) : (
-        <>
+      {joined && (
+        <Fragment>
           {isBroadcaster ? (
             <RtcLocalView.SurfaceView
               style={styles.fullscreen}
@@ -169,7 +138,7 @@ export const Live: FC<LiveScreenProps> = props => {
               channelId={idChannel}
             />
           )}
-        </>
+        </Fragment>
       )}
     </View>
   );
