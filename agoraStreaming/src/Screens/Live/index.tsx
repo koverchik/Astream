@@ -136,6 +136,7 @@ export const Live: FC<LiveScreenProps> = props => {
     isBroadcaster ? addNewChannel() : null;
     return () => {
       console.log('exit');
+      database().ref(`/channels/${newReference.key}`).remove();
       AgoraEngine.current?.destroy();
     };
   }, []);
