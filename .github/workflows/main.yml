@@ -45,4 +45,4 @@ jobs:
       - uses: actions/checkout@v2
       # Runs a single command using the runners shell
       - name: npm run test
-        run: cd $GITHUB_WORKSPACE/ && npm install && npm run test
+        run: cd $GITHUB_WORKSPACE/agoraStreaming && npm install && npm run test
