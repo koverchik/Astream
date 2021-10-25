@@ -8,6 +8,9 @@ on:
   push:
     branches: [koverchik-patch-1]
 
+  pull_request:
+    branches: [koverchik-patch-1]
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
