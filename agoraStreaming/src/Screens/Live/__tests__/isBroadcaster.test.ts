@@ -2,11 +2,11 @@ import {LiveType} from '../../../Navigation/types';
 import {isBroadcasterFunction} from '../helpers/isBroadcaster';
 
 describe('Check broadcaster', () => {
-  test('true check result', () => {
+  test('check result true', () => {
     expect(isBroadcasterFunction(LiveType.CREATE)).toBeTruthy();
   });
 
-  test('false check result', () => {
+  test('check result false', () => {
     expect(isBroadcasterFunction(LiveType.JOIN)).toBeFalsy();
   });
 });
