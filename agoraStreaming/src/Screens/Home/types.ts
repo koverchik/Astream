@@ -11,3 +11,7 @@ export type StackNavigationPropNavigation = StackNavigationProp<
   RootStackParamList,
   HomeStackScreens.Home
 >;
+
+export type ListChannelsType = {
+  name: string;
+};

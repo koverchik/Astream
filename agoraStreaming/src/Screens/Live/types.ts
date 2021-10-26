@@ -11,3 +11,8 @@ export type StackNavigationPropNavigation = StackNavigationProp<
   RootStackParamList,
   HomeStackScreens.Live
 >;
+
+export enum Members {
+  Audience = 2,
+  Broadcaster = 1,
+}

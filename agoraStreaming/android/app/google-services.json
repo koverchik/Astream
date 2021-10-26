@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1088468777432",
+    "firebase_url": "https://agorastream-bd068-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "agorastream-bd068",
+    "storage_bucket": "agorastream-bd068.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088468777432:android:91f2b43984c8117db51aad",
+        "android_client_info": {
+          "package_name": "com.agorastreaming"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1088468777432-b8mtsvhdvtb8h04mqpl2ks1tv50d78vf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.agorastreaming",
+            "certificate_hash": "c69c680ddfcf47b3aad4703be819c82eef41ffeb"
+          }
+        },
+        {
+          "client_id": "1088468777432-7titji4f8tsu0oorpqfibu469sl8jvnj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq8DfJD4RuSlrUVMYzj7TiEkFBH5r4gY4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1088468777432-7titji4f8tsu0oorpqfibu469sl8jvnj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
