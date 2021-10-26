@@ -16,6 +16,7 @@ import RtcEngine, {
 } from 'react-native-agora';
 import {LiveScreenProps} from './types';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
+import {LiveType} from '../../Navigation/types';
 
 export const Live: FC<LiveScreenProps> = props => {
   console.log(props.route.params.channel);
@@ -42,7 +43,7 @@ export const Live: FC<LiveScreenProps> = props => {
   }
   const [joined, setJoined] = useState(false);
 
-  const isBroadcaster = isBroadcasterFunction(props.route.params.type);
+  const isBroadcaster = props.route.params.type === LiveType.CREATE;
 
   const AgoraEngine = useRef<RtcEngine>();
 
