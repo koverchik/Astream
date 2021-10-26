@@ -15,7 +15,6 @@ import RtcEngine, {
   RtcRemoteView,
 } from 'react-native-agora';
 import {LiveScreenProps} from './types';
-import {LiveType} from '../../Navigation/types';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
 
 export const Live: FC<LiveScreenProps> = props => {
