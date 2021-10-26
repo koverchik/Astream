@@ -9,6 +9,7 @@ import RtcEngine, {
   RtcRemoteView,
   UserOfflineReason,
 } from 'react-native-agora';
+import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {LiveScreenProps, Members} from './types';
 import {LiveType} from '../../Navigation/types';
 import database from '@react-native-firebase/database';
