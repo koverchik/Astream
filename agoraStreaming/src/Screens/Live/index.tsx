@@ -15,8 +15,8 @@ import {LiveType} from '../../Navigation/types';
 import database from '@react-native-firebase/database';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationPropNavigation} from '../Home/types';
-import {errorAlert} from './Helpers/alert';
-import {requestCameraAndAudioPermission} from './Helpers/permission';
+import {errorAlert} from './helpers/alert';
+import {requestCameraAndAudioPermission} from './helpers/permission';
 
 export const Live: FC<LiveScreenProps> = props => {
   const idChannel = props.route.params.channel;
@@ -26,7 +26,7 @@ export const Live: FC<LiveScreenProps> = props => {
 
   const [error, setError] = useState(false);
 
-  const isBroadcaster = props.route.params.type === LiveType.CREATE;
+  const isBroadcaster = isBroadcasterFunction(LiveType.CREATE);
 
   const AgoraEngine = useRef<RtcEngine>();
 
