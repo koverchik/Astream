@@ -26,7 +26,7 @@ export const Live: FC<LiveScreenProps> = props => {
 
   const [error, setError] = useState(false);
 
-  const isBroadcaster = isBroadcasterFunction(LiveType.CREATE);
+  const isBroadcaster = isBroadcasterFunction(props.route.params.channel);
 
   const AgoraEngine = useRef<RtcEngine>();
 
