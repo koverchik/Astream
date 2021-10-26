@@ -1,11 +1,5 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
-import {
-  Text,
-  Platform,
-  View,
-  PermissionsAndroid,
-  ActivityIndicator,
-} from 'react-native';
+import React, {FC, useEffect, useRef, useState, Fragment} from 'react';
+import {Text, Platform, View, ActivityIndicator} from 'react-native';
 import {styles} from './style';
 
 import RtcEngine, {
@@ -13,38 +7,33 @@ import RtcEngine, {
   ClientRole,
   RtcLocalView,
   RtcRemoteView,
+  UserOfflineReason,
 } from 'react-native-agora';
-import {LiveScreenProps} from './types';
+import {LiveScreenProps, Members} from './types';
 import {LiveType} from '../../Navigation/types';
+import database from '@react-native-firebase/database';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationPropNavigation} from '../Home/types';
+import {errorAlert} from './Helpers/alert';
+import {requestCameraAndAudioPermission} from './Helpers/permission';
 
 export const Live: FC<LiveScreenProps> = props => {
-  console.log(props.route.params.channel);
+  const idChannel = props.route.params.channel;
+  console.log(idChannel);
 
-  async function requestCameraAndAudioPermission() {
-    try {
-      const granted = await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-      ]);
-      if (
-        granted['android.permission.RECORD_AUDIO'] ===
-          PermissionsAndroid.RESULTS.GRANTED &&
-        granted['android.permission.CAMERA'] ===
-          PermissionsAndroid.RESULTS.GRANTED
-      ) {
-        console.log('You can use the cameras & mic');
-      } else {
-        console.log('Permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  }
   const [joined, setJoined] = useState(false);
+
+  const [error, setError] = useState(false);
 
   const isBroadcaster = props.route.params.type === LiveType.CREATE;
 
   const AgoraEngine = useRef<RtcEngine>();
+
+  const newReference = database().ref('/channels').push();
+
+  const navigation = useNavigation<StackNavigationPropNavigation>();
+
+  const goHome = () => navigation.navigate('Home');
 
   const changeStateChannel = () => {
     setJoined(true);
@@ -58,49 +47,98 @@ export const Live: FC<LiveScreenProps> = props => {
     AgoraEngine.current.setChannelProfile(ChannelProfile.LiveBroadcasting);
     if (isBroadcaster)
       AgoraEngine.current.setClientRole(ClientRole.Broadcaster);
+
     AgoraEngine.current.addListener('JoinChannelSuccess', changeStateChannel);
+    AgoraEngine.current.addListener('UserOffline', (uid, reason) =>
+      closeChannel(uid, reason),
+    );
+  };
+
+  const closeChannel = (uid: number, reason: UserOfflineReason) => {
+    if (uid === Members.Broadcaster && reason === UserOfflineReason.Quit) {
+      setJoined(false);
+      setError(true);
+      errorAlert('The user left the current channel.', goHome);
+      leaveChannel();
+    }
+    if (uid === Members.Broadcaster && reason === UserOfflineReason.Dropped) {
+      setJoined(false);
+      setError(true);
+      leaveChannel();
+      errorAlert(
+        'User dropped offline, no data is received within a long period of time.',
+        goHome,
+      );
+      leaveChannel();
+    }
+  };
+
+  const addNewChannelInDB = () => {
+    newReference
+      .set(
+        {
+          name: idChannel,
+        },
+        e => console.log(e),
+      )
+      .then(() => console.log('Data updated.'));
+  };
+
+  const leaveChannel = async () => {
+    if (isBroadcaster) {
+      await database().ref(`/channels/${newReference.key}`).remove();
+    }
+    AgoraEngine.current?.destroy();
   };
 
   useEffect(() => {
     const uid = isBroadcaster ? 1 : 0;
-    if (Platform.OS === 'android') requestCameraAndAudioPermission();
-    init().then(() =>
-      AgoraEngine.current?.joinChannel(
-        null,
-        props.route.params.channel,
-        null,
-        uid,
-      ),
-    );
+    if (Platform.OS === 'android') {
+      requestCameraAndAudioPermission();
+    }
+
+    init()
+      .then(() => {
+        AgoraEngine.current?.joinChannel(null, idChannel, null, uid);
+        isBroadcaster ? addNewChannelInDB() : null;
+      })
+      .catch(e => {
+        setError(true);
+        errorAlert(e.message, goHome);
+      });
 
     return () => {
       console.log('exit');
-      AgoraEngine.current?.destroy();
+      leaveChannel();
     };
   }, []);
 
+  if (!error && !joined) {
+    return (
+      <View>
+        <ActivityIndicator size={60} color="#222" />
+        <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      {!joined ? (
-        <>
-          <ActivityIndicator size={60} color="#222" />
-          <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
-        </>
-      ) : (
-        <>
+      {joined && (
+        <Fragment>
           {isBroadcaster ? (
             <RtcLocalView.SurfaceView
               style={styles.fullscreen}
-              channelId={props.route.params.channel}
+              channelId={idChannel}
             />
           ) : (
             <RtcRemoteView.SurfaceView
               uid={1}
               style={styles.fullscreen}
-              channelId={props.route.params.channel}
+              channelId={idChannel}
             />
           )}
-        </>
+        </Fragment>
       )}
     </View>
   );
