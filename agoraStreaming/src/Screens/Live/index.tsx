@@ -20,13 +20,14 @@ import {requestCameraAndAudioPermission} from './helpers/permission';
 
 export const Live: FC<LiveScreenProps> = props => {
   const idChannel = props.route.params.channel;
+
   console.log(idChannel);
 
   const [joined, setJoined] = useState(false);
 
   const [error, setError] = useState(false);
 
-  const isBroadcaster = isBroadcasterFunction(props.route.params.channel);
+  const isBroadcaster = isBroadcasterFunction(props.route.params.type);
 
   const AgoraEngine = useRef<RtcEngine>();
 
@@ -116,7 +117,7 @@ export const Live: FC<LiveScreenProps> = props => {
 
   if (!error && !joined) {
     return (
-      <View>
+      <View style={styles.container}>
         <ActivityIndicator size={60} color="#222" />
         <Text style={styles.loadingText}>Joining Stream, Please Wait</Text>
       </View>
