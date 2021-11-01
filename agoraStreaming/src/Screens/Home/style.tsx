@@ -44,13 +44,12 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     backgroundColor: '#78b0ff',
   },
   buttonText: {
-    color: '#fff',
+    color: 'black',
     fontSize: 20,
   },
   itemChannel: {
     flex: 1,
     padding: 10,
-    backgroundColor: 'pink',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     borderBottomLeftRadius: 10,

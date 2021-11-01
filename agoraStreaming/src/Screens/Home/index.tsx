@@ -99,16 +99,12 @@ export const Home: FC<HomeScreenProps> = () => {
           latitude: data.coords.latitude,
           longitude: data.coords.longitude,
         }}
+        onCalloutPress={() => choseChannelAndJoinLive(data.channel)}
         title={data.name}>
         <Callout style={styles.calloutStyle}>
-          <View>
-            <TouchableOpacity
-              key={data.channel}
-              style={styles.itemChannel}
-              onPress={() => choseChannelAndJoinLive(data.channel)}>
-              <Text style={styles.buttonText}>{data.name}</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity key={data.channel} style={styles.itemChannel}>
+            <Text style={styles.buttonText}>{data.name}</Text>
+          </TouchableOpacity>
         </Callout>
       </Marker>
     );
@@ -116,19 +112,6 @@ export const Home: FC<HomeScreenProps> = () => {
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.createContainer}>
-        <TouchableOpacity style={styles.button} onPress={createLive}>
-          <Text style={styles.buttonText}>Start</Text>
-        </TouchableOpacity>
-      </View> */}
-      {/* <Text style={styles.title}>Livestream App</Text>
-      {listChannels ? (
-        <ListChannels
-          data={listChannels}
-          choseChannelAndJoinLive={choseChannelAndJoinLive}
-        />
-      ) : null} */}
-
       <MapView
         region={coordinates}
         provider={PROVIDER_GOOGLE}
