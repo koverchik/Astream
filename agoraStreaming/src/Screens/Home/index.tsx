@@ -1,20 +1,8 @@
 import React, {FC, useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Platform,
-  PermissionsAndroid,
-  Pressable,
-  Modal,
-  Alert,
-  SafeAreaView,
-} from 'react-native';
+import {View, Platform, PermissionsAndroid} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {styles} from './style';
 import 'react-native-get-random-values';
-import {v4 as uuid} from 'uuid';
 import MapView, {Circle, PROVIDER_GOOGLE} from 'react-native-maps';
 import {
   HomeScreenProps,
@@ -38,6 +26,7 @@ export const Home: FC<HomeScreenProps> = () => {
   });
 
   const [listChannels, setListChannels] = useState<ListChannelsType[]>([]);
+
   async function requestPermissions() {
     if (Platform.OS === 'android') {
       await PermissionsAndroid.request(
@@ -84,9 +73,6 @@ export const Home: FC<HomeScreenProps> = () => {
       });
   }, []);
 
-  const createLive = () =>
-    navigation.navigate('Live', {type: LiveType.CREATE, channel: uuid()});
-
   const choseChannelAndJoinLive = (idChannel: string) => {
     navigation.navigate('Live', {
       type: LiveType.JOIN,
@@ -108,7 +94,7 @@ export const Home: FC<HomeScreenProps> = () => {
           choseChannelAndJoinLive={choseChannelAndJoinLive}
         />
       ) : null} */}
-      <ModalCreateChannel />
+      <ModalCreateChannel coordinates={coordinates} />
       <MapView
         region={coordinates}
         provider={PROVIDER_GOOGLE}

@@ -21,7 +21,7 @@ import {requestCameraAndAudioPermission} from './helpers/permission';
 export const Live: FC<LiveScreenProps> = props => {
   const idChannel = props.route.params.channel;
 
-  console.log(idChannel);
+  console.log(props.route.params);
 
   const [joined, setJoined] = useState(false);
 

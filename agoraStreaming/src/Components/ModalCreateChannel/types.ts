@@ -1,7 +1,5 @@
-export type ListChannelsType = {
-  data: ItemChannelType[];
-  choseChannelAndJoinLive: (id: string) => void;
-};
-export type ItemChannelType = {
-  name: string;
+import {Region} from 'react-native-maps';
+
+export type ModalCreateChannelType = {
+  coordinates: Region;
 };

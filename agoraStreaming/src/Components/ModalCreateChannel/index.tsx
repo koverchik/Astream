@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {FC, useState} from 'react';
 import {
   View,
@@ -7,11 +8,27 @@ import {
   SafeAreaView,
   TextInput,
 } from 'react-native';
+import {LiveType} from '../../Navigation/types';
+import {StackNavigationPropNavigation} from '../../Screens/Home/types';
 import {styles} from './style';
+import {v4 as uuid} from 'uuid';
+import {ModalCreateChannelType} from './types';
 
-export const ModalCreateChannel = () => {
+export const ModalCreateChannel: FC<ModalCreateChannelType> = props => {
+  const coordinates = props.coordinates;
+
   const [modalVisible, setModalVisible] = useState(false);
-  const [text, onChangeText] = React.useState('');
+  const [name, onChangeName] = React.useState('');
+  const navigation = useNavigation<StackNavigationPropNavigation>();
+
+  const createLive = () =>
+    navigation.navigate('Live', {
+      type: LiveType.CREATE,
+      channel: uuid(),
+      name: name,
+      coords: coordinates,
+    });
+
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -26,14 +43,17 @@ export const ModalCreateChannel = () => {
             <SafeAreaView style={styles.safeAreaView}>
               <TextInput
                 style={styles.input}
-                onChangeText={onChangeText}
+                onChangeText={onChangeName}
                 placeholder="Name channel"
-                value={text}
+                value={name}
               />
             </SafeAreaView>
             <Pressable
               style={styles.button}
-              onPress={() => setModalVisible(!modalVisible)}>
+              onPress={() => {
+                setModalVisible(!modalVisible);
+                createLive();
+              }}>
               <Text style={styles.buttonText}>Start</Text>
             </Pressable>
           </View>
