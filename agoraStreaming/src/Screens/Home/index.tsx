@@ -6,6 +6,10 @@ import {
   TouchableOpacity,
   Platform,
   PermissionsAndroid,
+  Pressable,
+  Modal,
+  Alert,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {styles} from './style';
@@ -21,9 +25,11 @@ import Geolocation from 'react-native-geolocation-service';
 import {LiveType} from '../../Navigation/types';
 import database from '@react-native-firebase/database';
 import {ListChannels} from '../../Components/ListChannels';
+import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
 
 export const Home: FC<HomeScreenProps> = () => {
   const navigation = useNavigation<StackNavigationPropNavigation>();
+
   const [coordinates, setCoordinates] = useState({
     latitude: 53.5078788,
     longitude: 27.0877321,
@@ -90,11 +96,11 @@ export const Home: FC<HomeScreenProps> = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.createContainer}>
+      {/* <View style={styles.createContainer}>
         <TouchableOpacity style={styles.button} onPress={createLive}>
           <Text style={styles.buttonText}>Start</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
       {/* <Text style={styles.title}>Livestream App</Text>
       {listChannels ? (
         <ListChannels
@@ -102,6 +108,7 @@ export const Home: FC<HomeScreenProps> = () => {
           choseChannelAndJoinLive={choseChannelAndJoinLive}
         />
       ) : null} */}
+      <ModalCreateChannel />
       <MapView
         region={coordinates}
         provider={PROVIDER_GOOGLE}
