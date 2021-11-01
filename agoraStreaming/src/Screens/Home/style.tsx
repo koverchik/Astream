@@ -25,9 +25,13 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     color: '#333',
   },
   createContainer: {
-    width: '90%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    zIndex: 1,
+    width: '70%',
+    marginLeft: 35,
+    marginBottom: 25,
   },
   button: {
     width: '100%',

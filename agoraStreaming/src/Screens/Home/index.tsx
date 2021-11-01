@@ -1,5 +1,12 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Text, View, TextInput, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Platform,
+  PermissionsAndroid,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {styles} from './style';
 import 'react-native-get-random-values';
@@ -10,7 +17,7 @@ import {
   ListChannelsType,
   StackNavigationPropNavigation,
 } from './types';
-
+import Geolocation from 'react-native-geolocation-service';
 import {LiveType} from '../../Navigation/types';
 import database from '@react-native-firebase/database';
 import {ListChannels} from '../../Components/ListChannels';
@@ -18,16 +25,47 @@ import {ListChannels} from '../../Components/ListChannels';
 export const Home: FC<HomeScreenProps> = () => {
   const navigation = useNavigation<StackNavigationPropNavigation>();
   const [coordinates, setCoordinates] = useState({
-    latitude: 153.5078788,
-    longitude: 127.0877321,
+    latitude: 53.5078788,
+    longitude: 27.0877321,
     latitudeDelta: 2,
     longitudeDelta: 0.009,
   });
-  const [listChannels, setListChannels] = useState<ListChannelsType[]>([]);
 
+  const [listChannels, setListChannels] = useState<ListChannelsType[]>([]);
+  async function requestPermissions() {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+    }
+  }
   useEffect(() => {
     console.log('hello');
+    requestPermissions();
+    Geolocation.getCurrentPosition(
+      position => {
+        const {latitude, longitude} = position.coords;
+        setCoordinates(prev => {
+          return {
+            ...prev,
+            latitude,
+            longitude,
+          };
+        });
+      },
+      e => {
+        console.log(e);
 
+        setCoordinates(prev => {
+          return {
+            ...prev,
+            latitude: 9.135511,
+            longitude: 48.125577,
+          };
+        });
+      },
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    );
     database()
       .ref('/channels')
       .on('value', snapshot => {
@@ -52,12 +90,12 @@ export const Home: FC<HomeScreenProps> = () => {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.title}>Livestream App</Text>
       <View style={styles.createContainer}>
         <TouchableOpacity style={styles.button} onPress={createLive}>
           <Text style={styles.buttonText}>Start</Text>
         </TouchableOpacity>
       </View>
+      {/* <Text style={styles.title}>Livestream App</Text>
       {listChannels ? (
         <ListChannels
           data={listChannels}
@@ -73,7 +111,7 @@ export const Home: FC<HomeScreenProps> = () => {
         zoomTapEnabled={true}
         zoomControlEnabled={true}
         showsUserLocation={true}
-        maxZoomLevel={20}></MapView>
+      />
     </View>
   );
 };
