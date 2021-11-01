@@ -7,6 +7,8 @@ type HomeScreenStyles = {
   button: TextStyle;
   buttonText: TextStyle;
   map: ViewStyle;
+  calloutStyle: ViewStyle;
+  itemChannel: ViewStyle;
 };
 
 export const styles = StyleSheet.create<HomeScreenStyles>({
@@ -28,7 +30,6 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     position: 'absolute',
     bottom: 0,
     left: 0,
-    zIndex: 1,
     width: '70%',
     marginLeft: 35,
     marginBottom: 25,
@@ -45,6 +46,20 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
   buttonText: {
     color: '#fff',
     fontSize: 20,
+  },
+  itemChannel: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: 'pink',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  calloutStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   map: {
     width: '100%',

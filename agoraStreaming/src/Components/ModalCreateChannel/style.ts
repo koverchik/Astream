@@ -15,7 +15,6 @@ type LifeScreenStyles = {
 export const styles = StyleSheet.create<LifeScreenStyles>({
   centeredView: {
     flex: 1,
-    zIndex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
@@ -70,7 +69,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     justifyContent: 'flex-end',
     width: 250,
     marginLeft: -40,
-    zIndex: 1,
+
     marginBottom: 25,
   },
 });

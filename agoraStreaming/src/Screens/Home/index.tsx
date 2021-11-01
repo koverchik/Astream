@@ -1,9 +1,20 @@
 import React, {FC, useEffect, useState} from 'react';
-import {View, Platform, PermissionsAndroid} from 'react-native';
+import {
+  View,
+  Platform,
+  PermissionsAndroid,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {styles} from './style';
 import 'react-native-get-random-values';
-import MapView, {Circle, PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {
+  Callout,
+  Circle,
+  Marker,
+  PROVIDER_GOOGLE,
+} from 'react-native-maps';
 import {
   HomeScreenProps,
   ListChannelsType,
@@ -72,6 +83,7 @@ export const Home: FC<HomeScreenProps> = () => {
         }
       });
   }, []);
+  console.log(listChannels);
 
   const choseChannelAndJoinLive = (idChannel: string) => {
     navigation.navigate('Live', {
@@ -79,6 +91,28 @@ export const Home: FC<HomeScreenProps> = () => {
       channel: idChannel,
     });
   };
+  const allMarkers = listChannels.map(data => {
+    return (
+      <Marker
+        key={data.channel}
+        coordinate={{
+          latitude: data.coords.latitude,
+          longitude: data.coords.longitude,
+        }}
+        title={data.name}>
+        <Callout style={styles.calloutStyle}>
+          <View>
+            <TouchableOpacity
+              key={data.channel}
+              style={styles.itemChannel}
+              onPress={() => choseChannelAndJoinLive(data.channel)}>
+              <Text style={styles.buttonText}>{data.name}</Text>
+            </TouchableOpacity>
+          </View>
+        </Callout>
+      </Marker>
+    );
+  });
 
   return (
     <View style={styles.container}>
@@ -94,17 +128,19 @@ export const Home: FC<HomeScreenProps> = () => {
           choseChannelAndJoinLive={choseChannelAndJoinLive}
         />
       ) : null} */}
-      <ModalCreateChannel coordinates={coordinates} />
+
       <MapView
         region={coordinates}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         showsCompass={true}
         showsScale={true}
-        zoomTapEnabled={true}
+        zoomTapEnabled={false}
         zoomControlEnabled={true}
-        showsUserLocation={true}
-      />
+        showsUserLocation={true}>
+        {allMarkers}
+      </MapView>
+      <ModalCreateChannel coordinates={coordinates} />
     </View>
   );
 };
