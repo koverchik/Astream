@@ -1,7 +1,6 @@
 import React, {FC, useEffect, useRef, useState, Fragment} from 'react';
 import {Text, Platform, View, ActivityIndicator} from 'react-native';
 import {styles} from './style';
-
 import RtcEngine, {
   ChannelProfile,
   ClientRole,
@@ -19,8 +18,7 @@ import {errorAlert} from './helpers/alert';
 import {requestCameraAndAudioPermission} from './helpers/permission';
 
 export const Live: FC<LiveScreenProps> = props => {
-  const idChannel = props.route.params.channel;
-
+  const {channel, name, coords} = props.route.params;
   console.log(props.route.params);
 
   const [joined, setJoined] = useState(false);
@@ -79,7 +77,9 @@ export const Live: FC<LiveScreenProps> = props => {
     newReference
       .set(
         {
-          name: idChannel,
+          name,
+          channel,
+          coords,
         },
         e => console.log(e),
       )
@@ -101,7 +101,7 @@ export const Live: FC<LiveScreenProps> = props => {
 
     init()
       .then(() => {
-        AgoraEngine.current?.joinChannel(null, idChannel, null, uid);
+        AgoraEngine.current?.joinChannel(null, channel, null, uid);
         isBroadcaster ? addNewChannelInDB() : null;
       })
       .catch(e => {
@@ -131,13 +131,13 @@ export const Live: FC<LiveScreenProps> = props => {
           {isBroadcaster ? (
             <RtcLocalView.SurfaceView
               style={styles.fullscreen}
-              channelId={idChannel}
+              channelId={channel}
             />
           ) : (
             <RtcRemoteView.SurfaceView
               uid={1}
               style={styles.fullscreen}
-              channelId={idChannel}
+              channelId={channel}
             />
           )}
         </Fragment>

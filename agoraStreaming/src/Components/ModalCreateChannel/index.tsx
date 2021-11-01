@@ -52,6 +52,7 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = props => {
               style={styles.button}
               onPress={() => {
                 setModalVisible(!modalVisible);
+                onChangeName('');
                 createLive();
               }}>
               <Text style={styles.buttonText}>Start</Text>
