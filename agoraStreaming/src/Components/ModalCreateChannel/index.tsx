@@ -18,13 +18,14 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = props => {
   const coordinates = props.coordinates;
 
   const [modalVisible, setModalVisible] = useState(false);
+
   const [name, onChangeName] = React.useState('');
   const navigation = useNavigation<StackNavigationPropNavigation>();
 
   const createLive = () =>
     navigation.navigate('Live', {
       type: LiveType.CREATE,
-      channel: uuid(),
+      channelId: uuid(),
       name: name,
       coords: coordinates,
     });

@@ -18,7 +18,7 @@ import {errorAlert} from './helpers/alert';
 import {requestCameraAndAudioPermission} from './helpers/permission';
 
 export const Live: FC<LiveScreenProps> = props => {
-  const {channel, name, coords} = props.route.params;
+  const {channelId, name, coords} = props.route.params;
   console.log(props.route.params);
 
   const [joined, setJoined] = useState(false);
@@ -78,7 +78,7 @@ export const Live: FC<LiveScreenProps> = props => {
       .set(
         {
           name,
-          channel,
+          channelId,
           coords,
         },
         e => console.log(e),
@@ -101,7 +101,7 @@ export const Live: FC<LiveScreenProps> = props => {
 
     init()
       .then(() => {
-        AgoraEngine.current?.joinChannel(null, channel, null, uid);
+        AgoraEngine.current?.joinChannel(null, channelId, null, uid);
         isBroadcaster ? addNewChannelInDB() : null;
       })
       .catch(e => {
@@ -131,13 +131,13 @@ export const Live: FC<LiveScreenProps> = props => {
           {isBroadcaster ? (
             <RtcLocalView.SurfaceView
               style={styles.fullscreen}
-              channelId={channel}
+              channelId={channelId}
             />
           ) : (
             <RtcRemoteView.SurfaceView
               uid={1}
               style={styles.fullscreen}
-              channelId={channel}
+              channelId={channelId}
             />
           )}
         </Fragment>

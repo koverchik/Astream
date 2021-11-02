@@ -16,5 +16,5 @@ export type StackNavigationPropNavigation = StackNavigationProp<
 export type ListChannelsType = {
   name: string;
   coords: Region;
-  channel: string;
+  channelId: string;
 };

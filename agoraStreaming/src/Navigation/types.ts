@@ -9,7 +9,7 @@ export type RootStackParamList = {
   Home: undefined;
   Live: {
     type: LiveType;
-    channel: string;
+    channelId: string;
     name?: string;
     coords?: Region;
   };

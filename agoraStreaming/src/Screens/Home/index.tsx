@@ -10,7 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 import {styles} from './style';
 import 'react-native-get-random-values';
 import MapView from 'react-native-map-clustering';
-import {Callout, Circle, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {
   HomeScreenProps,
   ListChannelsType,
@@ -19,7 +19,6 @@ import {
 import Geolocation from 'react-native-geolocation-service';
 import {LiveType} from '../../Navigation/types';
 import database from '@react-native-firebase/database';
-import {ListChannels} from '../../Components/ListChannels';
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
 
 export const Home: FC<HomeScreenProps> = () => {
@@ -42,7 +41,6 @@ export const Home: FC<HomeScreenProps> = () => {
     }
   }
   useEffect(() => {
-    console.log('hello');
     requestPermissions();
     Geolocation.getCurrentPosition(
       position => {
@@ -79,27 +77,28 @@ export const Home: FC<HomeScreenProps> = () => {
         }
       });
   }, []);
-  console.log(listChannels);
 
-  const choseChannelAndJoinLive = (idChannel: string) => {
+  const choseChannelAndJoinLive = (channelId: string) => {
     navigation.navigate('Live', {
       type: LiveType.JOIN,
-      channel: idChannel,
+      channelId,
     });
   };
   const allMarkers = listChannels.map(data => {
+    const {name, channelId, coords} = data;
+    const {latitude, longitude} = coords;
     return (
       <Marker
-        key={data.channel}
+        key={channelId}
         coordinate={{
-          latitude: data.coords.latitude,
-          longitude: data.coords.longitude,
+          latitude,
+          longitude,
         }}
-        onCalloutPress={() => choseChannelAndJoinLive(data.channel)}
-        title={data.name}>
+        onCalloutPress={() => choseChannelAndJoinLive(channelId)}
+        title={name}>
         <Callout style={styles.calloutStyle}>
-          <TouchableOpacity key={data.channel} style={styles.itemChannel}>
-            <Text style={styles.buttonText}>{data.name}</Text>
+          <TouchableOpacity key={channelId} style={styles.itemChannel}>
+            <Text style={styles.buttonText}>{name}</Text>
           </TouchableOpacity>
         </Callout>
       </Marker>
