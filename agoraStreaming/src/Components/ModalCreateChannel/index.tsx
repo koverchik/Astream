@@ -1,13 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {FC, useState} from 'react';
-import {
-  View,
-  Text,
-  Modal,
-  Pressable,
-  SafeAreaView,
-  TextInput,
-} from 'react-native';
+import {View, Text, Modal, Pressable, TextInput} from 'react-native';
 import {LiveType} from '../../Navigation/types';
 import {StackNavigationPropNavigation} from '../../Screens/Home/types';
 import {styles} from './style';
@@ -29,6 +22,11 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = props => {
       name: name,
       coords: coordinates,
     });
+  const pressStart = () => {
+    setModalVisible(!modalVisible);
+    onChangeName('');
+    createLive();
+  };
 
   return (
     <View style={styles.centeredView}>
@@ -41,21 +39,13 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = props => {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <SafeAreaView style={styles.safeAreaView}>
-              <TextInput
-                style={styles.input}
-                onChangeText={onChangeName}
-                placeholder="Name channel"
-                value={name}
-              />
-            </SafeAreaView>
-            <Pressable
-              style={styles.button}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-                onChangeName('');
-                createLive();
-              }}>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeName}
+              placeholder="Name channel"
+              value={name}
+            />
+            <Pressable style={styles.button} onPress={pressStart}>
               <Text style={styles.buttonText}>Start</Text>
             </Pressable>
           </View>

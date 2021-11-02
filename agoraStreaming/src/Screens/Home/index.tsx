@@ -21,15 +21,17 @@ import {LiveType} from '../../Navigation/types';
 import database from '@react-native-firebase/database';
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
 
+const INITIAL_COORDS = {
+  latitude: 53.5078788,
+  longitude: 27.0877321,
+  latitudeDelta: 2,
+  longitudeDelta: 0.009,
+};
+
 export const Home: FC<HomeScreenProps> = () => {
   const navigation = useNavigation<StackNavigationPropNavigation>();
 
-  const [coordinates, setCoordinates] = useState({
-    latitude: 53.5078788,
-    longitude: 27.0877321,
-    latitudeDelta: 2,
-    longitudeDelta: 0.009,
-  });
+  const [coordinates, setCoordinates] = useState(INITIAL_COORDS);
 
   const [listChannels, setListChannels] = useState<ListChannelsType[]>([]);
 
@@ -54,15 +56,7 @@ export const Home: FC<HomeScreenProps> = () => {
         });
       },
       e => {
-        console.log(e);
-
-        setCoordinates(prev => {
-          return {
-            ...prev,
-            latitude: 9.135511,
-            longitude: 48.125577,
-          };
-        });
+        setCoordinates(INITIAL_COORDS);
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );

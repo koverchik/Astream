@@ -2,8 +2,6 @@ import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
 type HomeScreenStyles = {
   container: ViewStyle;
-  title: TextStyle;
-  createContainer: ViewStyle;
   button: TextStyle;
   buttonText: TextStyle;
   map: ViewStyle;
@@ -18,19 +16,6 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     left: 0,
     right: 0,
     bottom: 0,
-  },
-  title: {
-    fontSize: 30,
-    marginBottom: 50,
-    color: '#333',
-  },
-  createContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: '70%',
-    marginLeft: 35,
-    marginBottom: 25,
   },
   button: {
     width: '100%',
@@ -48,10 +33,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
   itemChannel: {
     flex: 1,
     padding: 10,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
+    borderRadius: 10,
   },
   calloutStyle: {
     flex: 1,

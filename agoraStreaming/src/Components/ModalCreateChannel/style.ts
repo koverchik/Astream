@@ -6,9 +6,6 @@ type LifeScreenStyles = {
   buttonText: TextStyle;
   modalView: ViewStyle;
   input: ViewStyle;
-  safeAreaView: ViewStyle;
-  buttonOpen: TextStyle;
-  modalText: TextStyle;
   createContainer: ViewStyle;
 };
 
@@ -23,7 +20,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     width: '100%',
     marginTop: 15,
     borderRadius: 8,
-    paddingVertical: 10,
+    paddingVertical: 7,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FF7070',
@@ -48,28 +45,17 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     shadowRadius: 4,
     elevation: 5,
   },
-  safeAreaView: {
-    width: '100%',
-  },
   input: {
     height: 40,
+    width: '100%',
     borderRadius: 8,
     borderWidth: 1,
     padding: 10,
   },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
   createContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    position: 'absolute',
+    left: 50,
+    top: -25,
     width: 250,
-    marginLeft: -40,
-
-    marginBottom: 25,
   },
 });
