@@ -1,3 +1,5 @@
+import {Region} from 'react-native-maps';
+
 export enum LiveType {
   CREATE = 'create',
   JOIN = 'join',
@@ -5,7 +7,12 @@ export enum LiveType {
 
 export type RootStackParamList = {
   Home: undefined;
-  Live: {type: LiveType; channel: string};
+  Live: {
+    type: LiveType;
+    channelId: string;
+    name?: string;
+    coords?: Region;
+  };
 };
 
 export enum HomeStackScreens {

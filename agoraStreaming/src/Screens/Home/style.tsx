@@ -2,29 +2,20 @@ import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
 type HomeScreenStyles = {
   container: ViewStyle;
-  title: TextStyle;
-  createContainer: ViewStyle;
   button: TextStyle;
   buttonText: TextStyle;
+  map: ViewStyle;
+  calloutStyle: ViewStyle;
+  itemChannel: ViewStyle;
 };
 
 export const styles = StyleSheet.create<HomeScreenStyles>({
   container: {
-    flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  title: {
-    fontSize: 30,
-    marginBottom: 50,
-    color: '#333',
-  },
-  createContainer: {
-    width: '90%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   button: {
     width: '100%',
@@ -33,10 +24,29 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#78b0ff',
+    backgroundColor: '#FF7070',
   },
   buttonText: {
-    color: '#fff',
+    color: 'black',
     fontSize: 20,
+  },
+  itemChannel: {
+    flex: 1,
+    padding: 10,
+    borderRadius: 10,
+  },
+  calloutStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  map: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 });
