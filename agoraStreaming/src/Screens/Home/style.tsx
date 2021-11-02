@@ -18,8 +18,6 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
   },
   title: {
     fontSize: 30,
@@ -41,7 +39,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#78b0ff',
+    backgroundColor: '#FF7070',
   },
   buttonText: {
     color: 'black',
@@ -61,6 +59,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     alignItems: 'center',
   },
   map: {
+    flex: 1,
     width: '100%',
     height: '100%',
     position: 'absolute',

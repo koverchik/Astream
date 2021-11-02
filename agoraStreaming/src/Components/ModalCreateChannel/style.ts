@@ -26,7 +26,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#78b0ff',
+    backgroundColor: '#FF7070',
   },
   buttonText: {
     color: '#fff',

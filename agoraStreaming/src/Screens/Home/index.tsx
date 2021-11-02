@@ -9,12 +9,8 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {styles} from './style';
 import 'react-native-get-random-values';
-import MapView, {
-  Callout,
-  Circle,
-  Marker,
-  PROVIDER_GOOGLE,
-} from 'react-native-maps';
+import MapView from 'react-native-map-clustering';
+import {Callout, Circle, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {
   HomeScreenProps,
   ListChannelsType,
@@ -113,12 +109,10 @@ export const Home: FC<HomeScreenProps> = () => {
   return (
     <View style={styles.container}>
       <MapView
-        region={coordinates}
+        initialRegion={coordinates}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        showsCompass={true}
-        showsScale={true}
-        zoomTapEnabled={false}
+        clusterColor={'#FF7070'}
         zoomControlEnabled={true}
         showsUserLocation={true}>
         {allMarkers}
