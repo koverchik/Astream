@@ -7,6 +7,7 @@ import RtcEngine, {
   RtcLocalView,
   RtcRemoteView,
   UserOfflineReason,
+  VideoRenderMode,
 } from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {LiveScreenProps, Members} from './types';
@@ -19,11 +20,10 @@ import {requestCameraAndAudioPermission} from './helpers/permission';
 
 export const Live: FC<LiveScreenProps> = props => {
   const {channelId, name, coords} = props.route.params;
-  console.log(props.route.params);
-
   const [joined, setJoined] = useState(false);
 
   const [error, setError] = useState(false);
+  const [peerIds, setPeerIds] = useState<number[]>([]);
 
   const isBroadcaster = isBroadcasterFunction(props.route.params.type);
 
@@ -45,14 +45,28 @@ export const Live: FC<LiveScreenProps> = props => {
     );
     AgoraEngine.current.enableVideo();
     AgoraEngine.current.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    if (isBroadcaster)
-      AgoraEngine.current.setClientRole(ClientRole.Broadcaster);
+
+    AgoraEngine.current.setClientRole(ClientRole.Broadcaster);
 
     AgoraEngine.current.addListener('JoinChannelSuccess', changeStateChannel);
-    AgoraEngine.current.addListener('UserOffline', (uid, reason) =>
-      closeChannel(uid, reason),
+    AgoraEngine.current.addListener('UserOffline', (uid, reason) => {
+      console.log('UserOffline', uid, reason);
+      setPeerIds(prev => prev.filter(id => id !== uid));
+      console.log('UserOffline', peerIds);
+    });
+    AgoraEngine.current.addListener(
+      'UserJoined',
+      (uid: number, elapsed: number) => {
+        console.log('UserJoined', uid, elapsed);
+        if (peerIds.indexOf(uid) === -1) {
+          setPeerIds(prev => [...prev, uid]);
+          console.log('newUser', peerIds);
+        }
+      },
     );
   };
+
+  //unnecessary function this function need for allert with errors
 
   const closeChannel = (uid: number, reason: UserOfflineReason) => {
     if (uid === Members.Broadcaster && reason === UserOfflineReason.Quit) {
@@ -64,7 +78,6 @@ export const Live: FC<LiveScreenProps> = props => {
     if (uid === Members.Broadcaster && reason === UserOfflineReason.Dropped) {
       setJoined(false);
       setError(true);
-      leaveChannel();
       errorAlert(
         'User dropped offline, no data is received within a long period of time.',
         goHome,
@@ -87,9 +100,7 @@ export const Live: FC<LiveScreenProps> = props => {
   };
 
   const leaveChannel = async () => {
-    if (isBroadcaster) {
-      await database().ref(`/channels/${newReference.key}`).remove();
-    }
+    await database().ref(`/channels/${newReference.key}`).remove();
     AgoraEngine.current?.destroy();
   };
 
@@ -111,7 +122,7 @@ export const Live: FC<LiveScreenProps> = props => {
 
     return () => {
       console.log('exit');
-      leaveChannel();
+      if (peerIds.length === 0) leaveChannel();
     };
   }, []);
 
@@ -127,21 +138,22 @@ export const Live: FC<LiveScreenProps> = props => {
   return (
     <View style={styles.container}>
       {joined && (
-        <Fragment>
-          {isBroadcaster ? (
-            <RtcLocalView.SurfaceView
-              style={styles.fullscreen}
-              channelId={channelId}
-            />
-          ) : (
-            <RtcRemoteView.SurfaceView
-              uid={1}
-              style={styles.fullscreen}
-              channelId={channelId}
-            />
-          )}
-        </Fragment>
+        <RtcLocalView.SurfaceView
+          style={styles.fullscreen}
+          channelId={channelId}
+        />
       )}
+      {peerIds.map(value => {
+        return (
+          <RtcRemoteView.SurfaceView
+            style={styles.usersScreen}
+            uid={value}
+            channelId={channelId}
+            renderMode={VideoRenderMode.Hidden}
+            zOrderMediaOverlay={true}
+          />
+        );
+      })}
     </View>
   );
 };

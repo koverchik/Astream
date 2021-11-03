@@ -9,6 +9,7 @@ type LifeScreenStyles = {
   container: ViewStyle;
   loadingText: TextStyle;
   fullscreen: ViewStyle;
+  usersScreen: ViewStyle;
 };
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
@@ -23,7 +24,13 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
   },
 
   fullscreen: {
-    width: dimensions.width,
-    height: dimensions.height,
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  usersScreen: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
 });
