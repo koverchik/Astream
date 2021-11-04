@@ -1,6 +1,14 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {FC, useState} from 'react';
-import {View, Text, Modal, Pressable, TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  Modal,
+  Pressable,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+} from 'react-native';
 import {LiveType} from '../../Navigation/types';
 import {StackNavigationPropNavigation} from '../../Screens/Home/types';
 import {styles} from './style';
@@ -11,21 +19,33 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = props => {
   const coordinates = props.coordinates;
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [name, setName] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
-  const [name, onChangeName] = React.useState('');
   const navigation = useNavigation<StackNavigationPropNavigation>();
 
-  const createLive = () =>
+  const createLive = () => {
     navigation.navigate('Live', {
       type: LiveType.CREATE,
       channelId: uuid(),
       name: name,
       coords: coordinates,
     });
+  };
   const pressStart = () => {
-    setModalVisible(!modalVisible);
-    onChangeName('');
-    createLive();
+    if (!name.trim()) {
+      setError('Channel name is required!');
+    } else if (name.trim().length < 5) {
+      setError('Channel name must be 5+ symbols');
+    } else {
+      setModalVisible(!modalVisible);
+      setName('');
+      createLive();
+    }
+  };
+  const onChangeTitle = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    setName(e.nativeEvent.text);
+    setError(null);
   };
 
   return (
@@ -35,17 +55,26 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = props => {
         transparent={false}
         visible={modalVisible}
         onRequestClose={() => {
+          setName('');
+          setError(null);
           setModalVisible(!modalVisible);
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeName}
-              placeholder="Name channel"
-              value={name}
-            />
-            <Pressable style={styles.button} onPress={pressStart}>
+            <Text style={styles.title}>Create new channel</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input, !!error && styles.errorInput]}
+                onChange={onChangeTitle}
+                placeholder="Name channel"
+                value={name}
+              />
+              {error && <Text style={styles.error}>{error}</Text>}
+            </View>
+            <Pressable
+              style={[styles.button, !!error && styles.buttonDisabled]}
+              onPress={pressStart}
+              disabled={!!error}>
               <Text style={styles.buttonText}>Start</Text>
             </Pressable>
           </View>
