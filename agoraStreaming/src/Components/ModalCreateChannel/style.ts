@@ -1,12 +1,17 @@
-import {StyleSheet, ViewStyle, TextStyle, TextInput} from 'react-native';
+import {StyleSheet, ViewStyle, TextStyle} from 'react-native';
 
 type LifeScreenStyles = {
   centeredView: ViewStyle;
   button: ViewStyle;
   buttonText: TextStyle;
+  title: TextStyle;
+  error: TextStyle;
   modalView: ViewStyle;
   input: ViewStyle;
+  errorInput: ViewStyle;
   createContainer: ViewStyle;
+  buttonDisabled: ViewStyle;
+  inputContainer: ViewStyle;
 };
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
@@ -16,6 +21,11 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     alignItems: 'center',
     marginTop: 22,
   },
+  title: {
+    color: '#FF7070',
+    fontSize: 20,
+    marginBottom: 25,
+  },
   button: {
     width: '100%',
     marginTop: 15,
@@ -24,6 +34,9 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FF7070',
+  },
+  buttonDisabled: {
+    backgroundColor: '#b2b2b2',
   },
   buttonText: {
     color: '#fff',
@@ -45,12 +58,23 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     shadowRadius: 4,
     elevation: 5,
   },
+  inputContainer: {
+    width: '100%',
+    height: 55,
+  },
+  error: {
+    margin: 5,
+    color: '#FF7070',
+  },
   input: {
     height: 40,
     width: '100%',
     borderRadius: 8,
     borderWidth: 1,
     padding: 10,
+  },
+  errorInput: {
+    borderColor: '#FF7070',
   },
   createContainer: {
     position: 'absolute',
