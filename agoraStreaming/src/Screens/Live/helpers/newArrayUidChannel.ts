@@ -2,7 +2,7 @@ import database from '@react-native-firebase/database';
 import {updateDataChannel} from './updateDataChannelUids';
 
 export const addUserInArrayUidChannel = (uid: number, channelId: string) => {
-  database()
+  const result = database()
     .ref('/channels/')
     .once('value')
     .then(snapshot => {
@@ -10,12 +10,21 @@ export const addUserInArrayUidChannel = (uid: number, channelId: string) => {
       for (let channel in allDataChannels) {
         if (allDataChannels[channel]['channelId'] === channelId) {
           const oldArrayUid = allDataChannels[channel]['uids'];
-          const newArrayUid = oldArrayUid.concat(uid);
+          let newArrayUid;
+          if (allDataChannels[channel]['uids']) {
+            newArrayUid = oldArrayUid.concat(uid);
+          } else {
+            newArrayUid = [uid];
+          }
           updateDataChannel(channel, newArrayUid);
-          return;
+          return {
+            uid,
+            channel,
+          };
         }
       }
     });
+  return result;
 };
 
 export const deleteUserInArrayUidChannel = (uid: number, channelId: string) => {

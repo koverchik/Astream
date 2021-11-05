@@ -11,7 +11,6 @@ import RtcEngine, {
 } from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {LiveScreenProps, Members} from './types';
-import {LiveType} from '../../Navigation/types';
 import database from '@react-native-firebase/database';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationPropNavigation} from '../Home/types';
@@ -21,10 +20,12 @@ import {
   addUserInArrayUidChannel,
   deleteUserInArrayUidChannel,
 } from './helpers/newArrayUidChannel';
-import {updateDataChannel} from './helpers/updateDataChannelUids';
+import {useAppDispatch} from '../../Redux/hooks';
+import {addUidAndKeyDB} from '../../Redux/action';
 
 export const Live: FC<LiveScreenProps> = props => {
   const {channelId, name, coords} = props.route.params;
+  const dispatch = useAppDispatch();
 
   const [joined, setJoined] = useState(false);
 
@@ -59,11 +60,9 @@ export const Live: FC<LiveScreenProps> = props => {
       'JoinChannelSuccess',
       (channel: string, uid: number, elapsed: number) => {
         uidCurrentChannel.current = uid;
-        const uidBrodcaster = [uid];
-        isBroadcaster
-          ? updateDataChannel(newReference.key, uidBrodcaster)
-          : addUserInArrayUidChannel(uid, channelId);
-
+        addUserInArrayUidChannel(uid, channelId).then(data => {
+          dispatch(addUidAndKeyDB(data?.uid, data?.channel));
+        });
         changeStateChannel();
       },
     );
