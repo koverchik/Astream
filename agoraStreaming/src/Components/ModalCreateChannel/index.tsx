@@ -35,8 +35,6 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = props => {
   const pressStart = () => {
     if (!name.trim()) {
       setError('Channel name is required!');
-    } else if (name.trim().length < 5) {
-      setError('Channel name must be 5+ symbols');
     } else {
       setModalVisible(!modalVisible);
       setName('');
