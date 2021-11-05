@@ -24,6 +24,7 @@ import {
 import {updateDataChannel} from './helpers/updateDataChannelUids';
 import {v4 as uuid} from 'uuid';
 import {UserNameLabel} from '../../Components/UserNameLabel/UserNameLabel';
+import {ExitButton} from '../../Components/ExitButton/ExitButton';
 
 type UserType = {
   userAccount: string;
@@ -182,6 +183,7 @@ export const Live: FC<LiveScreenProps> = props => {
             channelId={channelId}
           />
           <UserNameLabel userName={userName} />
+          <ExitButton />
         </>
       )}
       {peerIds.map(user => {
