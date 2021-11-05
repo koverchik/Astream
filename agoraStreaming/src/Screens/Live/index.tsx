@@ -17,11 +17,15 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationPropNavigation} from '../Home/types';
 import {errorAlert} from './helpers/alert';
 import {requestCameraAndAudioPermission} from './helpers/permission';
-import {newArrayUidChannel} from './helpers/newArrayUidChannel';
+import {
+  addUserInArrayUidChannel,
+  deleteUserInArrayUidChannel,
+} from './helpers/newArrayUidChannel';
 import {updateDataChannel} from './helpers/updateDataChannelUids';
 
 export const Live: FC<LiveScreenProps> = props => {
   const {channelId, name, coords} = props.route.params;
+
   const [joined, setJoined] = useState(false);
 
   const [error, setError] = useState(false);
@@ -29,6 +33,7 @@ export const Live: FC<LiveScreenProps> = props => {
 
   const isBroadcaster = isBroadcasterFunction(props.route.params.type);
 
+  const uidCurrentChannel = useRef<number>();
   const AgoraEngine = useRef<RtcEngine>();
 
   const newReference = database().ref('/channels').push();
@@ -53,10 +58,11 @@ export const Live: FC<LiveScreenProps> = props => {
     AgoraEngine.current.addListener(
       'JoinChannelSuccess',
       (channel: string, uid: number, elapsed: number) => {
+        uidCurrentChannel.current = uid;
         const uidBrodcaster = [uid];
         isBroadcaster
           ? updateDataChannel(newReference.key, uidBrodcaster)
-          : newArrayUidChannel(uid, channelId);
+          : addUserInArrayUidChannel(uid, channelId);
 
         changeStateChannel();
       },
@@ -66,15 +72,8 @@ export const Live: FC<LiveScreenProps> = props => {
       console.log('LeaveChannel', StatsCallback);
     });
 
-    AgoraEngine.current.addListener('MediaEngineStartCallSuccess', () => {
-      console.log('MediaEngineStartCallSuccess');
-    });
-    // receives the metadata react native
-
     AgoraEngine.current.addListener('UserOffline', (uid, reason) => {
-      // console.log('UserOffline', uid, reason);
       setPeerIds(prev => prev.filter(id => id !== uid));
-      // console.log('UserOffline', peerIds);
     });
     AgoraEngine.current.addListener(
       'UserJoined',
@@ -114,7 +113,6 @@ export const Live: FC<LiveScreenProps> = props => {
           name,
           channelId,
           coords,
-          uids: [],
         },
         e => console.log(e),
       )
@@ -124,15 +122,6 @@ export const Live: FC<LiveScreenProps> = props => {
   const leaveChannel = async () => {
     await database().ref(`/channels/${newReference.key}`).remove();
   };
-  // useEffect(() => {
-  //   console.log(peerIds);
-  //   let countUsers = peerIds;
-  //   return () => {
-  //     if (!countUsers) {
-
-  //     }
-  //   };
-  // }, [peerIds]);
 
   useEffect(() => {
     const uid = isBroadcaster ? 1 : 0;
@@ -156,10 +145,10 @@ export const Live: FC<LiveScreenProps> = props => {
       });
 
     return () => {
-      // console.log('return', peerIds);
+      deleteUserInArrayUidChannel(uidCurrentChannel.current, channelId);
       isBroadcaster ? leaveChannel() : null;
       AgoraEngine.current?.destroy();
-      console.log('exit');
+      console.log('exit first');
     };
   }, []);
 
