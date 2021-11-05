@@ -15,6 +15,7 @@
     "android3": "react-native run-android --port 8888 --deviceId=BUC7N17808001161"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@react-native-firebase/app": "^12.9.2",
     "@react-native-firebase/database": "^12.9.2",
     "@react-navigation/native": "^6.0.6",

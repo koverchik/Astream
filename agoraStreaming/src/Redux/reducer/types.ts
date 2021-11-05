@@ -1,6 +1,6 @@
 export type InitialStateUserType = {
   name: string;
-  uid: number | null;
+  uidStream: number | null;
   keyDatabases: string;
 };
 export enum StreamTypes {

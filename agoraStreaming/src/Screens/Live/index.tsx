@@ -20,12 +20,15 @@ import {
   addUserInArrayUidChannel,
   deleteUserInArrayUidChannel,
 } from './helpers/newArrayUidChannel';
-import {useAppDispatch} from '../../Redux/hooks';
+import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {addUidAndKeyDB} from '../../Redux/action';
+import {getStream} from '../../Redux/selectors';
 
 export const Live: FC<LiveScreenProps> = props => {
   const {channelId, name, coords} = props.route.params;
   const dispatch = useAppDispatch();
+
+  const {keyDatabases, uidStream} = useAppSelector(getStream);
 
   const [joined, setJoined] = useState(false);
 
@@ -69,6 +72,7 @@ export const Live: FC<LiveScreenProps> = props => {
 
     AgoraEngine.current.addListener('LeaveChannel', StatsCallback => {
       console.log('LeaveChannel', StatsCallback);
+      AgoraEngine.current?.destroy();
     });
 
     AgoraEngine.current.addListener('UserOffline', (uid, reason) => {
@@ -146,7 +150,7 @@ export const Live: FC<LiveScreenProps> = props => {
     return () => {
       deleteUserInArrayUidChannel(uidCurrentChannel.current, channelId);
       isBroadcaster ? leaveChannel() : null;
-      AgoraEngine.current?.destroy();
+
       console.log('exit first');
     };
   }, []);

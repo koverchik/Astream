@@ -6,7 +6,7 @@ import {
 
 export const initialStateStream: InitialStateStreamType = {
   name: '',
-  uid: null,
+  uidStream: null,
   keyDatabases: '',
 };
 
