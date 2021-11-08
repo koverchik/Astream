@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "start2": "react-native start --port 8899",
-    "android2": "react-native run-android --port 8899 --deviceId=J5AXHM00P8989W5",
+    "android2": "react-native run-android --port 8899 --deviceId=emulator-5554",
     "clean": "cd android && ./gradlew clean && cd .. ",
     "test": "jest",
     "lint": "eslint .",
@@ -31,6 +31,7 @@
     "react-native-map-clustering": "^3.4.2",
     "react-native-maps": "0.29.3",
     "react-native-safe-area-context": "^3.3.2",
+    "react-native-svg": "^12.1.1",
     "react-redux": "^7.2.6",
     "supercluster": "^7.1.4",
     "uuid": "^8.3.2"
