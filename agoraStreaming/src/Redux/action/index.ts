@@ -1,7 +1,7 @@
 import {StreamTypes} from '../reducer/types';
 import {AddNameType, AddUidAndKeyDBType} from './types';
 
-export const addName: AddNameType = payload => {
+export const addName: AddNameType = (payload) => {
   return {
     type: StreamTypes.USER_NAME,
     payload,

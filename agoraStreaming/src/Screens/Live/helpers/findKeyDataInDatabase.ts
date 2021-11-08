@@ -4,10 +4,10 @@ export const findKeyDataInDatabase = async (channelId: string) => {
   const result = await database()
     .ref('/channels/')
     .once('value')
-    .then(snapshot => {
+    .then((snapshot) => {
       const allDataChannels = snapshot.val();
       for (let channel in allDataChannels) {
-        if (allDataChannels[channel]['channelId'] === channelId) {
+        if (allDataChannels[channel].channelId === channelId) {
           return channel;
         }
       }

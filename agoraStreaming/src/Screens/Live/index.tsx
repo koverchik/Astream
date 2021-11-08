@@ -22,7 +22,7 @@ import {ExitButton} from '../../Components/ExitButton/ExitButton';
 import {findKeyDataInDatabase} from './helpers/findKeyDataInDatabase';
 import {deleteChannel} from './helpers/deleteChannel';
 
-export const Live: FC<LiveScreenProps> = props => {
+export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords} = props.route.params;
 
   const [joined, setJoined] = useState(false);
@@ -69,21 +69,21 @@ export const Live: FC<LiveScreenProps> = props => {
     AgoraEngine.current.addListener(
       'UserInfoUpdated',
       (uid: number, userInfo: UserInfo) => {
-        if (!peerIds.find(u => u.uid === uid)) {
-          setPeerIds(prev => [...prev, userInfo]);
+        if (!peerIds.find((u) => u.uid === uid)) {
+          setPeerIds((prev) => [...prev, userInfo]);
         }
       },
     );
 
     AgoraEngine.current.addListener('UserOffline', (uid, reason) => {
-      setPeerIds(prev => prev.filter(user => user.uid !== uid));
+      setPeerIds((prev) => prev.filter((user) => user.uid !== uid));
     });
 
-    AgoraEngine.current.addListener('UserOffline', uid => {
-      setPeerIds(prev => prev.filter(userData => userData.uid !== uid));
+    AgoraEngine.current.addListener('UserOffline', (uid) => {
+      setPeerIds((prev) => prev.filter((userData) => userData.uid !== uid));
     });
 
-    AgoraEngine.current?.addListener('LeaveChannel', StatsCallback => {
+    AgoraEngine.current?.addListener('LeaveChannel', (StatsCallback) => {
       StatsCallback.userCount === 1 ? userLeaveChannel() : null;
       AgoraEngine.current?.destroy();
     });
@@ -98,7 +98,7 @@ export const Live: FC<LiveScreenProps> = props => {
   };
 
   const userLeaveChannel = () => {
-    findKeyDataInDatabase(channelId).then(keyChannel => {
+    findKeyDataInDatabase(channelId).then((keyChannel) => {
       if (keyChannel) {
         deleteChannel(keyChannel);
       }
@@ -119,7 +119,7 @@ export const Live: FC<LiveScreenProps> = props => {
         );
         isBroadcaster ? addNewChannelInDB() : null;
       })
-      .catch(e => {
+      .catch((e) => {
         setError(true);
         errorAlert(e.message, goHome);
       });
@@ -150,7 +150,7 @@ export const Live: FC<LiveScreenProps> = props => {
           <ExitButton exitHandler={exitChannelHandler} />
         </View>
       )}
-      {peerIds.map(user => {
+      {peerIds.map((user) => {
         return (
           <View style={styles.userContainer}>
             <RtcRemoteView.SurfaceView

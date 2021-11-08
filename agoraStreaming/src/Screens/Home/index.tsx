@@ -45,9 +45,9 @@ export const Home: FC<HomeScreenProps> = () => {
   useEffect(() => {
     requestPermissions();
     Geolocation.getCurrentPosition(
-      position => {
+      (position) => {
         const {latitude, longitude} = position.coords;
-        setCoordinates(prev => {
+        setCoordinates((prev) => {
           return {
             ...prev,
             latitude,
@@ -55,14 +55,14 @@ export const Home: FC<HomeScreenProps> = () => {
           };
         });
       },
-      e => {
+      (e) => {
         setCoordinates(INITIAL_COORDS);
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
     database()
       .ref('/channels')
-      .on('value', snapshot => {
+      .on('value', (snapshot) => {
         console.log(snapshot.val());
         if (snapshot.val() != null) {
           setListChannels(Object.values(snapshot.val()));
@@ -78,7 +78,7 @@ export const Home: FC<HomeScreenProps> = () => {
       channelId,
     });
   };
-  const allMarkers = listChannels.map(data => {
+  const allMarkers = listChannels.map((data) => {
     const {name, channelId, coords} = data;
     const {latitude, longitude} = coords;
     return (

@@ -8,13 +8,13 @@ export const addUserInArrayUidChannel = async (
   const result = await database()
     .ref('/channels/')
     .once('value')
-    .then(snapshot => {
+    .then((snapshot) => {
       const allDataChannels = snapshot.val();
       for (let channel in allDataChannels) {
-        if (allDataChannels[channel]['channelId'] === channelId) {
-          const oldArrayUid = allDataChannels[channel]['uids'];
+        if (allDataChannels[channel].channelId === channelId) {
+          const oldArrayUid = allDataChannels[channel].uids;
           let newArrayUid;
-          if (allDataChannels[channel]['uids']) {
+          if (allDataChannels[channel].uids) {
             newArrayUid = oldArrayUid.concat(uid);
           } else {
             newArrayUid = [uid];
@@ -37,11 +37,11 @@ export const deleteUserInArrayUidChannel = async (
   await database()
     .ref('/channels/')
     .once('value')
-    .then(snapshot => {
+    .then((snapshot) => {
       const allDataChannels = snapshot.val();
       for (let channel in allDataChannels) {
-        if (allDataChannels[channel]['channelId'] === channelId) {
-          const arrayUid = allDataChannels[channel]['uids'];
+        if (allDataChannels[channel].channelId === channelId) {
+          const arrayUid = allDataChannels[channel].uids;
           const index = arrayUid.indexOf(uid);
           if (index > -1) {
             arrayUid.splice(index, 1);

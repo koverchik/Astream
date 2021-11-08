@@ -7,7 +7,7 @@ import {styles} from './style';
 import {v4 as uuid} from 'uuid';
 import {ModalCreateChannelType} from './types';
 
-export const ModalCreateChannel: FC<ModalCreateChannelType> = props => {
+export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
   const coordinates = props.coordinates;
 
   const [modalVisible, setModalVisible] = useState(false);
