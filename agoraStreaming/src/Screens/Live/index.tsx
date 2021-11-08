@@ -63,7 +63,6 @@ export const Live: FC<LiveScreenProps> = props => {
     });
 
     AgoraEngine.current.addListener('LocalUserRegistered', (uid, userInfo) => {
-      console.log('You join channel', userInfo);
       setUserName(userInfo);
     });
 
@@ -73,7 +72,6 @@ export const Live: FC<LiveScreenProps> = props => {
         if (!peerIds.find(u => u.uid === uid)) {
           setPeerIds(prev => [...prev, userInfo]);
         }
-        console.log(userInfo);
       },
     );
 
@@ -86,23 +84,17 @@ export const Live: FC<LiveScreenProps> = props => {
     });
 
     AgoraEngine.current?.addListener('LeaveChannel', StatsCallback => {
-      console.log('LeaveChannel', StatsCallback);
       StatsCallback.userCount === 1 ? userLeaveChannel() : null;
       AgoraEngine.current?.destroy();
     });
   };
 
-  const addNewChannelInDB = () => {
-    newReference
-      .set(
-        {
-          name,
-          channelId,
-          coords,
-        },
-        e => console.log(e),
-      )
-      .then(() => console.log('Data set.'));
+  const addNewChannelInDB = async () => {
+    await newReference.set({
+      name,
+      channelId,
+      coords,
+    });
   };
 
   const userLeaveChannel = () => {

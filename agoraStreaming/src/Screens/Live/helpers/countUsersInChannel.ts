@@ -7,9 +7,7 @@ export const countUsersInChannel = async (dataChannelKey: string) => {
     .once('value')
     .then(snapshot => {
       const dataChannel = snapshot.val();
-      console.log('Key ', dataChannelKey);
-      console.log('dataChannel', dataChannel);
-      if (dataChannel['uids'].length === 0) {
+      if (dataChannel.uids.length === 0) {
         deleteChannel(dataChannelKey);
       }
     });

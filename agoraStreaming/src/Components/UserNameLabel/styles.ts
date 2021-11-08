@@ -1,11 +1,11 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
-type UserNameLAbelType = {
+type UserNameLabelType = {
   userName: TextStyle;
   userNameContainer: ViewStyle;
 };
 
-export const styles = StyleSheet.create<UserNameLAbelType>({
+export const styles = StyleSheet.create<UserNameLabelType>({
   userNameContainer: {
     backgroundColor: '#5ebf9d',
     height: 40,

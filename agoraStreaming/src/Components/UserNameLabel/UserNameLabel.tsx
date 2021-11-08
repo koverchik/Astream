@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Text, View} from 'react-native';
-import {styles} from './UserName.styles';
-import {UserNameLabelPropsType} from './UserName.types';
+import {styles} from './styles';
+import {UserNameLabelPropsType} from './types';
 
 export const UserNameLabel: FC<UserNameLabelPropsType> = props => {
   const {userName} = props;
