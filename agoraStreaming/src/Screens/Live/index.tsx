@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState, Fragment} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {Text, Platform, View, ActivityIndicator} from 'react-native';
 import {styles} from './style';
 import RtcEngine, {
@@ -6,38 +6,28 @@ import RtcEngine, {
   ClientRole,
   RtcLocalView,
   RtcRemoteView,
-  UserOfflineReason,
   VideoRenderMode,
 } from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
-import {LiveScreenProps, Members} from './types';
+import {LiveScreenProps} from './types';
 import database from '@react-native-firebase/database';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationPropNavigation} from '../Home/types';
 import {errorAlert} from './helpers/alert';
 import {requestCameraAndAudioPermission} from './helpers/permission';
-import {
-  addUserInArrayUidChannel,
-  deleteUserInArrayUidChannel,
-} from './helpers/newArrayUidChannel';
-import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
-import {addUidAndKeyDB} from '../../Redux/action';
-import {getStream} from '../../Redux/selectors';
+import {findKeyDataInDatabase} from './helpers/findKeyDataInDatabase';
+import {deleteChannel} from './helpers/deleteChannel';
 
 export const Live: FC<LiveScreenProps> = props => {
   const {channelId, name, coords} = props.route.params;
-  const dispatch = useAppDispatch();
-
-  const {keyDatabases, uidStream} = useAppSelector(getStream);
 
   const [joined, setJoined] = useState(false);
-
   const [error, setError] = useState(false);
+
   const [peerIds, setPeerIds] = useState<number[]>([]);
 
   const isBroadcaster = isBroadcasterFunction(props.route.params.type);
 
-  const uidCurrentChannel = useRef<number>();
   const AgoraEngine = useRef<RtcEngine>();
 
   const newReference = database().ref('/channels').push();
@@ -59,54 +49,23 @@ export const Live: FC<LiveScreenProps> = props => {
 
     AgoraEngine.current.setClientRole(ClientRole.Broadcaster);
 
-    AgoraEngine.current.addListener(
-      'JoinChannelSuccess',
-      (channel: string, uid: number, elapsed: number) => {
-        uidCurrentChannel.current = uid;
-        addUserInArrayUidChannel(uid, channelId).then(data => {
-          dispatch(addUidAndKeyDB(data?.uid, data?.channel));
-        });
-        changeStateChannel();
-      },
-    );
-
-    AgoraEngine.current.addListener('LeaveChannel', StatsCallback => {
-      console.log('LeaveChannel', StatsCallback);
-      AgoraEngine.current?.destroy();
+    AgoraEngine.current.addListener('JoinChannelSuccess', () => {
+      changeStateChannel();
     });
 
-    AgoraEngine.current.addListener('UserOffline', (uid, reason) => {
+    AgoraEngine.current.addListener('UserOffline', uid => {
       setPeerIds(prev => prev.filter(id => id !== uid));
     });
-    AgoraEngine.current.addListener(
-      'UserJoined',
-      (uid: number, elapsed: number) => {
-        // console.log('UserJoined', uid, elapsed);
-        if (peerIds.indexOf(uid) === -1) {
-          setPeerIds(prev => [...prev, uid]);
-        }
-      },
-    );
-  };
-
-  //unnecessary function this function need for allert with errors
-
-  const closeChannel = (uid: number, reason: UserOfflineReason) => {
-    if (uid === Members.Broadcaster && reason === UserOfflineReason.Quit) {
-      setJoined(false);
-      setError(true);
-      errorAlert('The user left the current channel.', goHome);
-      leaveChannel();
-    }
-    if (uid === Members.Broadcaster && reason === UserOfflineReason.Dropped) {
-      setJoined(false);
-      setError(true);
-      errorAlert(
-        'User dropped offline, no data is received within a long period of time.',
-        goHome,
-      );
-      leaveChannel();
-    }
+    AgoraEngine.current.addListener('UserJoined', (uid: number) => {
+      if (peerIds.indexOf(uid) === -1) {
+        setPeerIds(prev => [...prev, uid]);
+      }
+    });
+    AgoraEngine.current?.addListener('LeaveChannel', StatsCallback => {
+      console.log('LeaveChannel', StatsCallback);
+      StatsCallback.userCount === 1 ? userLeaveChannel() : null;
+      AgoraEngine.current?.destroy();
+    });
   };
 
   const addNewChannelInDB = () => {
@@ -122,8 +81,10 @@ export const Live: FC<LiveScreenProps> = props => {
       .then(() => console.log('Data set.'));
   };
 
-  const leaveChannel = async () => {
-    await database().ref(`/channels/${newReference.key}`).remove();
+  const userLeaveChannel = () => {
+    findKeyDataInDatabase(channelId).then(keyChannel => {
+      if (keyChannel) deleteChannel(keyChannel);
+    });
   };
 
   useEffect(() => {
@@ -148,10 +109,7 @@ export const Live: FC<LiveScreenProps> = props => {
       });
 
     return () => {
-      deleteUserInArrayUidChannel(uidCurrentChannel.current, channelId);
-      isBroadcaster ? leaveChannel() : null;
-
-      console.log('exit first');
+      AgoraEngine.current?.leaveChannel();
     };
   }, []);
 

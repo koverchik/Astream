@@ -20,7 +20,7 @@ export const stream = (state = initialStateStream, action: ActionStream) => {
     case StreamTypes.INFO_STREAM:
       return {
         ...state,
-        uid: action.payload.uid,
+        uidStream: action.payload.uid,
         keyDatabases: action.payload.keyDatabases,
       };
     default:
