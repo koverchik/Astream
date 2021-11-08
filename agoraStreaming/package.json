@@ -7,12 +7,12 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "start2": "react-native start --port 8899",
-    "android2": "react-native run-android --port 8899 --deviceId=emulator-5554",
+    "android2": "react-native run-android --port 8899 --deviceId=BUC7N17808001161",
+    "start3": "react-native start --port 8888",
+    "android3": "react-native run-android --port 8888 --deviceId=6c39a157d440",
     "clean": "cd android && ./gradlew clean && cd .. ",
     "test": "jest",
-    "lint": "eslint .",
-    "start3": "react-native start --port 8888",
-    "android3": "react-native run-android --port 8888 --deviceId=BUC7N17808001161"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
