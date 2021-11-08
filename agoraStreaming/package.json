@@ -15,10 +15,12 @@
     "android3": "react-native run-android --port 8888 --deviceId=BUC7N17808001161"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@react-native-firebase/app": "^12.9.2",
     "@react-native-firebase/database": "^12.9.2",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/stack": "^6.0.11",
+    "@reduxjs/toolkit": "^1.6.2",
     "eslint-plugin-react": "^7.26.1",
     "react": "17.0.2",
     "react-native": "0.66.0",
@@ -30,6 +32,7 @@
     "react-native-maps": "0.29.3",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-svg": "^12.1.1",
+    "react-redux": "^7.2.6",
     "supercluster": "^7.1.4",
     "uuid": "^8.3.2"
   },
