@@ -89,7 +89,7 @@ export const Live: FC<LiveScreenProps> = props => {
     AgoraEngine.current.addListener(
       'UserInfoUpdated',
       (uid: number, userInfo: UserInfo) => {
-        if (peerIds.find(u => u.uid === uid) === undefined) {
+        if (!peerIds.find(u => u.uid === uid)) {
           setPeerIds(prev => [...prev, userInfo]);
         }
         console.log(userInfo);
