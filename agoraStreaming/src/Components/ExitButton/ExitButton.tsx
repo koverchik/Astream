@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {Pressable} from 'react-native';
-import {ExitSvg} from '../../Icons/Exit/ExitSvg';
+import {ExitSvg} from '../../Icons/ExitSvg';
 import {styles} from './styles';
 import {ExitButtonPropsType} from './types';
 
