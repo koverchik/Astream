@@ -7,44 +7,28 @@ import RtcEngine, {
   RtcLocalView,
   RtcRemoteView,
   UserInfo,
-  UserOfflineReason,
   VideoRenderMode,
 } from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
-import {LiveScreenProps} from './types';
+import {LiveScreenProps, UserType} from './types';
 import database from '@react-native-firebase/database';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationPropNavigation} from '../Home/types';
 import {errorAlert} from './helpers/alert';
 import {requestCameraAndAudioPermission} from './helpers/permission';
-
-import {
-  addUserInArrayUidChannel,
-  deleteUserInArrayUidChannel,
-} from './helpers/newArrayUidChannel';
-import {updateDataChannel} from './helpers/updateDataChannelUids';
 import {v4 as uuid} from 'uuid';
 import {UserNameLabel} from '../../Components/UserNameLabel/UserNameLabel';
 import {ExitButton} from '../../Components/ExitButton/ExitButton';
-
-type UserType = {
-  userAccount: string;
-  uid: number;
-};
-
 import {findKeyDataInDatabase} from './helpers/findKeyDataInDatabase';
 import {deleteChannel} from './helpers/deleteChannel';
-
 
 export const Live: FC<LiveScreenProps> = props => {
   const {channelId, name, coords} = props.route.params;
 
   const [joined, setJoined] = useState(false);
   const [error, setError] = useState(false);
-
   const [peerIds, setPeerIds] = useState<UserType[]>([]);
   const [userName, setUserName] = useState<string>('');
-
 
   const isBroadcaster = isBroadcasterFunction(props.route.params.type);
 
@@ -60,6 +44,11 @@ export const Live: FC<LiveScreenProps> = props => {
     setJoined(true);
   };
 
+  const exitChannelHandler = () => {
+    AgoraEngine.current?.leaveChannel();
+    navigation.goBack();
+  };
+
   const init = async () => {
     AgoraEngine.current = await RtcEngine.create(
       'fecf7537eab9494b9612e782053cc546',
@@ -72,7 +61,6 @@ export const Live: FC<LiveScreenProps> = props => {
     AgoraEngine.current.addListener('JoinChannelSuccess', () => {
       changeStateChannel();
     });
-
 
     AgoraEngine.current.addListener('LocalUserRegistered', (uid, userInfo) => {
       console.log('You join channel', userInfo);
@@ -92,29 +80,9 @@ export const Live: FC<LiveScreenProps> = props => {
     AgoraEngine.current.addListener('UserOffline', (uid, reason) => {
       setPeerIds(prev => prev.filter(user => user.uid !== uid));
     });
-  };
-
-  //unnecessary function this function need for allert with errors
-
-  const closeChannel = (uid: number, reason: UserOfflineReason) => {
-    if (uid === Members.Broadcaster && reason === UserOfflineReason.Quit) {
-      setJoined(false);
-      setError(true);
-      errorAlert('The user left the current channel.', goHome);
-      leaveChannel();
-    }
-    if (uid === Members.Broadcaster && reason === UserOfflineReason.Dropped) {
-      setJoined(false);
-      setError(true);
-      errorAlert(
-        'User dropped offline, no data is received within a long period of time.',
-        goHome,
-      );
-      leaveChannel();
-    }
 
     AgoraEngine.current.addListener('UserOffline', uid => {
-      setPeerIds(prev => prev.filter(id => id !== uid));
+      setPeerIds(prev => prev.filter(userData => userData.uid !== uid));
     });
 
     AgoraEngine.current?.addListener('LeaveChannel', StatsCallback => {
@@ -122,7 +90,6 @@ export const Live: FC<LiveScreenProps> = props => {
       StatsCallback.userCount === 1 ? userLeaveChannel() : null;
       AgoraEngine.current?.destroy();
     });
-
   };
 
   const addNewChannelInDB = () => {
@@ -140,7 +107,9 @@ export const Live: FC<LiveScreenProps> = props => {
 
   const userLeaveChannel = () => {
     findKeyDataInDatabase(channelId).then(keyChannel => {
-      if (keyChannel) deleteChannel(keyChannel);
+      if (keyChannel) {
+        deleteChannel(keyChannel);
+      }
     });
   };
 
@@ -165,7 +134,6 @@ export const Live: FC<LiveScreenProps> = props => {
 
     return () => {
       AgoraEngine.current?.leaveChannel();
-
     };
   }, []);
 
@@ -181,20 +149,20 @@ export const Live: FC<LiveScreenProps> = props => {
   return (
     <View style={styles.container}>
       {joined && (
-        <>
+        <View style={styles.localContainer}>
           <RtcLocalView.SurfaceView
-            style={styles.fullscreen}
+            style={styles.localScreen}
             channelId={channelId}
           />
           <UserNameLabel userName={userName} />
-          <ExitButton />
-        </>
+          <ExitButton exitHandler={exitChannelHandler} />
+        </View>
       )}
       {peerIds.map(user => {
         return (
-          <View style={styles.usersScreen}>
+          <View style={styles.userContainer}>
             <RtcRemoteView.SurfaceView
-              style={styles.usersScreen}
+              style={styles.userScreen}
               uid={user.uid}
               channelId={channelId}
               renderMode={VideoRenderMode.Hidden}
