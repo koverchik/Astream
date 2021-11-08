@@ -14,6 +14,8 @@ target 'agoraStreaming' do
 
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'agoraStreamingTests' do
     inherit! :complete
     # Pods for testing

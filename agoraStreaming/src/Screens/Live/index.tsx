@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState, Fragment} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {Text, Platform, View, ActivityIndicator} from 'react-native';
 import {styles} from './style';
 import RtcEngine, {
@@ -6,24 +6,29 @@ import RtcEngine, {
   ClientRole,
   RtcLocalView,
   RtcRemoteView,
-  UserOfflineReason,
+  UserInfo,
+  VideoRenderMode,
 } from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
-import {LiveScreenProps, Members} from './types';
-import {LiveType} from '../../Navigation/types';
+import {LiveScreenProps, UserType} from './types';
 import database from '@react-native-firebase/database';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationPropNavigation} from '../Home/types';
 import {errorAlert} from './helpers/alert';
 import {requestCameraAndAudioPermission} from './helpers/permission';
+import {v4 as uuid} from 'uuid';
+import {UserNameLabel} from '../../Components/UserNameLabel/UserNameLabel';
+import {ExitButton} from '../../Components/ExitButton/ExitButton';
+import {findKeyDataInDatabase} from './helpers/findKeyDataInDatabase';
+import {deleteChannel} from './helpers/deleteChannel';
 
-export const Live: FC<LiveScreenProps> = props => {
+export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords} = props.route.params;
-  console.log(props.route.params);
 
   const [joined, setJoined] = useState(false);
-
   const [error, setError] = useState(false);
+  const [peerIds, setPeerIds] = useState<UserType[]>([]);
+  const [userName, setUserName] = useState<string>('');
 
   const isBroadcaster = isBroadcasterFunction(props.route.params.type);
 
@@ -39,79 +44,88 @@ export const Live: FC<LiveScreenProps> = props => {
     setJoined(true);
   };
 
+  const exitChannelHandler = () => {
+    AgoraEngine.current?.leaveChannel();
+    navigation.goBack();
+  };
+
   const init = async () => {
     AgoraEngine.current = await RtcEngine.create(
       'fecf7537eab9494b9612e782053cc546',
     );
     AgoraEngine.current.enableVideo();
     AgoraEngine.current.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    if (isBroadcaster)
-      AgoraEngine.current.setClientRole(ClientRole.Broadcaster);
 
-    AgoraEngine.current.addListener('JoinChannelSuccess', changeStateChannel);
-    AgoraEngine.current.addListener('UserOffline', (uid, reason) =>
-      closeChannel(uid, reason),
+    AgoraEngine.current.setClientRole(ClientRole.Broadcaster);
+
+    AgoraEngine.current.addListener('JoinChannelSuccess', () => {
+      changeStateChannel();
+    });
+
+    AgoraEngine.current.addListener('LocalUserRegistered', (uid, userInfo) => {
+      setUserName(userInfo);
+    });
+
+    AgoraEngine.current.addListener(
+      'UserInfoUpdated',
+      (uid: number, userInfo: UserInfo) => {
+        if (!peerIds.find((u) => u.uid === uid)) {
+          setPeerIds((prev) => [...prev, userInfo]);
+        }
+      },
     );
+
+    AgoraEngine.current.addListener('UserOffline', (uid, reason) => {
+      setPeerIds((prev) => prev.filter((user) => user.uid !== uid));
+    });
+
+    AgoraEngine.current.addListener('UserOffline', (uid) => {
+      setPeerIds((prev) => prev.filter((userData) => userData.uid !== uid));
+    });
+
+    AgoraEngine.current?.addListener('LeaveChannel', (StatsCallback) => {
+      StatsCallback.userCount === 1 ? userLeaveChannel() : null;
+      AgoraEngine.current?.destroy();
+    });
   };
 
-  const closeChannel = (uid: number, reason: UserOfflineReason) => {
-    if (uid === Members.Broadcaster && reason === UserOfflineReason.Quit) {
-      setJoined(false);
-      setError(true);
-      errorAlert('The user left the current channel.', goHome);
-      leaveChannel();
-    }
-    if (uid === Members.Broadcaster && reason === UserOfflineReason.Dropped) {
-      setJoined(false);
-      setError(true);
-      leaveChannel();
-      errorAlert(
-        'User dropped offline, no data is received within a long period of time.',
-        goHome,
-      );
-      leaveChannel();
-    }
+  const addNewChannelInDB = async () => {
+    await newReference.set({
+      name,
+      channelId,
+      coords,
+    });
   };
 
-  const addNewChannelInDB = () => {
-    newReference
-      .set(
-        {
-          name,
-          channelId,
-          coords,
-        },
-        e => console.log(e),
-      )
-      .then(() => console.log('Data updated.'));
-  };
-
-  const leaveChannel = async () => {
-    if (isBroadcaster) {
-      await database().ref(`/channels/${newReference.key}`).remove();
-    }
-    AgoraEngine.current?.destroy();
+  const userLeaveChannel = () => {
+    findKeyDataInDatabase(channelId).then((keyChannel) => {
+      if (keyChannel) {
+        deleteChannel(keyChannel);
+      }
+    });
   };
 
   useEffect(() => {
-    const uid = isBroadcaster ? 1 : 0;
     if (Platform.OS === 'android') {
       requestCameraAndAudioPermission();
     }
 
     init()
       .then(() => {
-        AgoraEngine.current?.joinChannel(null, channelId, null, uid);
+        AgoraEngine.current?.joinChannelWithUserAccount(
+          null,
+          channelId,
+          uuid(),
+        );
         isBroadcaster ? addNewChannelInDB() : null;
       })
-      .catch(e => {
+      .catch((e) => {
         setError(true);
         errorAlert(e.message, goHome);
       });
 
     return () => {
-      console.log('exit');
-      leaveChannel();
+      AgoraEngine.current?.leaveChannel();
     };
   }, []);
 
@@ -127,21 +141,29 @@ export const Live: FC<LiveScreenProps> = props => {
   return (
     <View style={styles.container}>
       {joined && (
-        <Fragment>
-          {isBroadcaster ? (
-            <RtcLocalView.SurfaceView
-              style={styles.fullscreen}
-              channelId={channelId}
-            />
-          ) : (
-            <RtcRemoteView.SurfaceView
-              uid={1}
-              style={styles.fullscreen}
-              channelId={channelId}
-            />
-          )}
-        </Fragment>
+        <View style={styles.localContainer}>
+          <RtcLocalView.SurfaceView
+            style={styles.localScreen}
+            channelId={channelId}
+          />
+          <UserNameLabel userName={userName} />
+          <ExitButton exitHandler={exitChannelHandler} />
+        </View>
       )}
+      {peerIds.map((user) => {
+        return (
+          <View style={styles.userContainer}>
+            <RtcRemoteView.SurfaceView
+              style={styles.userScreen}
+              uid={user.uid}
+              channelId={channelId}
+              renderMode={VideoRenderMode.Hidden}
+              zOrderMediaOverlay={true}
+            />
+            <UserNameLabel userName={user.userAccount} />
+          </View>
+        );
+      })}
     </View>
   );
 };

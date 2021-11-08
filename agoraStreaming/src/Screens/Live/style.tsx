@@ -8,7 +8,10 @@ const dimensions = {
 type LifeScreenStyles = {
   container: ViewStyle;
   loadingText: TextStyle;
-  fullscreen: ViewStyle;
+  localScreen: ViewStyle;
+  userScreen: ViewStyle;
+  userContainer: ViewStyle;
+  localContainer: ViewStyle;
 };
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
@@ -17,13 +20,24 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  localContainer: {
+    flex: 1,
+    width: '100%',
+  },
+  localScreen: {
+    flex: 1,
+    width: '100%',
+  },
+  userContainer: {
+    flex: 1,
+    width: '100%',
+  },
+  userScreen: {
+    flex: 1,
+    width: '100%',
+  },
   loadingText: {
     fontSize: 18,
     color: '#222',
-  },
-
-  fullscreen: {
-    width: dimensions.width,
-    height: dimensions.height,
   },
 });

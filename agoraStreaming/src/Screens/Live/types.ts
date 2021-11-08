@@ -16,3 +16,8 @@ export enum Members {
   Audience = 2,
   Broadcaster = 1,
 }
+
+export type UserType = {
+  userAccount: string;
+  uid: number;
+};
