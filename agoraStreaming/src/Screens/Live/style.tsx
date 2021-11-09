@@ -1,16 +1,16 @@
 import {StyleSheet, Dimensions, ViewStyle, TextStyle} from 'react-native';
 
-const dimensions = {
-  width: Dimensions.get('window').width,
-  height: Dimensions.get('window').height,
-};
+const {width} = Dimensions.get('window');
+
+const MicroSize = 20;
 
 type LifeScreenStyles = {
   container: ViewStyle;
   loadingText: TextStyle;
-  muteText: TextStyle;
   camera: ViewStyle;
   muteCamera: ViewStyle;
+  userNameContainer: ViewStyle;
+  microMuteIcon: ViewStyle;
 };
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
@@ -21,7 +21,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
   },
   camera: {
     flex: 1,
-    width: '100%',
+    width: width,
     alignItems: 'center',
   },
   loadingText: {
@@ -32,7 +32,20 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     backgroundColor: '#000',
     justifyContent: 'center',
   },
-  muteText: {
-    color: '#fff',
+  userNameContainer: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+  },
+  microMuteIcon: {
+    position: 'absolute',
+    bottom: -7,
+    left: -10,
+    width: MicroSize,
+    height: MicroSize,
+    borderRadius: MicroSize / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#e01b4a',
   },
 });

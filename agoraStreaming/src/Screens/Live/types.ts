@@ -20,6 +20,12 @@ export enum Members {
 export type UserType = {
   userAccount: string;
   uid: number;
-  muteCamera: boolean;
-  muteVoice: boolean;
+  camera: boolean;
+  voice: boolean;
+};
+
+export type MuteSettings = {
+  uid: number;
+  muted: boolean;
+  device: 'voice' | 'camera';
 };
