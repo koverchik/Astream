@@ -24,7 +24,7 @@ export type UserType = {
   voice: boolean;
 };
 
-export type MuteSettings = {
+export type MuteSettingsType = {
   uid: number;
   muted: boolean;
   device: 'voice' | 'camera';
