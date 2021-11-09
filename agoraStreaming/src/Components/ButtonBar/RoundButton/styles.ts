@@ -6,12 +6,9 @@ export const styles = StyleSheet.create({
   wrapper: {
     width: ButtonSize,
     height: ButtonSize,
-    borderRadius: 5,
-    backgroundColor: '#FF7070',
+    borderRadius: ButtonSize / 2,
+    marginHorizontal: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
   },
 });

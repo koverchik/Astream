@@ -13,9 +13,6 @@ export const styles = StyleSheet.create<UserNameLabelType>({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
-    position: 'absolute',
-    top: 20,
-    left: 20,
   },
   userName: {
     fontSize: 16,
