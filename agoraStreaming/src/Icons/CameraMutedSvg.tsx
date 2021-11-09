@@ -1,7 +1,8 @@
 import React, {FC} from 'react';
 import Svg, {Path} from 'react-native-svg';
+import {CameraMutePropsType} from './types';
 
-export const CameraMutedSvg: FC<{fill?: string; size?: string}> = (props) => {
+export const CameraMutedSvg: FC<CameraMutePropsType> = (props) => {
   const {fill, size} = props;
   return (
     <Svg
