@@ -219,11 +219,18 @@ export const Live: FC<LiveScreenProps> = (props) => {
             )}
             <View style={styles.userNameContainer}>
               <UserNameLabel userName={user.userAccount} />
-              {user.voice && (
-                <View style={styles.microMuteIcon}>
-                  <MicroMutedSvg />
-                </View>
-              )}
+              <View style={styles.iconContainer}>
+                {user.voice && (
+                  <View style={styles.muteIcon}>
+                    <MicroMutedSvg />
+                  </View>
+                )}
+                {user.camera && (
+                  <View style={styles.muteIcon}>
+                    <CameraMutedSvg />
+                  </View>
+                )}
+              </View>
             </View>
           </View>
         );

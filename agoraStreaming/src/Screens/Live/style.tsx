@@ -10,7 +10,8 @@ type LifeScreenStyles = {
   camera: ViewStyle;
   muteCamera: ViewStyle;
   userNameContainer: ViewStyle;
-  microMuteIcon: ViewStyle;
+  muteIcon: ViewStyle;
+  iconContainer: ViewStyle;
 };
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
@@ -37,10 +38,15 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     top: 20,
     left: 20,
   },
-  microMuteIcon: {
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     position: 'absolute',
-    bottom: -7,
+    bottom: -10,
     left: -10,
+  },
+  muteIcon: {
+    margin: 1,
     width: MicroSize,
     height: MicroSize,
     borderRadius: MicroSize / 2,
