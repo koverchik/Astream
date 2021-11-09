@@ -7,7 +7,7 @@ export const RoundButton: FC<RoundButtonPropsType> = (props) => {
   const {handler, icon, color} = props;
   return (
     <Pressable
-      style={[styles.wrapper, {backgroundColor: color ?? '#78adea'}]}
+      style={[styles.wrapper, {backgroundColor: color ?? '#10b4ef'}]}
       onPress={handler}>
       {icon}
     </Pressable>

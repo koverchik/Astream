@@ -6,7 +6,6 @@ import RtcEngine, {
   ClientRole,
   RtcLocalView,
   RtcRemoteView,
-  UserInfo,
   VideoRenderMode,
 } from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
@@ -29,8 +28,8 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const [error, setError] = useState(false);
   const [peerIds, setPeerIds] = useState<UserType[]>([]);
   const [userName, setUserName] = useState<string>('');
-
   const [muteCamera, setMuteCamera] = useState<boolean>(false);
+  const [muteVoice, setMuteVoice] = useState<boolean>(false);
 
   const isBroadcaster = isBroadcasterFunction(props.route.params.type);
 
@@ -56,16 +55,13 @@ export const Live: FC<LiveScreenProps> = (props) => {
     AgoraEngine.current?.muteLocalVideoStream(!muteCamera);
   };
 
-  const muteRemoteCamera = (uid: number, muted: boolean) => {
-    setPeerIds((prevState) =>
-      prevState.map((userData) => {
-        if (userData.uid === uid) {
-          return {...userData, muteCamera: muted};
-        } else {
-          return userData;
-        }
-      }),
-    );
+  const microphoneHandler = () => {
+    setMuteVoice((prev) => !prev);
+    AgoraEngine.current?.muteLocalAudioStream(!muteVoice);
+  };
+
+  const switchCamera = () => {
+    AgoraEngine.current?.switchCamera();
   };
 
   const init = async () => {
@@ -85,22 +81,19 @@ export const Live: FC<LiveScreenProps> = (props) => {
       setUserName(userInfo);
     });
 
-    AgoraEngine.current.addListener(
-      'UserInfoUpdated',
-      (uid: number, userInfo: UserInfo) => {
-        if (!peerIds.find((u) => u.uid === uid)) {
-          const user: UserType = {
-            ...userInfo,
-            muteCamera: false,
-            muteVoice: false,
-          };
-          setPeerIds((prev) => [...prev, user]);
-        }
-      },
-    );
+    AgoraEngine.current.addListener('UserInfoUpdated', (uid, userInfo) => {
+      if (!peerIds.find((userData) => userData.uid === uid)) {
+        const user: UserType = {
+          ...userInfo,
+          muteCamera: false,
+          muteVoice: false,
+        };
+        setPeerIds((prev) => [...prev, user]);
+      }
+    });
 
-    AgoraEngine.current.addListener('UserOffline', (uid, reason) => {
-      setPeerIds((prev) => prev.filter((user) => user.uid !== uid));
+    AgoraEngine.current.addListener('UserOffline', (uid) => {
+      setPeerIds((prev) => prev.filter((userData) => userData.uid !== uid));
     });
 
     AgoraEngine.current.addListener('UserOffline', (uid) => {
@@ -112,12 +105,29 @@ export const Live: FC<LiveScreenProps> = (props) => {
       AgoraEngine.current?.destroy();
     });
 
-    AgoraEngine.current?.addListener(
-      'UserMuteVideo',
-      (uid: number, muted: boolean) => {
-        muteRemoteCamera(uid, muted);
-      },
-    );
+    AgoraEngine.current?.addListener('UserMuteVideo', (uid, muted) => {
+      setPeerIds((prevState) =>
+        prevState.map((userData) => {
+          if (userData.uid === uid) {
+            return {...userData, muteCamera: muted};
+          } else {
+            return userData;
+          }
+        }),
+      );
+    });
+
+    AgoraEngine.current?.addListener('UserMuteAudio', (uid, muted) => {
+      setPeerIds((prevState) =>
+        prevState.map((userData) => {
+          if (userData.uid === uid) {
+            return {...userData, muteVoice: muted};
+          } else {
+            return userData;
+          }
+        }),
+      );
+    });
   };
 
   const addNewChannelInDB = async () => {
@@ -175,7 +185,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
         <View style={styles.camera}>
           {muteCamera ? (
             <View style={[styles.muteCamera, styles.camera]}>
-              <Text style={{color: '#fff'}}>Video muted</Text>
+              <Text style={styles.muteText}>Video muted</Text>
             </View>
           ) : (
             <RtcLocalView.SurfaceView
@@ -187,15 +197,19 @@ export const Live: FC<LiveScreenProps> = (props) => {
           <ButtonBar
             exitHandler={exitChannelHandler}
             cameraHandler={cameraHandler}
+            microphoneHandler={microphoneHandler}
+            switchCamera={switchCamera}
+            muteCamera={muteCamera}
+            muteVoice={muteVoice}
           />
         </View>
       )}
       {peerIds.map((user) => {
         return (
-          <View style={styles.camera}>
+          <View style={styles.camera} key={user.uid}>
             {user.muteCamera ? (
               <View style={[styles.muteCamera, styles.camera]}>
-                <Text style={{color: '#fff'}}>Video muted</Text>
+                <Text style={styles.muteText}>Video muted</Text>
               </View>
             ) : (
               <RtcRemoteView.SurfaceView

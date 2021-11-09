@@ -8,6 +8,7 @@ const dimensions = {
 type LifeScreenStyles = {
   container: ViewStyle;
   loadingText: TextStyle;
+  muteText: TextStyle;
   camera: ViewStyle;
   muteCamera: ViewStyle;
 };
@@ -30,5 +31,8 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
   muteCamera: {
     backgroundColor: '#000',
     justifyContent: 'center',
+  },
+  muteText: {
+    color: '#fff',
   },
 });
