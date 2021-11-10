@@ -5,5 +5,6 @@ import {styles} from './styles';
 
 export const MuteIcon: FC<MuteIconPropsType> = (props) => {
   const {icon} = props;
+
   return <View style={styles.muteIcon}>{icon}</View>;
 };
