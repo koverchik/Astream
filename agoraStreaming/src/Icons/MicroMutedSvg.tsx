@@ -4,8 +4,8 @@ import Svg, {G, Path} from 'react-native-svg';
 export const MicroMutedSvg: FC = () => {
   return (
     <Svg
-      width="60.2%"
-      height="60.2%"
+      width="60%"
+      height="60%"
       viewBox="0 0 788 788"
       fill="#000"
       style={{transform: [{scaleX: -1}, {translateX: -0.3}]}}>
