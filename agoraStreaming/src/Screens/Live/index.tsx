@@ -1,12 +1,10 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, Platform, Text, View} from 'react-native';
+import {ActivityIndicator, Animated, Platform, Text, View} from 'react-native';
 import {styles} from './style';
 import RtcEngine, {
   ChannelProfile,
   ClientRole,
   RtcLocalView,
-  RtcRemoteView,
-  VideoRenderMode,
 } from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {LiveScreenProps, MuteSettings, UserType} from './types';
@@ -20,7 +18,8 @@ import {UserNameLabel} from '../../Components/UserNameLabel/UserNameLabel';
 import {findKeyDataInDatabase} from './helpers/findKeyDataInDatabase';
 import {deleteChannel} from './helpers/deleteChannel';
 import {ButtonBar} from '../../Components/ButtonBar/ButtonBar';
-import {MicroMutedSvg} from '../../Icons/MicroMutedSvg';
+import {RemoteUsers} from '../../Components/RemoteUsers';
+import {IconUserName} from '../../Components/IconUserName';
 import {CameraMutedSvg} from '../../Icons/CameraMutedSvg';
 
 export const Live: FC<LiveScreenProps> = (props) => {
@@ -32,6 +31,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const [userName, setUserName] = useState<string>('');
   const [muteCamera, setMuteCamera] = useState<boolean>(false);
   const [muteVoice, setMuteVoice] = useState<boolean>(false);
+  const [activeVoice, activeVoiceSet] = useState(false);
 
   const isBroadcaster = isBroadcasterFunction(props.route.params.type);
 
@@ -42,6 +42,27 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const navigation = useNavigation<StackNavigationPropNavigation>();
 
   const goHome = () => navigation.navigate('Home');
+
+  const sizeUserPoint = useRef(new Animated.Value(5)).current;
+  const wavesAroundUserPoint = useRef(new Animated.Value(3)).current;
+
+  const animation = useRef(
+    Animated.loop(
+      Animated.parallel([
+        Animated.spring(sizeUserPoint, {
+          toValue: 3,
+          useNativeDriver: true,
+          stiffness: 10,
+        }),
+        Animated.spring(wavesAroundUserPoint, {
+          toValue: 5,
+          useNativeDriver: true,
+          stiffness: 10,
+        }),
+      ]),
+      {iterations: 100000},
+    ),
+  ).current;
 
   const changeStateChannel = () => {
     setJoined(true);
@@ -59,6 +80,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const microphoneHandler = () => {
     setMuteVoice((prev) => !prev);
+
     AgoraEngine.current?.muteLocalAudioStream(!muteVoice);
   };
 
@@ -75,6 +97,8 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
     AgoraEngine.current.setClientRole(ClientRole.Broadcaster);
 
+    AgoraEngine.current.enableAudioVolumeIndication(200, 10, true);
+
     AgoraEngine.current.addListener('JoinChannelSuccess', () => {
       changeStateChannel();
     });
@@ -89,8 +113,43 @@ export const Live: FC<LiveScreenProps> = (props) => {
           ...userInfo,
           camera: false,
           voice: false,
+          activeVoice: false,
         };
         setPeerIds((prev) => [...prev, user]);
+      }
+    });
+    AgoraEngine.current.addListener('AudioVolumeIndication', (speakers) => {
+      for (let i = 0; i < speakers.length; i++) {
+        const speaker = speakers[i];
+        console.log(speaker);
+        console.log(speaker['uid']);
+
+        if (speaker['volume']) {
+          if (
+            speaker['volume'] > 0 &&
+            speaker['uid'] === 0 &&
+            activeVoice == false
+          ) {
+            activeVoiceSet(true);
+            animation.start();
+          }
+
+          setPeerIds((prev) => {
+            return prev.map((user) => {
+              if (user.uid === speaker.uid) {
+                return {
+                  ...user,
+                  activeVoice: true,
+                };
+              } else {
+                return {
+                  ...user,
+                  activeVoice: false,
+                };
+              }
+            });
+          });
+        }
       }
     });
 
@@ -173,14 +232,25 @@ export const Live: FC<LiveScreenProps> = (props) => {
       </View>
     );
   }
-
+  const countUsers = () => {
+    return peerIds.length + 1;
+  };
   return (
     <View style={styles.container}>
       {joined && (
         <View style={styles.camera}>
           {muteCamera ? (
             <View style={[styles.muteCamera, styles.camera]}>
-              <CameraMutedSvg fill={'#262626'} size={'50%'} />
+              {activeVoice ? (
+                <IconUserName
+                  userName={userName}
+                  countUser={countUsers}
+                  sizeUserPoint={sizeUserPoint}
+                  wavesAroundUserPoint={wavesAroundUserPoint}
+                />
+              ) : (
+                <CameraMutedSvg fill={'#262626'} size={'50%'} />
+              )}
             </View>
           ) : (
             <RtcLocalView.SurfaceView
@@ -203,36 +273,16 @@ export const Live: FC<LiveScreenProps> = (props) => {
       )}
       {peerIds.map((user) => {
         return (
-          <View style={styles.camera} key={user.uid}>
-            {user.camera ? (
-              <View style={[styles.muteCamera, styles.camera]}>
-                <CameraMutedSvg fill={'#262626'} />
-              </View>
-            ) : (
-              <RtcRemoteView.SurfaceView
-                style={styles.camera}
-                uid={user.uid}
-                channelId={channelId}
-                renderMode={VideoRenderMode.Hidden}
-                zOrderMediaOverlay={true}
-              />
-            )}
-            <View style={styles.userNameContainer}>
-              <UserNameLabel userName={user.userAccount} />
-              <View style={styles.iconContainer}>
-                {user.voice && (
-                  <View style={styles.muteIcon}>
-                    <MicroMutedSvg />
-                  </View>
-                )}
-                {user.camera && (
-                  <View style={styles.muteIcon}>
-                    <CameraMutedSvg />
-                  </View>
-                )}
-              </View>
-            </View>
-          </View>
+          <RemoteUsers
+            key={'RemoteUsers' + user.uid}
+            uid={user.uid}
+            channelId={channelId}
+            countUsers={countUsers}
+            userAccount={user.userAccount}
+            voice={user.voice}
+            camera={user.camera}
+            activeVoice={user.activeVoice}
+          />
         );
       })}
     </View>

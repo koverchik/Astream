@@ -22,6 +22,7 @@ export type UserType = {
   uid: number;
   camera: boolean;
   voice: boolean;
+  activeVoice: boolean;
 };
 
 export type MuteSettings = {

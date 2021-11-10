@@ -19,7 +19,7 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
   const coordinates = props.coordinates;
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [name, setName] = useState('');
+  const [name, setName] = useState('channel');
   const [error, setError] = useState<string | null>(null);
 
   const navigation = useNavigation<StackNavigationPropNavigation>();

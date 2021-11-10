@@ -1,18 +1,27 @@
-import React, {FC, useEffect, useRef} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {Animated, Dimensions, View} from 'react-native';
 import {RtcRemoteView, VideoRenderMode} from 'react-native-agora';
-import {ExitButton} from '../ExitButton/ExitButton';
+import {CameraMutedSvg} from '../../Icons/CameraMutedSvg';
+import {MicroMutedSvg} from '../../Icons/MicroMutedSvg';
 import {IconUserName} from '../IconUserName';
 import {UserNameLabel} from '../UserNameLabel/UserNameLabel';
 import {styles} from './styles';
 import {RemoteUsersType} from './types';
 
 export const RemoteUsers: FC<RemoteUsersType> = (props) => {
-  const {uid, channelId, userAccount, countUsers} = props;
+  const {uid, channelId, userAccount, countUsers, voice, camera, activeVoice} =
+    props;
+
   const sizeUserPoint = useRef(new Animated.Value(5)).current;
   const wavesAroundUserPoint = useRef(new Animated.Value(3)).current;
+  const [stateVoice, setStateVoice] = useState(activeVoice);
 
-  const animationUserPoint = () => {
+  useEffect(() => {
+    stateVoice === activeVoice ? null : setStateVoice(activeVoice);
+    stateVoice ? animation.start() : null;
+  }, [activeVoice, stateVoice]);
+
+  const animation = useRef(
     Animated.loop(
       Animated.parallel([
         Animated.spring(sizeUserPoint, {
@@ -27,26 +36,48 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
         }),
       ]),
       {iterations: 100000},
-    ).start();
-  };
+    ),
+  ).current;
 
   return (
-    <View style={styles.userContainer} key={uid}>
-      <RtcRemoteView.SurfaceView
-        style={styles.userScreen}
-        uid={uid}
-        channelId={channelId}
-        renderMode={VideoRenderMode.Hidden}
-        zOrderMediaOverlay={true}
-      />
-      <IconUserName
-        userName={userAccount}
-        countUser={countUsers}
-        sizeUserPoint={sizeUserPoint}
-        wavesAroundUserPoint={wavesAroundUserPoint}
-      />
-      <ExitButton exitHandler={animationUserPoint} />
-      <UserNameLabel userName={userAccount} />
+    <View style={styles.camera} key={uid}>
+      {camera ? (
+        <View style={[styles.muteCamera, styles.camera]}>
+          {activeVoice ? (
+            <IconUserName
+              userName={userAccount}
+              countUser={countUsers}
+              sizeUserPoint={sizeUserPoint}
+              wavesAroundUserPoint={wavesAroundUserPoint}
+            />
+          ) : (
+            <CameraMutedSvg fill={'#262626'} />
+          )}
+        </View>
+      ) : (
+        <RtcRemoteView.SurfaceView
+          style={styles.camera}
+          uid={uid}
+          channelId={channelId}
+          renderMode={VideoRenderMode.Hidden}
+          zOrderMediaOverlay={true}
+        />
+      )}
+      <View style={styles.userNameContainer}>
+        <UserNameLabel userName={userAccount} />
+        <View style={styles.iconContainer}>
+          {voice && (
+            <View style={styles.muteIcon}>
+              <MicroMutedSvg />
+            </View>
+          )}
+          {camera && (
+            <View style={styles.muteIcon}>
+              <CameraMutedSvg />
+            </View>
+          )}
+        </View>
+      </View>
     </View>
   );
 };
