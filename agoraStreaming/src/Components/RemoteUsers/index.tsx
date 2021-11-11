@@ -1,17 +1,14 @@
-import React, {FC, useEffect, useMemo, useRef, useState} from 'react';
-import {Animated, Dimensions, View} from 'react-native';
+import React, {FC, useRef} from 'react';
+import {Animated, View} from 'react-native';
 import {RtcRemoteView, VideoRenderMode} from 'react-native-agora';
-import {CameraMutedSvg} from '../../Icons/CameraMutedSvg';
-import {MicroMutedSvg} from '../../Icons/MicroMutedSvg';
 import {animationCircle} from '../../Screens/Live/helpers/animationCircle';
 import {IconUserName} from '../IconUserName';
-import {UserNameLabel} from '../UserNameLabel/UserNameLabel';
 import {styles} from './styles';
 import {RemoteUsersType} from './types';
+import {UserNameLabel} from '../UserNameLabel/UserNameLabel';
 
 export const RemoteUsers: FC<RemoteUsersType> = (props) => {
-  const {uid, channelId, userAccount, countUsers, voice, camera, activeVoice} =
-    props;
+  const {uid, channelId, userAccount, countUsers, camera, activeVoice} = props;
 
   const sizeUserPoint = useRef(new Animated.Value(5)).current;
   const wavesAroundUserPoint = useRef(new Animated.Value(3)).current;
@@ -41,18 +38,6 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
       )}
       <View style={styles.userNameContainer}>
         <UserNameLabel userName={userAccount} />
-        <View style={styles.iconContainer}>
-          {voice && (
-            <View style={styles.muteIcon}>
-              <MicroMutedSvg />
-            </View>
-          )}
-          {camera && (
-            <View style={styles.muteIcon}>
-              <CameraMutedSvg />
-            </View>
-          )}
-        </View>
       </View>
     </View>
   );

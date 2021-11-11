@@ -7,3 +7,10 @@ export type RemoteUsersType = {
   camera: boolean;
   activeVoice: boolean;
 };
+
+export type LocalUserType = {
+  uid: number;
+  userAccount: string;
+  voice: boolean;
+  camera: boolean;
+};

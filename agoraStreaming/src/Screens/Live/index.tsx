@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {Animated, Platform, Text, View} from 'react-native';
 import {styles} from './style';
-import RtcEngine, {RtcLocalView} from 'react-native-agora';
+import RtcEngine from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {LiveScreenProps, MuteSettingsType, UserType} from './types';
 import database from '@react-native-firebase/database';
@@ -10,26 +10,54 @@ import {StackNavigationPropNavigation} from '../Home/types';
 import {errorAlert} from './helpers/alert';
 import {requestCameraAndAudioPermission} from './helpers/permission';
 import {v4 as uuid} from 'uuid';
-import {UserNameLabel} from '../../Components/UserNameLabel/UserNameLabel';
 import {findKeyDataInDatabase} from './helpers/findKeyDataInDatabase';
 import {deleteChannel} from './helpers/deleteChannel';
 import {ButtonBar} from '../../Components/ButtonBar/ButtonBar';
 import {RemoteUsers} from '../../Components/RemoteUsers';
-import {IconUserName} from '../../Components/IconUserName';
 import {Preloader} from '../../Components/Preloader/Preloader';
 import {animationCircle} from './helpers/animationCircle';
 import {initChannel} from './helpers/channel';
+import {LocalUserType} from '../../Components/RemoteUsers/types';
+import {LocalUser} from '../../Components/LocalUser';
 
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords} = props.route.params;
 
   const [joined, setJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [peerIds, setPeerIds] = useState<UserType[]>([]);
-  const [userName, setUserName] = useState<string>('');
-  const [muteCamera, setMuteCamera] = useState<boolean>(false);
-  const [muteVoice, setMuteVoice] = useState<boolean>(false);
+  const [peerIds, setPeerIds] = useState<UserType[]>([
+    {
+      uid: 228,
+      userAccount: 'lol',
+      camera: false,
+      voice: false,
+      activeVoice: false,
+    },
+    {
+      uid: 322,
+      userAccount: 'kek',
+      camera: false,
+      voice: false,
+      activeVoice: false,
+    },
+    {
+      uid: 1337,
+      userAccount: 'cheburek',
+      camera: false,
+      voice: false,
+      activeVoice: false,
+    },
+  ]);
+  const [myUserData, setMyUserData] = useState<LocalUserType>({
+    uid: 0,
+    userAccount: '',
+    camera: false,
+    voice: false,
+  });
+
   const [activeVoice, activeVoiceSet] = useState(false);
+
+  const [stash, setStash] = useState<UserType[]>([]);
 
   const isBroadcaster = isBroadcasterFunction(props.route.params.type);
 
@@ -56,14 +84,13 @@ export const Live: FC<LiveScreenProps> = (props) => {
   };
 
   const cameraHandler = () => {
-    setMuteCamera((prev) => !prev);
-    AgoraEngine.current?.muteLocalVideoStream(!muteCamera);
+    setMyUserData((prev) => ({...prev, camera: !prev.camera}));
+    AgoraEngine.current?.muteLocalVideoStream(!myUserData.camera);
   };
 
   const microphoneHandler = () => {
-    setMuteVoice((prev) => !prev);
-
-    AgoraEngine.current?.muteLocalAudioStream(!muteVoice);
+    setMyUserData((prev) => ({...prev, voice: !prev.voice}));
+    AgoraEngine.current?.muteLocalAudioStream(!myUserData.voice);
   };
 
   const switchCamera = () => {
@@ -100,16 +127,17 @@ export const Live: FC<LiveScreenProps> = (props) => {
       requestCameraAndAudioPermission();
     }
 
-    initChannel(
+    initChannel({
       AgoraEngine,
       userJoined,
-      setUserName,
+      setMyUserData,
       peerIds,
       setPeerIds,
       activeVoiceSet,
       mute,
       userLeaveChannel,
-    )
+      setStash,
+    })
       .then(() => {
         AgoraEngine.current?.joinChannelWithUserAccount(
           null,
@@ -134,54 +162,107 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const countUsers = () => {
     return peerIds.length + 1;
   };
+
   return (
     <View style={styles.container}>
-      {joined && (
-        <View style={styles.camera}>
-          {muteCamera ? (
-            <View style={[styles.muteCamera, styles.camera]}>
-              {activeVoice && (
-                <IconUserName
-                  userName={userName}
-                  countUser={countUsers}
-                  sizeUserPoint={sizeUserPoint}
-                  wavesAroundUserPoint={wavesAroundUserPoint}
-                />
-              )}
-            </View>
-          ) : (
-            <RtcLocalView.SurfaceView
-              style={styles.camera}
-              channelId={channelId}
-            />
-          )}
-          <View style={styles.userNameContainer}>
-            <UserNameLabel userName={userName} />
-          </View>
+      <View style={styles.videoContainer}>
+        <View
+          style={[
+            styles.row,
+            peerIds.length === 2 && {flexDirection: 'column'},
+          ]}>
+          {peerIds.map((user, index) => {
+            if (index === 0 || index === 1) {
+              if (user.uid !== myUserData.uid) {
+                return (
+                  <RemoteUsers
+                    key={'RemoteUsers' + user.uid}
+                    uid={user.uid}
+                    channelId={channelId}
+                    countUsers={countUsers}
+                    userAccount={user.userAccount}
+                    voice={user.voice}
+                    camera={user.camera}
+                    activeVoice={user.activeVoice}
+                  />
+                );
+              } else if (joined) {
+                return (
+                  <LocalUser
+                    myUserData={myUserData}
+                    channelId={channelId}
+                    activeVoice={activeVoice}
+                    countUsers={countUsers}
+                    sizeUserPoint={sizeUserPoint}
+                    wavesAroundUserPoint={wavesAroundUserPoint}
+                  />
+                );
+              }
+            }
+          })}
         </View>
-      )}
-      {peerIds.map((user) => {
-        return (
-          <RemoteUsers
-            key={'RemoteUsers' + user.uid}
-            uid={user.uid}
-            channelId={channelId}
-            countUsers={countUsers}
-            userAccount={user.userAccount}
-            voice={user.voice}
-            camera={user.camera}
-            activeVoice={user.activeVoice}
-          />
-        );
-      })}
+        {peerIds.length >= 3 && (
+          <View style={styles.row}>
+            {peerIds.map((user, index) => {
+              if (index === 2 || index === 3) {
+                if (user.uid !== myUserData.uid) {
+                  return (
+                    <RemoteUsers
+                      key={'RemoteUsers' + user.uid}
+                      uid={user.uid}
+                      channelId={channelId}
+                      countUsers={countUsers}
+                      userAccount={user.userAccount}
+                      voice={user.voice}
+                      camera={user.camera}
+                      activeVoice={user.activeVoice}
+                    />
+                  );
+                } else if (joined) {
+                  return (
+                    <LocalUser
+                      myUserData={myUserData}
+                      channelId={channelId}
+                      activeVoice={activeVoice}
+                      countUsers={countUsers}
+                      sizeUserPoint={sizeUserPoint}
+                      wavesAroundUserPoint={wavesAroundUserPoint}
+                    />
+                  );
+                }
+              }
+            })}
+          </View>
+        )}
+      </View>
       <ButtonBar
         exitHandler={exitChannelHandler}
         cameraHandler={cameraHandler}
         microphoneHandler={microphoneHandler}
         switchCamera={switchCamera}
-        muteCamera={muteCamera}
-        muteVoice={muteVoice}
+        muteCamera={myUserData.camera}
+        muteVoice={myUserData.voice}
       />
+      <Text
+        style={{
+          color: '#000',
+          fontSize: 20,
+          position: 'absolute',
+          bottom: 20,
+          right: 20,
+        }}>
+        {stash.length}
+      </Text>
+      <Text
+        style={{
+          color: '#000',
+          fontSize: 20,
+          position: 'absolute',
+          bottom: 20,
+          left: 20,
+        }}>
+        {peerIds.length}
+      </Text>
     </View>
   );
 };
