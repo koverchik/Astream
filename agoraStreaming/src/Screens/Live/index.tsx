@@ -31,8 +31,6 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const [muteVoice, setMuteVoice] = useState<boolean>(false);
   const [activeVoice, activeVoiceSet] = useState(false);
 
-  const appID = 'fecf7537eab9494b9612e782053cc546';
-
   const isBroadcaster = isBroadcasterFunction(props.route.params.type);
 
   const AgoraEngine = useRef<RtcEngine>();

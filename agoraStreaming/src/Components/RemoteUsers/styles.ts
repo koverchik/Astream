@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions, ViewStyle, TextStyle} from 'react-native';
+import {StyleSheet, Dimensions, ViewStyle} from 'react-native';
 
 const dimensions = {
   width: Dimensions.get('window').width,
@@ -8,29 +8,14 @@ const dimensions = {
 const MicroSize = 20;
 
 type LifeScreenStyles = {
-  container: ViewStyle;
-  loadingText: TextStyle;
-  localScreen: ViewStyle;
   camera: ViewStyle;
   userNameContainer: ViewStyle;
   muteCamera: ViewStyle;
   iconContainer: ViewStyle;
   muteIcon: ViewStyle;
-  userScreen: ViewStyle;
-  userContainer: ViewStyle;
-  localContainer: ViewStyle;
 };
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  localContainer: {
-    flex: 1,
-    width: '100%',
-  },
   camera: {
     flex: 1,
     width: dimensions.width,
@@ -60,21 +45,5 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#e01b4a',
-  },
-  localScreen: {
-    flex: 1,
-    width: '100%',
-  },
-  userContainer: {
-    flex: 1,
-    width: '100%',
-  },
-  userScreen: {
-    flex: 1,
-    width: '100%',
-  },
-  loadingText: {
-    fontSize: 18,
-    color: '#222',
   },
 });
