@@ -1,11 +1,7 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {Animated, Platform, Text, View} from 'react-native';
 import {styles} from './style';
-import RtcEngine, {
-  ChannelProfile,
-  ClientRole,
-  RtcLocalView,
-} from 'react-native-agora';
+import RtcEngine, {RtcLocalView} from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {LiveScreenProps, MuteSettingsType, UserType} from './types';
 import database from '@react-native-firebase/database';
@@ -20,10 +16,9 @@ import {deleteChannel} from './helpers/deleteChannel';
 import {ButtonBar} from '../../Components/ButtonBar/ButtonBar';
 import {RemoteUsers} from '../../Components/RemoteUsers';
 import {IconUserName} from '../../Components/IconUserName';
-import {CameraMutedSvg} from '../../Icons/CameraMutedSvg';
 import {Preloader} from '../../Components/Preloader/Preloader';
-import {MuteIcon} from '../../Components/MuteIcon/MuteIcon';
 import {animationCircle} from './helpers/animationCircle';
+import {initChannel} from './helpers/channel';
 
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords} = props.route.params;
@@ -87,87 +82,6 @@ export const Live: FC<LiveScreenProps> = (props) => {
     });
   };
 
-  const init = async () => {
-    AgoraEngine.current = await RtcEngine.create(appID);
-
-    AgoraEngine.current?.enableVideo();
-
-    AgoraEngine.current.enableAudioVolumeIndication(3000, 6, true);
-
-    AgoraEngine.current?.setChannelProfile(ChannelProfile.LiveBroadcasting);
-
-    AgoraEngine.current?.setClientRole(ClientRole.Broadcaster);
-
-    AgoraEngine.current?.addListener('JoinChannelSuccess', () => {
-      userJoined();
-    });
-
-    AgoraEngine.current?.addListener('LocalUserRegistered', (uid, userInfo) => {
-      setUserName(userInfo);
-    });
-
-    AgoraEngine.current?.addListener('UserInfoUpdated', (uid, userInfo) => {
-      if (!peerIds.find((userData) => userData.uid === uid)) {
-        const user: UserType = {
-          ...userInfo,
-          camera: false,
-          voice: false,
-          activeVoice: false,
-        };
-        setPeerIds((prev) => [...prev, user]);
-      }
-    });
-    AgoraEngine.current.addListener('AudioVolumeIndication', (speakers) => {
-      for (let i = 0; i < speakers.length; i++) {
-        const speaker = speakers[i];
-        if (speaker['volume']) {
-          if (speaker['vad'] === 1 && speaker['uid'] === 0) {
-            activeVoiceSet(true);
-          } else {
-            activeVoiceSet(false);
-          }
-
-          setPeerIds((prev) => {
-            return prev.map((user) => {
-              if (user.uid === speaker.uid) {
-                return {
-                  ...user,
-                  activeVoice: true,
-                };
-              } else {
-                return {
-                  ...user,
-                  activeVoice: false,
-                };
-              }
-            });
-          });
-        }
-      }
-    });
-
-    AgoraEngine.current?.addListener('UserOffline', (uid) => {
-      setPeerIds((prev) => prev.filter((userData) => userData.uid !== uid));
-    });
-
-    AgoraEngine.current?.addListener('LeaveChannel', (StatsCallback) => {
-      StatsCallback.userCount === 1 ? userLeaveChannel() : null;
-      AgoraEngine.current?.destroy();
-    });
-
-    AgoraEngine.current?.addListener('UserMuteVideo', (uid, muted) => {
-      setPeerIds((prevState) => {
-        return mute({uid, muted, device: 'camera'}, prevState);
-      });
-    });
-
-    AgoraEngine.current?.addListener('UserMuteAudio', (uid, muted) => {
-      setPeerIds((prevState) => {
-        return mute({uid, muted, device: 'voice'}, prevState);
-      });
-    });
-  };
-
   const addNewChannelInDB = async () => {
     await newReference.set({
       name,
@@ -188,7 +102,16 @@ export const Live: FC<LiveScreenProps> = (props) => {
       requestCameraAndAudioPermission();
     }
 
-    init()
+    initChannel(
+      AgoraEngine,
+      userJoined,
+      setUserName,
+      peerIds,
+      setPeerIds,
+      activeVoiceSet,
+      mute,
+      userLeaveChannel,
+    )
       .then(() => {
         AgoraEngine.current?.joinChannelWithUserAccount(
           null,
