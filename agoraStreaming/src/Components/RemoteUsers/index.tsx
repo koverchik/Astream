@@ -21,14 +21,14 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
     <View style={styles.camera} key={uid}>
       {camera ? (
         <View style={[styles.muteCamera, styles.camera]}>
-          {activeVoice ? (
+          {activeVoice && (
             <IconUserName
               userName={userAccount}
               countUser={countUsers}
               sizeUserPoint={sizeUserPoint}
               wavesAroundUserPoint={wavesAroundUserPoint}
             />
-          ) : null}
+          )}
         </View>
       ) : (
         <RtcRemoteView.SurfaceView

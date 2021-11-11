@@ -140,14 +140,14 @@ export const Live: FC<LiveScreenProps> = (props) => {
         <View style={styles.camera}>
           {muteCamera ? (
             <View style={[styles.muteCamera, styles.camera]}>
-              {activeVoice ? (
+              {activeVoice && (
                 <IconUserName
                   userName={userName}
                   countUser={countUsers}
                   sizeUserPoint={sizeUserPoint}
                   wavesAroundUserPoint={wavesAroundUserPoint}
                 />
-              ) : null}
+              )}
             </View>
           ) : (
             <RtcLocalView.SurfaceView
