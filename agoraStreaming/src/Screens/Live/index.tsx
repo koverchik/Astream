@@ -19,6 +19,8 @@ import {IconUserName} from '../../Components/IconUserName';
 import {Preloader} from '../../Components/Preloader/Preloader';
 import {animationCircle} from './helpers/animationCircle';
 import {initChannel} from './helpers/channel';
+import {ListUsers} from '../../Components/ListUsers';
+import {hiddenUsers} from './fakeData';
 
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords} = props.route.params;
@@ -136,52 +138,55 @@ export const Live: FC<LiveScreenProps> = (props) => {
   };
   return (
     <View style={styles.container}>
-      {joined && (
-        <View style={styles.camera}>
-          {muteCamera ? (
-            <View style={[styles.muteCamera, styles.camera]}>
-              {activeVoice && (
-                <IconUserName
-                  userName={userName}
-                  countUser={countUsers}
-                  sizeUserPoint={sizeUserPoint}
-                  wavesAroundUserPoint={wavesAroundUserPoint}
-                />
-              )}
+      <View style={styles.wrapperVideoAndButton}>
+        {joined && (
+          <View style={styles.camera}>
+            {muteCamera ? (
+              <View style={[styles.muteCamera, styles.camera]}>
+                {activeVoice && (
+                  <IconUserName
+                    userName={userName}
+                    countUser={countUsers}
+                    sizeUserPoint={sizeUserPoint}
+                    wavesAroundUserPoint={wavesAroundUserPoint}
+                  />
+                )}
+              </View>
+            ) : (
+              <RtcLocalView.SurfaceView
+                style={styles.camera}
+                channelId={channelId}
+              />
+            )}
+            <View style={styles.userNameContainer}>
+              <UserNameLabel userName={userName} />
             </View>
-          ) : (
-            <RtcLocalView.SurfaceView
-              style={styles.camera}
-              channelId={channelId}
-            />
-          )}
-          <View style={styles.userNameContainer}>
-            <UserNameLabel userName={userName} />
           </View>
-        </View>
-      )}
-      {peerIds.map((user) => {
-        return (
-          <RemoteUsers
-            key={'RemoteUsers' + user.uid}
-            uid={user.uid}
-            channelId={channelId}
-            countUsers={countUsers}
-            userAccount={user.userAccount}
-            voice={user.voice}
-            camera={user.camera}
-            activeVoice={user.activeVoice}
-          />
-        );
-      })}
-      <ButtonBar
-        exitHandler={exitChannelHandler}
-        cameraHandler={cameraHandler}
-        microphoneHandler={microphoneHandler}
-        switchCamera={switchCamera}
-        muteCamera={muteCamera}
-        muteVoice={muteVoice}
-      />
+        )}
+        {peerIds.map((user) => {
+          return (
+            <RemoteUsers
+              key={'RemoteUsers' + user.uid}
+              uid={user.uid}
+              channelId={channelId}
+              countUsers={countUsers}
+              userAccount={user.userAccount}
+              voice={user.voice}
+              camera={user.camera}
+              activeVoice={user.activeVoice}
+            />
+          );
+        })}
+        <ButtonBar
+          exitHandler={exitChannelHandler}
+          cameraHandler={cameraHandler}
+          microphoneHandler={microphoneHandler}
+          switchCamera={switchCamera}
+          muteCamera={muteCamera}
+          muteVoice={muteVoice}
+        />
+      </View>
+      <ListUsers hiddenUsers={hiddenUsers} />
     </View>
   );
 };
