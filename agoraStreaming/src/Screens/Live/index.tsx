@@ -23,6 +23,7 @@ import {IconUserName} from '../../Components/IconUserName';
 import {CameraMutedSvg} from '../../Icons/CameraMutedSvg';
 import {Preloader} from '../../Components/Preloader/Preloader';
 import {MuteIcon} from '../../Components/MuteIcon/MuteIcon';
+import {animationCircle} from './helpers/animationCircle';
 
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords} = props.route.params;
@@ -50,25 +51,9 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const sizeUserPoint = useRef(new Animated.Value(5)).current;
   const wavesAroundUserPoint = useRef(new Animated.Value(3)).current;
 
-  const animation = useRef(
-    Animated.loop(
-      Animated.parallel([
-        Animated.spring(sizeUserPoint, {
-          toValue: 3,
-          useNativeDriver: true,
-          stiffness: 10,
-        }),
-        Animated.spring(wavesAroundUserPoint, {
-          toValue: 5,
-          useNativeDriver: true,
-          stiffness: 10,
-        }),
-      ]),
-      {iterations: 100000},
-    ),
-  ).current;
+  animationCircle(sizeUserPoint, wavesAroundUserPoint).start();
 
-  const changeStateChannel = () => {
+  const userJoined = () => {
     setJoined(true);
   };
 
@@ -107,16 +92,14 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
     AgoraEngine.current?.enableVideo();
 
-
-    AgoraEngine.current.enableAudioVolumeIndication(200, 10, true);
-
+    AgoraEngine.current.enableAudioVolumeIndication(3000, 6, true);
 
     AgoraEngine.current?.setChannelProfile(ChannelProfile.LiveBroadcasting);
 
     AgoraEngine.current?.setClientRole(ClientRole.Broadcaster);
 
     AgoraEngine.current?.addListener('JoinChannelSuccess', () => {
-      changeStateChannel();
+      userJoined();
     });
 
     AgoraEngine.current?.addListener('LocalUserRegistered', (uid, userInfo) => {
@@ -137,17 +120,11 @@ export const Live: FC<LiveScreenProps> = (props) => {
     AgoraEngine.current.addListener('AudioVolumeIndication', (speakers) => {
       for (let i = 0; i < speakers.length; i++) {
         const speaker = speakers[i];
-        console.log(speaker);
-        console.log(speaker['uid']);
-
         if (speaker['volume']) {
-          if (
-            speaker['volume'] > 0 &&
-            speaker['uid'] === 0 &&
-            activeVoice == false
-          ) {
+          if (speaker['vad'] === 1 && speaker['uid'] === 0) {
             activeVoiceSet(true);
-            animation.start();
+          } else {
+            activeVoiceSet(false);
           }
 
           setPeerIds((prev) => {
@@ -249,9 +226,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
                   sizeUserPoint={sizeUserPoint}
                   wavesAroundUserPoint={wavesAroundUserPoint}
                 />
-              ) : (
-                <CameraMutedSvg fill={'#262626'} size={'50%'} />
-              )}
+              ) : null}
             </View>
           ) : (
             <RtcLocalView.SurfaceView

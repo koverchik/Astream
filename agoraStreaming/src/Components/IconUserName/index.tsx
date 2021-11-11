@@ -11,7 +11,22 @@ const dimensions = {
 export const IconUserName: FC<IconUserNameType> = (props) => {
   const {userName, countUser, sizeUserPoint, wavesAroundUserPoint} = props;
   const valueTop = dimensions.height / 2 / countUser() - 20;
-
+  const transformCircleAround = [
+    {
+      scale: wavesAroundUserPoint.interpolate({
+        inputRange: [3, 4, 5],
+        outputRange: [3, 4.5, 3],
+      }),
+    },
+  ];
+  const transformAround = [
+    {
+      scale: sizeUserPoint.interpolate({
+        inputRange: [3, 4, 5],
+        outputRange: [4, 3, 4],
+      }),
+    },
+  ];
   return (
     <>
       <Animated.View
@@ -19,14 +34,7 @@ export const IconUserName: FC<IconUserNameType> = (props) => {
           styles.wavesAroundUserPoint,
           {
             top: valueTop,
-            transform: [
-              {
-                scale: wavesAroundUserPoint.interpolate({
-                  inputRange: [3, 4, 5],
-                  outputRange: [3, 4.5, 3],
-                }),
-              },
-            ],
+            transform: transformCircleAround,
           },
         ]}></Animated.View>
       <Animated.View
@@ -34,14 +42,7 @@ export const IconUserName: FC<IconUserNameType> = (props) => {
           styles.pointUserName,
           {
             top: valueTop,
-            transform: [
-              {
-                scale: sizeUserPoint.interpolate({
-                  inputRange: [3, 4, 5],
-                  outputRange: [4, 3, 4],
-                }),
-              },
-            ],
+            transform: transformAround,
           },
         ]}>
         <Text>{userName.slice(0, 1)}</Text>
