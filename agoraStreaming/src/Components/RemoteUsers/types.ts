@@ -2,5 +2,8 @@ export type RemoteUsersType = {
   uid: number;
   channelId: string;
   countUsers: () => number;
-  userAccount: any;
+  userAccount: string;
+  voice: boolean;
+  camera: boolean;
+  activeVoice: boolean;
 };

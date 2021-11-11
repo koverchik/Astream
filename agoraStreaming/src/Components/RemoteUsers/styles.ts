@@ -1,43 +1,49 @@
-import {StyleSheet, Dimensions, ViewStyle, TextStyle} from 'react-native';
+import {StyleSheet, Dimensions, ViewStyle} from 'react-native';
 
 const dimensions = {
   width: Dimensions.get('window').width,
   height: Dimensions.get('window').height,
 };
 
+const MicroSize = 20;
+
 type LifeScreenStyles = {
-  container: ViewStyle;
-  loadingText: TextStyle;
-  localScreen: ViewStyle;
-  userScreen: ViewStyle;
-  userContainer: ViewStyle;
-  localContainer: ViewStyle;
+  camera: ViewStyle;
+  userNameContainer: ViewStyle;
+  muteCamera: ViewStyle;
+  iconContainer: ViewStyle;
+  muteIcon: ViewStyle;
 };
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
-  container: {
+  camera: {
     flex: 1,
-    justifyContent: 'center',
+    width: dimensions.width,
     alignItems: 'center',
   },
-  localContainer: {
-    flex: 1,
-    width: '100%',
+  muteCamera: {
+    backgroundColor: '#000',
+    justifyContent: 'center',
   },
-  localScreen: {
-    flex: 1,
-    width: '100%',
+  userNameContainer: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
   },
-  userContainer: {
-    flex: 1,
-    width: '100%',
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: -10,
+    left: -10,
   },
-  userScreen: {
-    flex: 1,
-    width: '100%',
-  },
-  loadingText: {
-    fontSize: 18,
-    color: '#222',
+  muteIcon: {
+    margin: 1,
+    width: MicroSize,
+    height: MicroSize,
+    borderRadius: MicroSize / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#e01b4a',
   },
 });

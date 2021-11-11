@@ -9,32 +9,29 @@ const dimensions = {
   height: Dimensions.get('window').height,
 };
 
-const HEIGHT_USER_POINT = 40;
-const WIDTH_USER_POINT = 40;
+const SIZE_USER_POINT = 40;
+
+const roundStyles: ViewStyle = {
+  height: SIZE_USER_POINT,
+  width: SIZE_USER_POINT,
+  marginLeft: 20,
+  alignItems: 'center',
+  justifyContent: 'center',
+  position: 'absolute',
+  left: dimensions.height / 4 - 20,
+ borderRadius: 20,
+};
 
 export const styles = StyleSheet.create<UserNameLabelType>({
   pointUserName: {
+    ...roundStyles,
     backgroundColor: '#5ebf9d',
-    height: HEIGHT_USER_POINT,
-    width: WIDTH_USER_POINT,
-    marginLeft: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 20,
-    position: 'absolute',
-    left: dimensions.height / 4 - 20,
+   
   },
   wavesAroundUserPoint: {
+    ...roundStyles,
     borderWidth: 2,
     opacity: 0.8,
-    height: HEIGHT_USER_POINT,
-    width: WIDTH_USER_POINT,
-    marginLeft: 20,
     borderColor: '#6390BB',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 20,
-    position: 'absolute',
-    left: dimensions.height / 4 - 20,
   },
 });
