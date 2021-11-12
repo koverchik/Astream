@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet, ViewStyle} from 'react-native';
+import {StyleSheet, ViewStyle} from 'react-native';
 
 type UserNameLabelType = {
   pointUserName: ViewStyle;
@@ -12,13 +12,12 @@ export const styles = StyleSheet.create<UserNameLabelType>({
     width: SIZE_USER_POINT,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 20,
+    borderRadius: SIZE_USER_POINT / 2,
     backgroundColor: '#5ebf9d',
     margin: 10,
   },
   container: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     alignContent: 'center',
   },
 });
