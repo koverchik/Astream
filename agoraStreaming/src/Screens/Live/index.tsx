@@ -59,11 +59,13 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const callbackFunctionUserOffline = (uid: number) => {
     setPeerIds((prev) => prev.filter((userData) => userData.uid !== uid));
   };
+
   const callbackUserMuteAudio = (uid: number, muted: boolean) => {
     setPeerIds((prevState) => {
       return mute({uid, muted, device: 'voice'}, prevState);
     });
   };
+
   const callbackFunctionLocalUserRegistered = (
     uid: number,
     userInfo: string,
@@ -82,6 +84,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
       setPeerIds((prev) => [...prev, user]);
     }
   };
+
   const callbackFunctionUserMuteVideo = (uid: number, muted: boolean) => {
     setPeerIds((prevState) => {
       return mute({uid, muted, device: 'camera'}, prevState);
