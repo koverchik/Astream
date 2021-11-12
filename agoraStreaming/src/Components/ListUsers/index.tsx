@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {FlatList, SafeAreaView, Text, View} from 'react-native';
+import {FlatList, Text, View} from 'react-native';
 import {styles} from './styles';
 import {ListUsersType} from './types';
 

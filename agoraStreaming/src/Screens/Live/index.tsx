@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {Animated, Platform, Text, View} from 'react-native';
+import {Animated, Platform, View} from 'react-native';
 import {styles} from './style';
 import RtcEngine, {RtcLocalView, UserInfo} from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
@@ -21,10 +21,10 @@ import {animationCircle} from './helpers/animationCircle';
 import {initChannel} from './helpers/channel';
 import {ListUsers} from '../../Components/ListUsers';
 import {hiddenUsers} from './fakeData';
-import {
-  AudioVolumeCallback,
-  UserInfoCallback,
-} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
+import {UserInfoCallback} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
+import {callbackFunctionAudioVolumeIndication} from './helpers/callbackFunctionAudioVolumeIndication';
+import {switchCamera} from './helpers/switchCamera';
+import {exitChannelHandler} from './helpers/exitChannelHandler';
 
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords} = props.route.params;
@@ -70,36 +70,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   ) => {
     setUserName(userInfo);
   };
-  const callbackFunctionAudioVolumeIndication: AudioVolumeCallback = (
-    speakers,
-  ) => {
-    for (let i = 0; i < speakers.length; i++) {
-      const speaker = speakers[i];
-      if (speaker['volume']) {
-        if (speaker['vad'] === 1 && speaker['uid'] === 0) {
-          activeVoiceSet(true);
-        } else {
-          activeVoiceSet(false);
-        }
 
-        setPeerIds((prev) => {
-          return prev.map((user) => {
-            if (user.uid === speaker.uid) {
-              return {
-                ...user,
-                activeVoice: true,
-              };
-            } else {
-              return {
-                ...user,
-                activeVoice: false,
-              };
-            }
-          });
-        });
-      }
-    }
-  };
   const callbackFunctionUserInfoUpdated: UserInfoCallback = (uid, userInfo) => {
     if (!peerIds.find((userData) => userData.uid === uid)) {
       const user: UserType = {
@@ -117,11 +88,6 @@ export const Live: FC<LiveScreenProps> = (props) => {
     });
   };
 
-  const exitChannelHandler = () => {
-    AgoraEngine.current?.leaveChannel();
-    navigation.goBack();
-  };
-
   const cameraHandler = () => {
     setMuteCamera((prev) => !prev);
     AgoraEngine.current?.muteLocalVideoStream(!muteCamera);
@@ -129,12 +95,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const microphoneHandler = () => {
     setMuteVoice((prev) => !prev);
-
     AgoraEngine.current?.muteLocalAudioStream(!muteVoice);
-  };
-
-  const switchCamera = () => {
-    AgoraEngine.current?.switchCamera();
   };
 
   const mute = (settings: MuteSettingsType, data: UserType[]) => {
@@ -169,14 +130,13 @@ export const Live: FC<LiveScreenProps> = (props) => {
     initChannel(
       AgoraEngine,
       userJoined,
-
       userLeaveChannel,
       callbackFunctionUserOffline,
       callbackFunctionUserInfoUpdated,
       callbackFunctionUserMuteVideo,
       callbackUserMuteAudio,
       callbackFunctionLocalUserRegistered,
-      callbackFunctionAudioVolumeIndication,
+      callbackFunctionAudioVolumeIndication(activeVoiceSet, setPeerIds),
     )
       .then(() => {
         AgoraEngine.current?.joinChannelWithUserAccount(
@@ -202,6 +162,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const countUsers = () => {
     return peerIds.length + 1;
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapperVideoAndButton}>
@@ -244,10 +205,10 @@ export const Live: FC<LiveScreenProps> = (props) => {
           );
         })}
         <ButtonBar
-          exitHandler={exitChannelHandler}
+          exitHandler={() => exitChannelHandler(AgoraEngine, navigation)}
           cameraHandler={cameraHandler}
           microphoneHandler={microphoneHandler}
-          switchCamera={switchCamera}
+          switchCamera={() => switchCamera(AgoraEngine)}
           muteCamera={muteCamera}
           muteVoice={muteVoice}
         />
