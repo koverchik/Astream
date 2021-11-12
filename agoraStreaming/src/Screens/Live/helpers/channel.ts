@@ -36,12 +36,6 @@ export const initChannel = async (initData: InitChannelDataType) => {
         voice: false,
         activeVoice: false,
       };
-      // if (initData.peerIds.length < 4) {
-      //   initData.setPeerIds((prev) => [...prev, user]);
-      // } else {
-      //   initData.setStash((prev) => [...prev, user]);
-      // }
-
       initData.setPeerIds((prev) => {
         if (prev.length < 4) {
           return [...prev, user];
@@ -63,11 +57,6 @@ export const initChannel = async (initData: InitChannelDataType) => {
           voice: false,
           activeVoice: false,
         };
-        // if (initData.peerIds.length < 4) {
-        //   initData.setPeerIds((prev) => [...prev, user]);
-        // } else {
-        //   initData.setStash((prev) => [...prev, user]);
-        // }
         initData.setPeerIds((prev) => {
           if (prev.length < 4) {
             return [...prev, user];

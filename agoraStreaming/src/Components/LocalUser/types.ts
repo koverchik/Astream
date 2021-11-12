@@ -1,5 +1,5 @@
 import {LocalUserType} from '../RemoteUsers/types';
-import {Animated} from 'react-native';
+import {Animated, ViewStyle} from 'react-native';
 
 export type LocalUserPropsType = {
   myUserData: LocalUserType;
@@ -8,4 +8,5 @@ export type LocalUserPropsType = {
   countUsers: () => number;
   sizeUserPoint: Animated.Value;
   wavesAroundUserPoint: Animated.Value;
+  cameraSize: ViewStyle;
 };

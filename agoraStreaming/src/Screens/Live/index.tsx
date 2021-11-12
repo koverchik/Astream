@@ -25,7 +25,29 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const [joined, setJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [peerIds, setPeerIds] = useState<UserType[]>([]);
+  const [peerIds, setPeerIds] = useState<UserType[]>([
+    /*{
+      uid: 1,
+      camera: false,
+      voice: false,
+      activeVoice: false,
+      userAccount: 'lol',
+    },*/
+    /*{
+      uid: 2,
+      camera: false,
+      voice: false,
+      activeVoice: false,
+      userAccount: 'kek',
+    },*/
+    /*{
+      uid: 3,
+      camera: false,
+      voice: false,
+      activeVoice: false,
+      userAccount: 'cheburek',
+    },*/
+  ]);
   const [myUserData, setMyUserData] = useState<LocalUserType>({
     uid: 0,
     userAccount: '',
@@ -141,73 +163,60 @@ export const Live: FC<LiveScreenProps> = (props) => {
     return peerIds.length + 1;
   };
 
+  const cameraStyle = (index: number, ids: UserType[]) => {
+    switch (ids.length) {
+      case 1: {
+        return styles.camera_1;
+      }
+      case 2: {
+        return styles.camera_2;
+      }
+      case 3: {
+        if (index === 2) {
+          return styles.camera_2;
+        } else {
+          return styles.camera_3;
+        }
+      }
+      default:
+        return styles.camera_3;
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.videoContainer}>
+      <View style={[styles.videoContainer, peerIds.length === 3 && styles.row]}>
         <View style={peerIds.length === 2 ? styles.column : styles.row}>
-          {peerIds.map((user, index) => {
-            if (index === 0 || index === 1) {
-              if (user.uid !== myUserData.uid) {
-                return (
-                  <RemoteUsers
-                    key={'RemoteUsers' + user.uid}
-                    uid={user.uid}
-                    channelId={channelId}
-                    countUsers={countUsers}
-                    userAccount={user.userAccount}
-                    voice={user.voice}
-                    camera={user.camera}
-                    activeVoice={user.activeVoice}
-                  />
-                );
-              } else if (joined) {
-                return (
-                  <LocalUser
-                    myUserData={myUserData}
-                    channelId={channelId}
-                    activeVoice={activeVoice}
-                    countUsers={countUsers}
-                    sizeUserPoint={sizeUserPoint}
-                    wavesAroundUserPoint={wavesAroundUserPoint}
-                  />
-                );
-              }
+          {peerIds.map((user, index, ids) => {
+            if (user.uid !== myUserData.uid) {
+              return (
+                <RemoteUsers
+                  cameraStyle={cameraStyle(index, ids)}
+                  key={'RemoteUsers' + user.uid}
+                  uid={user.uid}
+                  channelId={channelId}
+                  countUsers={countUsers}
+                  userAccount={user.userAccount}
+                  voice={user.voice}
+                  camera={user.camera}
+                  activeVoice={user.activeVoice}
+                />
+              );
+            } else if (joined) {
+              return (
+                <LocalUser
+                  cameraSize={cameraStyle(index, ids)}
+                  myUserData={myUserData}
+                  channelId={channelId}
+                  activeVoice={activeVoice}
+                  countUsers={countUsers}
+                  sizeUserPoint={sizeUserPoint}
+                  wavesAroundUserPoint={wavesAroundUserPoint}
+                />
+              );
             }
           })}
         </View>
-        {peerIds.length >= 3 && (
-          <View style={styles.row}>
-            {peerIds.map((user, index) => {
-              if (index === 2 || index === 3) {
-                if (user.uid !== myUserData.uid) {
-                  return (
-                    <RemoteUsers
-                      key={'RemoteUsers' + user.uid}
-                      uid={user.uid}
-                      channelId={channelId}
-                      countUsers={countUsers}
-                      userAccount={user.userAccount}
-                      voice={user.voice}
-                      camera={user.camera}
-                      activeVoice={user.activeVoice}
-                    />
-                  );
-                } else if (joined) {
-                  return (
-                    <LocalUser
-                      myUserData={myUserData}
-                      channelId={channelId}
-                      activeVoice={activeVoice}
-                      countUsers={countUsers}
-                      sizeUserPoint={sizeUserPoint}
-                      wavesAroundUserPoint={wavesAroundUserPoint}
-                    />
-                  );
-                }
-              }
-            })}
-          </View>
-        )}
       </View>
       <ButtonBar
         exitHandler={exitChannelHandler}

@@ -8,12 +8,17 @@ type LifeScreenStyles = {
   muteCamera: ViewStyle;
   iconContainer: ViewStyle;
   muteIcon: ViewStyle;
+  rtcRemote: ViewStyle;
 };
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
   camera: {
     flex: 1,
     backgroundColor: '#178',
+  },
+  rtcRemote: {
+    width: '100%',
+    height: '100%',
   },
   muteCamera: {
     backgroundColor: '#000',

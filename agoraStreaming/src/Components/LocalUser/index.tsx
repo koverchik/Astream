@@ -14,11 +14,13 @@ export const LocalUser: FC<LocalUserPropsType> = (props) => {
     countUsers,
     activeVoice,
     channelId,
+    cameraSize,
   } = props;
+
   return (
-    <View style={styles.camera}>
+    <View style={cameraSize}>
       {myUserData.camera ? (
-        <View style={[styles.muteCamera, styles.camera]}>
+        <View style={[styles.muteCamera, cameraSize]}>
           {activeVoice && (
             <IconUserName
               userName={myUserData.userAccount}

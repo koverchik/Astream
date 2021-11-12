@@ -4,7 +4,9 @@ const {width} = Dimensions.get('window');
 
 type LifeScreenStyles = {
   container: ViewStyle;
-  camera: ViewStyle;
+  camera_1: ViewStyle;
+  camera_2: ViewStyle;
+  camera_3: ViewStyle;
   muteCamera: ViewStyle;
   userNameContainer: ViewStyle;
   iconContainer: ViewStyle;
@@ -25,12 +27,20 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     height: '60%',
     backgroundColor: '#92abe1',
   },
-  camera: {
+  camera_1: {
     flex: 1,
   },
+  camera_2: {
+    width: width,
+    height: '50%',
+  },
+  camera_3: {
+    width: '50%',
+    height: '50%',
+  },
   row: {
-    flex: 1,
     flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   column: {
     flex: 1,

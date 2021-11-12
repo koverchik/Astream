@@ -8,16 +8,24 @@ import {RemoteUsersType} from './types';
 import {UserNameLabel} from '../UserNameLabel/UserNameLabel';
 
 export const RemoteUsers: FC<RemoteUsersType> = (props) => {
-  const {uid, channelId, userAccount, countUsers, camera, activeVoice} = props;
+  const {
+    uid,
+    channelId,
+    userAccount,
+    countUsers,
+    camera,
+    activeVoice,
+    cameraStyle,
+  } = props;
 
   const sizeUserPoint = useRef(new Animated.Value(5)).current;
   const wavesAroundUserPoint = useRef(new Animated.Value(3)).current;
   animationCircle(sizeUserPoint, wavesAroundUserPoint).start();
 
   return (
-    <View style={styles.camera} key={uid}>
+    <View style={cameraStyle} key={uid}>
       {camera ? (
-        <View style={[styles.muteCamera, styles.camera]}>
+        <View style={[styles.muteCamera, cameraStyle]}>
           {activeVoice && (
             <IconUserName
               userName={userAccount}
@@ -29,7 +37,7 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
         </View>
       ) : (
         <RtcRemoteView.SurfaceView
-          style={styles.camera}
+          style={styles.rtcRemote}
           uid={uid}
           channelId={channelId}
           renderMode={VideoRenderMode.Hidden}

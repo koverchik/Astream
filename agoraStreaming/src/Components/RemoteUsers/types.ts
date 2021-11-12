@@ -1,3 +1,5 @@
+import {ViewStyle} from 'react-native';
+
 export type RemoteUsersType = {
   uid: number;
   channelId: string;
@@ -6,6 +8,7 @@ export type RemoteUsersType = {
   voice: boolean;
   camera: boolean;
   activeVoice: boolean;
+  cameraStyle: ViewStyle;
 };
 
 export type LocalUserType = {
