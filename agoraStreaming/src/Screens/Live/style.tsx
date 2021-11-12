@@ -2,9 +2,8 @@ import {StyleSheet, Dimensions, ViewStyle} from 'react-native';
 
 const {width} = Dimensions.get('window');
 
-type LifeScreenStyles = {
+export type LifeScreenStyles = {
   container: ViewStyle;
-  wrapperVideoAndButton: ViewStyle;
   cameraFullScreen: ViewStyle;
   cameraTwoUsers: ViewStyle;
   defaultCamera: ViewStyle;
@@ -21,11 +20,7 @@ const POSITION_OFFSET = 20;
 export const styles = StyleSheet.create<LifeScreenStyles>({
   container: {
     flex: 1,
-    //justifyContent: 'flex-start',
     alignItems: 'center',
-  },
-  wrapperVideoAndButton: {
-    flex: 1,
   },
   videoContainer: {
     flex: 1,

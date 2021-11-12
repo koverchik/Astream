@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {Animated, Platform, View} from 'react-native';
-import {styles} from './style';
+import {LifeScreenStyles, styles} from './style';
 import RtcEngine from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {LiveScreenProps, MuteSettingsType, UserType} from './types';
@@ -25,6 +25,7 @@ import {LocalUserType} from '../../Components/RemoteUsers/types';
 import {LocalUser} from '../../Components/LocalUser';
 import {ListUsers} from '../../Components/ListUsers';
 import {hiddenUsers} from './fakeData';
+import {cameraStyle} from './helpers/CameraStyle';
 
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords} = props.route.params;
@@ -197,26 +198,6 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const countUsers = () => {
     return peerIds.length + 1;
   };
-  //helper
-  const cameraStyle = (index: number, ids: UserType[]) => {
-    switch (ids.length) {
-      case 1: {
-        return styles.cameraFullScreen;
-      }
-      case 2: {
-        return styles.cameraTwoUsers;
-      }
-      case 3: {
-        if (index === 2) {
-          return styles.cameraTwoUsers;
-        } else {
-          return styles.defaultCamera;
-        }
-      }
-      default:
-        return styles.defaultCamera;
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -226,7 +207,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
             if (user.uid !== myUserData.uid) {
               return (
                 <RemoteUsers
-                  cameraStyle={cameraStyle(index, ids)}
+                  cameraStyle={cameraStyle(index, ids, styles)}
                   key={'RemoteUsers' + user.uid}
                   uid={user.uid}
                   channelId={channelId}
@@ -240,7 +221,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
             } else if (joined) {
               return (
                 <LocalUser
-                  cameraSize={cameraStyle(index, ids)}
+                  cameraSize={cameraStyle(index, ids, styles)}
                   myUserData={myUserData}
                   channelId={channelId}
                   activeVoice={myUserData.activeVoice}
