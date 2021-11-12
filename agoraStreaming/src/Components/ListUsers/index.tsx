@@ -13,7 +13,7 @@ export const ListUsers: FC<ListUsersType> = (props) => {
         data={hiddenUsers}
         renderItem={({item}) => {
           return (
-            <View style={styles.pointUserName} key={'pointUser' + item.uid}>
+            <View style={styles.pointUserName}>
               <Text>{item.userAccount.slice(0, 1)}</Text>
             </View>
           );
