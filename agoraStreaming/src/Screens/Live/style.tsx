@@ -1,45 +1,64 @@
-import {StyleSheet, Dimensions, ViewStyle, TextStyle} from 'react-native';
+import {StyleSheet, Dimensions, ViewStyle} from 'react-native';
 
 const {width} = Dimensions.get('window');
 
-type LifeScreenStyles = {
+export type LifeScreenStyles = {
   container: ViewStyle;
-  camera: ViewStyle;
-  wrapperVideoAndButton: ViewStyle;
+  cameraFullScreen: ViewStyle;
+  cameraTwoUsers: ViewStyle;
+  defaultCamera: ViewStyle;
   muteCamera: ViewStyle;
   userNameContainer: ViewStyle;
   iconContainer: ViewStyle;
+  videoContainer: ViewStyle;
+  row: ViewStyle;
+  column: ViewStyle;
 };
+
+const POSITION_OFFSET = 20;
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
-  wrapperVideoAndButton: {
+  videoContainer: {
+    flex: 1,
+    width,
+  },
+  cameraFullScreen: {
     flex: 1,
   },
-  camera: {
-    flex: 1,
-    width: width,
-    alignItems: 'center',
+  cameraTwoUsers: {
+    width,
+    height: '50%',
   },
-
+  defaultCamera: {
+    width: '50%',
+    height: '50%',
+  },
+  row: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  column: {
+    flex: 1,
+    flexDirection: 'column',
+  },
   muteCamera: {
     backgroundColor: '#000',
     justifyContent: 'center',
   },
   userNameContainer: {
     position: 'absolute',
-    top: 20,
-    left: 20,
+    top: POSITION_OFFSET,
+    left: POSITION_OFFSET,
   },
   iconContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     position: 'absolute',
-    bottom: -10,
-    left: -10,
+    bottom: -POSITION_OFFSET / 2,
+    left: -POSITION_OFFSET / 2,
   },
 });

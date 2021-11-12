@@ -1,3 +1,4 @@
+import {MutableRefObject} from 'react';
 import RtcEngine, {ChannelProfile, ClientRole} from 'react-native-agora';
 import {
   AudioVolumeCallback,
@@ -10,7 +11,7 @@ import {
 const appID = 'fecf7537eab9494b9612e782053cc546';
 
 export const initChannel = async (
-  AgoraEngine: React.MutableRefObject<RtcEngine | undefined>,
+  AgoraEngine: MutableRefObject<RtcEngine | undefined>,
   callbackUserJoined: () => void,
   userLeaveChannel: () => Promise<void>,
   callBackFunctionUserOffline: UserOfflineCallback,
@@ -24,7 +25,7 @@ export const initChannel = async (
 
   AgoraEngine.current?.enableVideo();
 
-  AgoraEngine.current.enableAudioVolumeIndication(3000, 6, true);
+  AgoraEngine.current?.enableAudioVolumeIndication(3000, 6, true);
 
   AgoraEngine.current?.setChannelProfile(ChannelProfile.LiveBroadcasting);
 
@@ -40,11 +41,6 @@ export const initChannel = async (
   AgoraEngine.current?.addListener(
     'UserInfoUpdated',
     callbackFunctionUserInfoUpdated,
-  );
-
-  AgoraEngine.current.addListener(
-    'AudioVolumeIndication',
-    callbackFunctionAudioVolumeIndication,
   );
 
   AgoraEngine.current?.addListener('UserOffline', callBackFunctionUserOffline);

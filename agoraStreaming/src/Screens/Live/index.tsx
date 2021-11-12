@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {Animated, Platform, View} from 'react-native';
-import {styles} from './style';
-import RtcEngine, {RtcLocalView, UserInfo} from 'react-native-agora';
+import {LifeScreenStyles, styles} from './style';
+import RtcEngine from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {LiveScreenProps, MuteSettingsType, UserType} from './types';
 import database from '@react-native-firebase/database';
@@ -10,21 +10,22 @@ import {StackNavigationPropNavigation} from '../Home/types';
 import {errorAlert} from './helpers/alert';
 import {requestCameraAndAudioPermission} from './helpers/permission';
 import {v4 as uuid} from 'uuid';
-import {UserNameLabel} from '../../Components/UserNameLabel/UserNameLabel';
 import {findKeyDataInDatabase} from './helpers/findKeyDataInDatabase';
 import {deleteChannel} from './helpers/deleteChannel';
 import {ButtonBar} from '../../Components/ButtonBar/ButtonBar';
 import {RemoteUsers} from '../../Components/RemoteUsers';
-import {IconUserName} from '../../Components/IconUserName';
 import {Preloader} from '../../Components/Preloader/Preloader';
 import {animationCircle} from './helpers/animationCircle';
 import {initChannel} from './helpers/channel';
-import {ListUsers} from '../../Components/ListUsers';
-import {hiddenUsers} from './fakeData';
 import {UserInfoCallback} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 import {callbackFunctionAudioVolumeIndication} from './helpers/callbackFunctionAudioVolumeIndication';
 import {switchCamera} from './helpers/switchCamera';
 import {exitChannelHandler} from './helpers/exitChannelHandler';
+import {LocalUserType} from '../../Components/RemoteUsers/types';
+import {LocalUser} from '../../Components/LocalUser';
+import {ListUsers} from '../../Components/ListUsers';
+import {hiddenUsers} from './fakeData';
+import {cameraStyle} from './helpers/CameraStyle';
 
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords} = props.route.params;
@@ -32,10 +33,15 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const [joined, setJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [peerIds, setPeerIds] = useState<UserType[]>([]);
-  const [userName, setUserName] = useState<string>('');
-  const [muteCamera, setMuteCamera] = useState<boolean>(false);
-  const [muteVoice, setMuteVoice] = useState<boolean>(false);
-  const [activeVoice, activeVoiceSet] = useState(false);
+  const [myUserData, setMyUserData] = useState<LocalUserType>({
+    uid: 0,
+    userAccount: '',
+    camera: false,
+    voice: false,
+    activeVoice: false,
+  });
+
+  const [stash, setStash] = useState<UserType[]>([]);
 
   const isBroadcaster = isBroadcasterFunction(props.route.params.type);
 
@@ -58,6 +64,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const callbackFunctionUserOffline = (uid: number) => {
     setPeerIds((prev) => prev.filter((userData) => userData.uid !== uid));
+    setStash((prev) => prev.filter((userData) => userData.uid !== uid));
   };
 
   const callbackUserMuteAudio = (uid: number, muted: boolean) => {
@@ -70,7 +77,26 @@ export const Live: FC<LiveScreenProps> = (props) => {
     uid: number,
     userInfo: string,
   ) => {
-    setUserName(userInfo);
+    setMyUserData((prev) => ({
+      ...prev,
+      uid: uid,
+      userAccount: userInfo,
+    }));
+    const user: UserType = {
+      uid: uid,
+      userAccount: userInfo,
+      camera: false,
+      voice: false,
+      activeVoice: false,
+    };
+    setPeerIds((prev) => {
+      if (prev.length < 4) {
+        return [...prev, user];
+      } else {
+        setStash((prevStash) => [...prevStash, user]);
+        return prev;
+      }
+    });
   };
 
   const callbackFunctionUserInfoUpdated: UserInfoCallback = (uid, userInfo) => {
@@ -81,7 +107,14 @@ export const Live: FC<LiveScreenProps> = (props) => {
         voice: false,
         activeVoice: false,
       };
-      setPeerIds((prev) => [...prev, user]);
+      setPeerIds((prev) => {
+        if (prev.length < 4) {
+          return [...prev, user];
+        } else {
+          setStash((prevStash) => [...prevStash, user]);
+          return prev;
+        }
+      });
     }
   };
 
@@ -92,13 +125,13 @@ export const Live: FC<LiveScreenProps> = (props) => {
   };
 
   const cameraHandler = () => {
-    setMuteCamera((prev) => !prev);
-    AgoraEngine.current?.muteLocalVideoStream(!muteCamera);
+    setMyUserData((prev) => ({...prev, camera: !prev.camera}));
+    AgoraEngine.current?.muteLocalVideoStream(!myUserData.camera);
   };
 
   const microphoneHandler = () => {
-    setMuteVoice((prev) => !prev);
-    AgoraEngine.current?.muteLocalAudioStream(!muteVoice);
+    setMyUserData((prev) => ({...prev, voice: !prev.voice}));
+    AgoraEngine.current?.muteLocalAudioStream(!myUserData.voice);
   };
 
   const mute = (settings: MuteSettingsType, data: UserType[]) => {
@@ -139,7 +172,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
       callbackFunctionUserMuteVideo,
       callbackUserMuteAudio,
       callbackFunctionLocalUserRegistered,
-      callbackFunctionAudioVolumeIndication(activeVoiceSet, setPeerIds),
+      callbackFunctionAudioVolumeIndication(setMyUserData, setPeerIds),
     )
       .then(() => {
         AgoraEngine.current?.joinChannelWithUserAccount(
@@ -168,52 +201,45 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.wrapperVideoAndButton}>
-        {joined && (
-          <View style={styles.camera}>
-            {muteCamera ? (
-              <View style={[styles.muteCamera, styles.camera]}>
-                {activeVoice && (
-                  <IconUserName
-                    userName={userName}
-                    countUser={countUsers}
-                    sizeUserPoint={sizeUserPoint}
-                    wavesAroundUserPoint={wavesAroundUserPoint}
-                  />
-                )}
-              </View>
-            ) : (
-              <RtcLocalView.SurfaceView
-                style={styles.camera}
-                channelId={channelId}
-              />
-            )}
-            <View style={styles.userNameContainer}>
-              <UserNameLabel userName={userName} />
-            </View>
-          </View>
-        )}
-        {peerIds.map((user) => {
-          return (
-            <RemoteUsers
-              key={'RemoteUsers' + user.uid}
-              uid={user.uid}
-              channelId={channelId}
-              countUsers={countUsers}
-              userAccount={user.userAccount}
-              voice={user.voice}
-              camera={user.camera}
-              activeVoice={user.activeVoice}
-            />
-          );
-        })}
+      <View style={[styles.videoContainer, peerIds.length === 3 && styles.row]}>
+        <View style={peerIds.length === 2 ? styles.column : styles.row}>
+          {peerIds.map((user, index, ids) => {
+            if (user.uid !== myUserData.uid) {
+              return (
+                <RemoteUsers
+                  cameraStyle={cameraStyle(index, ids, styles)}
+                  key={'RemoteUsers' + user.uid}
+                  uid={user.uid}
+                  channelId={channelId}
+                  countUsers={countUsers}
+                  userAccount={user.userAccount}
+                  voice={user.voice}
+                  camera={user.camera}
+                  activeVoice={user.activeVoice}
+                />
+              );
+            } else if (joined) {
+              return (
+                <LocalUser
+                  cameraSize={cameraStyle(index, ids, styles)}
+                  myUserData={myUserData}
+                  channelId={channelId}
+                  activeVoice={myUserData.activeVoice}
+                  countUsers={countUsers}
+                  sizeUserPoint={sizeUserPoint}
+                  wavesAroundUserPoint={wavesAroundUserPoint}
+                />
+              );
+            }
+          })}
+        </View>
         <ButtonBar
           exitHandler={() => exitChannelHandler(AgoraEngine, navigation)}
           cameraHandler={cameraHandler}
           microphoneHandler={microphoneHandler}
           switchCamera={() => switchCamera(AgoraEngine)}
-          muteCamera={muteCamera}
-          muteVoice={muteVoice}
+          muteCamera={myUserData.camera}
+          muteVoice={myUserData.voice}
         />
       </View>
       <ListUsers hiddenUsers={hiddenUsers} />

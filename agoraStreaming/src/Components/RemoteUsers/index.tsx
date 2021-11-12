@@ -1,26 +1,31 @@
 import React, {FC, useRef} from 'react';
 import {Animated, View} from 'react-native';
 import {RtcRemoteView, VideoRenderMode} from 'react-native-agora';
-import {CameraMutedSvg} from '../../Icons/CameraMutedSvg';
-import {MicroMutedSvg} from '../../Icons/MicroMutedSvg';
 import {animationCircle} from '../../Screens/Live/helpers/animationCircle';
 import {IconUserName} from '../IconUserName';
-import {UserNameLabel} from '../UserNameLabel/UserNameLabel';
 import {styles} from './styles';
 import {RemoteUsersType} from './types';
+import {UserNameLabel} from '../UserNameLabel/UserNameLabel';
 
 export const RemoteUsers: FC<RemoteUsersType> = (props) => {
-  const {uid, channelId, userAccount, countUsers, voice, camera, activeVoice} =
-    props;
+  const {
+    uid,
+    channelId,
+    userAccount,
+    countUsers,
+    camera,
+    activeVoice,
+    cameraStyle,
+  } = props;
 
   const sizeUserPoint = useRef(new Animated.Value(5)).current;
   const wavesAroundUserPoint = useRef(new Animated.Value(3)).current;
   animationCircle(sizeUserPoint, wavesAroundUserPoint).start();
 
   return (
-    <View style={styles.camera} key={uid}>
+    <View style={cameraStyle}>
       {camera ? (
-        <View style={[styles.muteCamera, styles.camera]}>
+        <View style={[styles.muteCamera, styles.rtcRemote]}>
           {activeVoice && (
             <IconUserName
               userName={userAccount}
@@ -32,7 +37,7 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
         </View>
       ) : (
         <RtcRemoteView.SurfaceView
-          style={styles.camera}
+          style={styles.rtcRemote}
           uid={uid}
           channelId={channelId}
           renderMode={VideoRenderMode.Hidden}
@@ -41,18 +46,6 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
       )}
       <View style={styles.userNameContainer}>
         <UserNameLabel userName={userAccount} />
-        <View style={styles.iconContainer}>
-          {voice && (
-            <View style={styles.muteIcon}>
-              <MicroMutedSvg />
-            </View>
-          )}
-          {camera && (
-            <View style={styles.muteIcon}>
-              <CameraMutedSvg />
-            </View>
-          )}
-        </View>
       </View>
     </View>
   );

@@ -36,7 +36,8 @@ export const IconUserName: FC<IconUserNameType> = (props) => {
             top: valueTop,
             transform: transformCircleAround,
           },
-        ]}></Animated.View>
+        ]}
+      />
       <Animated.View
         style={[
           styles.pointUserName,
