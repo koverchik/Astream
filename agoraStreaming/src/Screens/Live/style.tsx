@@ -4,6 +4,7 @@ const {width} = Dimensions.get('window');
 
 type LifeScreenStyles = {
   container: ViewStyle;
+  wrapperVideoAndButton: ViewStyle;
   cameraFullScreen: ViewStyle;
   cameraTwoUsers: ViewStyle;
   defaultCamera: ViewStyle;
@@ -22,6 +23,9 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+  wrapperVideoAndButton: {
+    flex: 1,
   },
   videoContainer: {
     width,

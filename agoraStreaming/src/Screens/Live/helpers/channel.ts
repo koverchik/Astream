@@ -1,26 +1,43 @@
 import RtcEngine, {ChannelProfile, ClientRole} from 'react-native-agora';
-import {UserType} from '../types';
-import {InitChannelDataType} from './types';
+import {
+  AudioVolumeCallback,
+  UidWithMutedCallback,
+  UserAccountCallback,
+  UserInfoCallback,
+  UserOfflineCallback,
+} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 
 const appID = 'fecf7537eab9494b9612e782053cc546';
 
-export const initChannel = async (initData: InitChannelDataType) => {
-  initData.AgoraEngine.current = await RtcEngine.create(appID);
+export const initChannel = async (
+  AgoraEngine: React.MutableRefObject<RtcEngine | undefined>,
+  callbackUserJoined: () => void,
+  userLeaveChannel: () => Promise<void>,
+  callBackFunctionUserOffline: UserOfflineCallback,
+  callbackFunctionUserInfoUpdated: UserInfoCallback,
+  callBackFunctionUserMuteVideo: UidWithMutedCallback,
+  callBackUserMuteAudio: UidWithMutedCallback,
+  callbackFunctionLocalUserRegistered: UserAccountCallback,
+  callbackFunctionAudioVolumeIndication: AudioVolumeCallback,
+) => {
+  AgoraEngine.current = await RtcEngine.create(appID);
 
-  initData.AgoraEngine.current?.enableVideo();
+  AgoraEngine.current?.enableVideo();
 
-  initData.AgoraEngine.current?.enableAudioVolumeIndication(3000, 6, true);
+  AgoraEngine.current?.enableAudioVolumeIndication(3000, 6, true);
 
-  initData.AgoraEngine.current?.setChannelProfile(
+  AgoraEngine.current?.setChannelProfile(
     ChannelProfile.LiveBroadcasting,
   );
 
-  initData.AgoraEngine.current?.setClientRole(ClientRole.Broadcaster);
+  AgoraEngine.current?.setClientRole(ClientRole.Broadcaster);
 
-  initData.AgoraEngine.current?.addListener('JoinChannelSuccess', () => {
-    initData.userJoined();
-  });
+  AgoraEngine.current?.addListener('JoinChannelSuccess', callbackUserJoined);
 
+  AgoraEngine.current?.addListener(
+    'LocalUserRegistered',
+    callbackFunctionLocalUserRegistered,
+  );
   initData.AgoraEngine.current?.addListener(
     'LocalUserRegistered',
     (uid, userInfo) => {
@@ -47,6 +64,10 @@ export const initChannel = async (initData: InitChannelDataType) => {
     },
   );
 
+  AgoraEngine.current?.addListener(
+    'UserInfoUpdated',
+    callbackFunctionUserInfoUpdated,
+  );
   initData.AgoraEngine.current?.addListener(
     'UserInfoUpdated',
     (uid, userInfo) => {
@@ -69,7 +90,7 @@ export const initChannel = async (initData: InitChannelDataType) => {
     },
   );
 
-  initData.AgoraEngine.current?.addListener(
+  AgoraEngine.current?.addListener(
     'AudioVolumeIndication',
     (speakers) => {
       for (let i = 0; i < speakers.length; i++) {
@@ -81,6 +102,10 @@ export const initChannel = async (initData: InitChannelDataType) => {
             initData.setMyUserData((prev) => ({...prev, activeVoice: false}));
           }
 
+  AgoraEngine.current.addListener(
+    'AudioVolumeIndication',
+    callbackFunctionAudioVolumeIndication,
+  );
           initData.setPeerIds((prev) => {
             return prev.map((user) => {
               if (user.uid === speaker.uid) {
@@ -101,6 +126,7 @@ export const initChannel = async (initData: InitChannelDataType) => {
     },
   );
 
+  AgoraEngine.current?.addListener('UserOffline', callBackFunctionUserOffline);
   initData.AgoraEngine.current?.addListener('UserOffline', (uid) => {
     initData.setPeerIds((prev) =>
       prev.filter((userData) => userData.uid !== uid),
@@ -115,12 +141,17 @@ export const initChannel = async (initData: InitChannelDataType) => {
     initData.AgoraEngine.current?.destroy();
   });
 
+  AgoraEngine.current?.addListener(
+    'UserMuteVideo',
+    callBackFunctionUserMuteVideo,
+  );
   initData.AgoraEngine.current?.addListener('UserMuteVideo', (uid, muted) => {
     initData.setPeerIds((prevState) => {
       return initData.mute({uid, muted, device: 'camera'}, prevState);
     });
   });
 
+  AgoraEngine.current?.addListener('UserMuteAudio', callBackUserMuteAudio);
   initData.AgoraEngine.current?.addListener('UserMuteAudio', (uid, muted) => {
     initData.setPeerIds((prevState) => {
       return initData.mute({uid, muted, device: 'voice'}, prevState);

@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {Animated, Platform, Text, View} from 'react-native';
+import {Animated, Platform, View} from 'react-native';
 import {styles} from './style';
-import RtcEngine from 'react-native-agora';
+import RtcEngine, {RtcLocalView, UserInfo} from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {LiveScreenProps, MuteSettingsType, UserType} from './types';
 import database from '@react-native-firebase/database';
@@ -17,8 +17,12 @@ import {RemoteUsers} from '../../Components/RemoteUsers';
 import {Preloader} from '../../Components/Preloader/Preloader';
 import {animationCircle} from './helpers/animationCircle';
 import {initChannel} from './helpers/channel';
-import {LocalUserType} from '../../Components/RemoteUsers/types';
-import {LocalUser} from '../../Components/LocalUser';
+import {ListUsers} from '../../Components/ListUsers';
+import {hiddenUsers} from './fakeData';
+import {UserInfoCallback} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
+import {callbackFunctionAudioVolumeIndication} from './helpers/callbackFunctionAudioVolumeIndication';
+import {switchCamera} from './helpers/switchCamera';
+import {exitChannelHandler} from './helpers/exitChannelHandler';
 
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords} = props.route.params;
@@ -55,9 +59,39 @@ export const Live: FC<LiveScreenProps> = (props) => {
     setJoined(true);
   };
 
-  const exitChannelHandler = () => {
-    AgoraEngine.current?.leaveChannel();
-    navigation.goBack();
+  const callbackFunctionUserOffline = (uid: number) => {
+    setPeerIds((prev) => prev.filter((userData) => userData.uid !== uid));
+  };
+
+  const callbackUserMuteAudio = (uid: number, muted: boolean) => {
+    setPeerIds((prevState) => {
+      return mute({uid, muted, device: 'voice'}, prevState);
+    });
+  };
+
+  const callbackFunctionLocalUserRegistered = (
+    uid: number,
+    userInfo: string,
+  ) => {
+    setUserName(userInfo);
+  };
+
+  const callbackFunctionUserInfoUpdated: UserInfoCallback = (uid, userInfo) => {
+    if (!peerIds.find((userData) => userData.uid === uid)) {
+      const user: UserType = {
+        ...userInfo,
+        camera: false,
+        voice: false,
+        activeVoice: false,
+      };
+      setPeerIds((prev) => [...prev, user]);
+    }
+  };
+
+  const callbackFunctionUserMuteVideo = (uid: number, muted: boolean) => {
+    setPeerIds((prevState) => {
+      return mute({uid, muted, device: 'camera'}, prevState);
+    });
   };
 
   const cameraHandler = () => {
@@ -68,10 +102,6 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const microphoneHandler = () => {
     setMyUserData((prev) => ({...prev, voice: !prev.voice}));
     AgoraEngine.current?.muteLocalAudioStream(!myUserData.voice);
-  };
-
-  const switchCamera = () => {
-    AgoraEngine.current?.switchCamera();
   };
 
   const mute = (settings: MuteSettingsType, data: UserType[]) => {
@@ -103,17 +133,17 @@ export const Live: FC<LiveScreenProps> = (props) => {
     if (Platform.OS === 'android') {
       requestCameraAndAudioPermission();
     }
-
-    initChannel({
+    initChannel(
       AgoraEngine,
       userJoined,
-      setMyUserData,
-      peerIds,
-      setPeerIds,
-      mute,
       userLeaveChannel,
-      setStash,
-    })
+      callbackFunctionUserOffline,
+      callbackFunctionUserInfoUpdated,
+      callbackFunctionUserMuteVideo,
+      callbackUserMuteAudio,
+      callbackFunctionLocalUserRegistered,
+      callbackFunctionAudioVolumeIndication(activeVoiceSet, setPeerIds),
+    )
       .then(() => {
         AgoraEngine.current?.joinChannelWithUserAccount(
           null,
@@ -138,6 +168,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const countUsers = () => {
     return peerIds.length + 1;
   };
+
 
   const cameraStyle = (index: number, ids: UserType[]) => {
     switch (ids.length) {
