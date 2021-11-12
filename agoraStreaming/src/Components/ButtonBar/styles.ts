@@ -7,8 +7,9 @@ type ButtonBarStylesType = {
 export const styles = StyleSheet.create<ButtonBarStylesType>({
   buttonBar: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 10,
     flexDirection: 'row',
+    width: '100%',
     justifyContent: 'center',
   },
 });

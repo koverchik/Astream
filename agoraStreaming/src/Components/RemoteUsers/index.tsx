@@ -1,5 +1,5 @@
-import React, {FC, useEffect, useMemo, useRef, useState} from 'react';
-import {Animated, Dimensions, View} from 'react-native';
+import React, {FC, useRef} from 'react';
+import {Animated, View} from 'react-native';
 import {RtcRemoteView, VideoRenderMode} from 'react-native-agora';
 import {CameraMutedSvg} from '../../Icons/CameraMutedSvg';
 import {MicroMutedSvg} from '../../Icons/MicroMutedSvg';
