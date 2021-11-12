@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {Animated, Platform, View} from 'react-native';
 import {styles} from './style';
-import RtcEngine, {RtcLocalView, UserInfo} from 'react-native-agora';
+import RtcEngine from 'react-native-agora';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {LiveScreenProps, MuteSettingsType, UserType} from './types';
 import database from '@react-native-firebase/database';
@@ -17,12 +17,14 @@ import {RemoteUsers} from '../../Components/RemoteUsers';
 import {Preloader} from '../../Components/Preloader/Preloader';
 import {animationCircle} from './helpers/animationCircle';
 import {initChannel} from './helpers/channel';
-import {ListUsers} from '../../Components/ListUsers';
-import {hiddenUsers} from './fakeData';
 import {UserInfoCallback} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 import {callbackFunctionAudioVolumeIndication} from './helpers/callbackFunctionAudioVolumeIndication';
 import {switchCamera} from './helpers/switchCamera';
 import {exitChannelHandler} from './helpers/exitChannelHandler';
+import {LocalUserType} from '../../Components/RemoteUsers/types';
+import {LocalUser} from '../../Components/LocalUser';
+import {ListUsers} from '../../Components/ListUsers';
+import {hiddenUsers} from './fakeData';
 
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords} = props.route.params;
@@ -61,6 +63,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const callbackFunctionUserOffline = (uid: number) => {
     setPeerIds((prev) => prev.filter((userData) => userData.uid !== uid));
+    setStash((prev) => prev.filter((userData) => userData.uid !== uid));
   };
 
   const callbackUserMuteAudio = (uid: number, muted: boolean) => {
@@ -73,7 +76,26 @@ export const Live: FC<LiveScreenProps> = (props) => {
     uid: number,
     userInfo: string,
   ) => {
-    setUserName(userInfo);
+    setMyUserData((prev) => ({
+      ...prev,
+      uid: uid,
+      userAccount: userInfo,
+    }));
+    const user: UserType = {
+      uid: uid,
+      userAccount: userInfo,
+      camera: false,
+      voice: false,
+      activeVoice: false,
+    };
+    setPeerIds((prev) => {
+      if (prev.length < 4) {
+        return [...prev, user];
+      } else {
+        setStash((prevStash) => [...prevStash, user]);
+        return prev;
+      }
+    });
   };
 
   const callbackFunctionUserInfoUpdated: UserInfoCallback = (uid, userInfo) => {
@@ -84,7 +106,14 @@ export const Live: FC<LiveScreenProps> = (props) => {
         voice: false,
         activeVoice: false,
       };
-      setPeerIds((prev) => [...prev, user]);
+      setPeerIds((prev) => {
+        if (prev.length < 4) {
+          return [...prev, user];
+        } else {
+          setStash((prevStash) => [...prevStash, user]);
+          return prev;
+        }
+      });
     }
   };
 
@@ -142,7 +171,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
       callbackFunctionUserMuteVideo,
       callbackUserMuteAudio,
       callbackFunctionLocalUserRegistered,
-      callbackFunctionAudioVolumeIndication(activeVoiceSet, setPeerIds),
+      callbackFunctionAudioVolumeIndication(setMyUserData, setPeerIds),
     )
       .then(() => {
         AgoraEngine.current?.joinChannelWithUserAccount(
@@ -168,8 +197,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const countUsers = () => {
     return peerIds.length + 1;
   };
-
-
+  //helper
   const cameraStyle = (index: number, ids: UserType[]) => {
     switch (ids.length) {
       case 1: {
@@ -224,15 +252,16 @@ export const Live: FC<LiveScreenProps> = (props) => {
             }
           })}
         </View>
+        <ButtonBar
+          exitHandler={() => exitChannelHandler(AgoraEngine, navigation)}
+          cameraHandler={cameraHandler}
+          microphoneHandler={microphoneHandler}
+          switchCamera={() => switchCamera(AgoraEngine)}
+          muteCamera={myUserData.camera}
+          muteVoice={myUserData.voice}
+        />
       </View>
-      <ButtonBar
-        exitHandler={exitChannelHandler}
-        cameraHandler={cameraHandler}
-        microphoneHandler={microphoneHandler}
-        switchCamera={switchCamera}
-        muteCamera={myUserData.camera}
-        muteVoice={myUserData.voice}
-      />
+      <ListUsers hiddenUsers={hiddenUsers} />
     </View>
   );
 };

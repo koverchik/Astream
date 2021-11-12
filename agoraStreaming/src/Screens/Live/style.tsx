@@ -21,16 +21,15 @@ const POSITION_OFFSET = 20;
 export const styles = StyleSheet.create<LifeScreenStyles>({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    //justifyContent: 'flex-start',
     alignItems: 'center',
   },
   wrapperVideoAndButton: {
     flex: 1,
   },
   videoContainer: {
+    flex: 1,
     width,
-    height: '60%',
-    backgroundColor: '#92abe1',
   },
   cameraFullScreen: {
     flex: 1,

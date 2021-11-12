@@ -1,8 +1,15 @@
+import {MutableRefObject} from 'react';
+import RtcEngine from 'react-native-agora';
+import {StackNavigationPropNavigation} from '../../Screens/Live/types';
+
 export type ButtonBarPropsType = {
-  exitHandler: () => void;
+  exitHandler: (
+    AgoraEngine: MutableRefObject<RtcEngine | undefined>,
+    navigation: StackNavigationPropNavigation,
+  ) => void;
   cameraHandler: () => void;
   microphoneHandler: () => void;
-  switchCamera: () => void;
+  switchCamera: (AgoraEngine: MutableRefObject<RtcEngine | undefined>) => void;
   muteCamera: boolean;
   muteVoice: boolean;
 };
