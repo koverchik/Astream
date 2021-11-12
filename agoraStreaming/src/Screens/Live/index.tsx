@@ -25,29 +25,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const [joined, setJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [peerIds, setPeerIds] = useState<UserType[]>([
-    {
-      uid: 228,
-      userAccount: 'lol',
-      camera: false,
-      voice: false,
-      activeVoice: false,
-    },
-    {
-      uid: 322,
-      userAccount: 'kek',
-      camera: false,
-      voice: false,
-      activeVoice: false,
-    },
-    {
-      uid: 1337,
-      userAccount: 'cheburek',
-      camera: false,
-      voice: false,
-      activeVoice: false,
-    },
-  ]);
+  const [peerIds, setPeerIds] = useState<UserType[]>([]);
   const [myUserData, setMyUserData] = useState<LocalUserType>({
     uid: 0,
     userAccount: '',
@@ -166,11 +144,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.videoContainer}>
-        <View
-          style={[
-            styles.row,
-            peerIds.length === 2 && {flexDirection: 'column'},
-          ]}>
+        <View style={peerIds.length === 2 ? styles.column : styles.row}>
           {peerIds.map((user, index) => {
             if (index === 0 || index === 1) {
               if (user.uid !== myUserData.uid) {

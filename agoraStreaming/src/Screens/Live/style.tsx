@@ -11,6 +11,7 @@ type LifeScreenStyles = {
   videoContainer: ViewStyle;
   rtcLocal: ViewStyle;
   row: ViewStyle;
+  column: ViewStyle;
 };
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
@@ -30,6 +31,10 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
   row: {
     flex: 1,
     flexDirection: 'row',
+  },
+  column: {
+    flex: 1,
+    flexDirection: 'column',
   },
   rtcLocal: {
     width: '100%',

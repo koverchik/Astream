@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions, ViewStyle} from 'react-native';
+import {StyleSheet, ViewStyle} from 'react-native';
 
 const MICRO_SIZE = 20;
 
