@@ -76,9 +76,9 @@ export const initChannel = async (initData: InitChannelDataType) => {
         const speaker = speakers[i];
         if (speaker.volume) {
           if (speaker.vad === 1 && speaker.uid === 0) {
-            initData.activeVoiceSet(true);
+            initData.setMyUserData((prev) => ({...prev, activeVoice: true}));
           } else {
-            initData.activeVoiceSet(false);
+            initData.setMyUserData((prev) => ({...prev, activeVoice: false}));
           }
 
           initData.setPeerIds((prev) => {

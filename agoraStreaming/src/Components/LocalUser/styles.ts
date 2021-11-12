@@ -7,6 +7,8 @@ type LifeScreenStyles = {
   rtcLocal: ViewStyle;
 };
 
+const POSITION_OFFSET = 20;
+
 export const styles = StyleSheet.create<LifeScreenStyles>({
   camera: {
     flex: 1,
@@ -21,7 +23,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
   },
   userNameContainer: {
     position: 'absolute',
-    top: 20,
-    left: 20,
+    top: POSITION_OFFSET,
+    left: POSITION_OFFSET,
   },
 });

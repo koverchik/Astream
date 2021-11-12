@@ -11,10 +11,11 @@ type LifeScreenStyles = {
   userNameContainer: ViewStyle;
   iconContainer: ViewStyle;
   videoContainer: ViewStyle;
-  rtcLocal: ViewStyle;
   row: ViewStyle;
   column: ViewStyle;
 };
+
+const POSITION_OFFSET = 20;
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
   container: {
@@ -23,7 +24,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     alignItems: 'center',
   },
   videoContainer: {
-    width: width,
+    width,
     height: '60%',
     backgroundColor: '#92abe1',
   },
@@ -31,7 +32,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     flex: 1,
   },
   cameraTwoUsers: {
-    width: width,
+    width,
     height: '50%',
   },
   defaultCamera: {
@@ -46,24 +47,20 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     flex: 1,
     flexDirection: 'column',
   },
-  rtcLocal: {
-    width: '100%',
-    height: '100%',
-  },
   muteCamera: {
     backgroundColor: '#000',
     justifyContent: 'center',
   },
   userNameContainer: {
     position: 'absolute',
-    top: 20,
-    left: 20,
+    top: POSITION_OFFSET,
+    left: POSITION_OFFSET,
   },
   iconContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     position: 'absolute',
-    bottom: -10,
-    left: -10,
+    bottom: -POSITION_OFFSET / 2,
+    left: -POSITION_OFFSET / 2,
   },
 });

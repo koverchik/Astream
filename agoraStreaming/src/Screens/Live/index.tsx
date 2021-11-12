@@ -25,37 +25,14 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const [joined, setJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [peerIds, setPeerIds] = useState<UserType[]>([
-    {
-      uid: 1,
-      camera: false,
-      voice: false,
-      activeVoice: false,
-      userAccount: 'lol',
-    },
-    {
-      uid: 2,
-      camera: false,
-      voice: false,
-      activeVoice: false,
-      userAccount: 'kek',
-    },
-    {
-      uid: 3,
-      camera: false,
-      voice: false,
-      activeVoice: false,
-      userAccount: 'cheburek',
-    },
-  ]);
+  const [peerIds, setPeerIds] = useState<UserType[]>([]);
   const [myUserData, setMyUserData] = useState<LocalUserType>({
     uid: 0,
     userAccount: '',
     camera: false,
     voice: false,
+    activeVoice: false,
   });
-
-  const [activeVoice, activeVoiceSet] = useState(false);
 
   const [stash, setStash] = useState<UserType[]>([]);
 
@@ -133,7 +110,6 @@ export const Live: FC<LiveScreenProps> = (props) => {
       setMyUserData,
       peerIds,
       setPeerIds,
-      activeVoiceSet,
       mute,
       userLeaveChannel,
       setStash,
@@ -208,7 +184,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
                   cameraSize={cameraStyle(index, ids)}
                   myUserData={myUserData}
                   channelId={channelId}
-                  activeVoice={activeVoice}
+                  activeVoice={myUserData.activeVoice}
                   countUsers={countUsers}
                   sizeUserPoint={sizeUserPoint}
                   wavesAroundUserPoint={wavesAroundUserPoint}
@@ -226,26 +202,6 @@ export const Live: FC<LiveScreenProps> = (props) => {
         muteCamera={myUserData.camera}
         muteVoice={myUserData.voice}
       />
-      <Text
-        style={{
-          color: '#000',
-          fontSize: 20,
-          position: 'absolute',
-          bottom: 20,
-          right: 20,
-        }}>
-        {stash.length}
-      </Text>
-      <Text
-        style={{
-          color: '#000',
-          fontSize: 20,
-          position: 'absolute',
-          bottom: 20,
-          left: 20,
-        }}>
-        {peerIds.length}
-      </Text>
     </View>
   );
 };

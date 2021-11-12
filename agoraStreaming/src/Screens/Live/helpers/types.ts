@@ -9,7 +9,6 @@ export type InitChannelDataType = {
   setMyUserData: Dispatch<SetStateAction<LocalUserType>>;
   peerIds: UserType[];
   setPeerIds: Dispatch<SetStateAction<UserType[]>>;
-  activeVoiceSet: Dispatch<SetStateAction<boolean>>;
   mute: (settings: MuteSettingsType, data: UserType[]) => UserType[];
   userLeaveChannel: () => Promise<void>;
   setStash: Dispatch<SetStateAction<UserType[]>>;
