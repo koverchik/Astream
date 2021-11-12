@@ -23,9 +23,9 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
   animationCircle(sizeUserPoint, wavesAroundUserPoint).start();
 
   return (
-    <View style={cameraStyle} key={uid}>
+    <View style={cameraStyle}>
       {camera ? (
-        <View style={[styles.muteCamera, cameraStyle]}>
+        <View style={[styles.muteCamera, styles.rtcRemote]}>
           {activeVoice && (
             <IconUserName
               userName={userAccount}

@@ -4,9 +4,9 @@ const {width} = Dimensions.get('window');
 
 type LifeScreenStyles = {
   container: ViewStyle;
-  camera_1: ViewStyle;
-  camera_2: ViewStyle;
-  camera_3: ViewStyle;
+  cameraFullScreen: ViewStyle;
+  cameraTwoUsers: ViewStyle;
+  defaultCamera: ViewStyle;
   muteCamera: ViewStyle;
   userNameContainer: ViewStyle;
   iconContainer: ViewStyle;
@@ -27,14 +27,14 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     height: '60%',
     backgroundColor: '#92abe1',
   },
-  camera_1: {
+  cameraFullScreen: {
     flex: 1,
   },
-  camera_2: {
+  cameraTwoUsers: {
     width: width,
     height: '50%',
   },
-  camera_3: {
+  defaultCamera: {
     width: '50%',
     height: '50%',
   },

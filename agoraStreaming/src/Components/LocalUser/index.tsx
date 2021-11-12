@@ -20,7 +20,7 @@ export const LocalUser: FC<LocalUserPropsType> = (props) => {
   return (
     <View style={cameraSize}>
       {myUserData.camera ? (
-        <View style={[styles.muteCamera, cameraSize]}>
+        <View style={[styles.muteCamera, styles.rtcLocal]}>
           {activeVoice && (
             <IconUserName
               userName={myUserData.userAccount}

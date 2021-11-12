@@ -26,27 +26,27 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const [joined, setJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [peerIds, setPeerIds] = useState<UserType[]>([
-    /*{
+    {
       uid: 1,
       camera: false,
       voice: false,
       activeVoice: false,
       userAccount: 'lol',
-    },*/
-    /*{
+    },
+    {
       uid: 2,
       camera: false,
       voice: false,
       activeVoice: false,
       userAccount: 'kek',
-    },*/
-    /*{
+    },
+    {
       uid: 3,
       camera: false,
       voice: false,
       activeVoice: false,
       userAccount: 'cheburek',
-    },*/
+    },
   ]);
   const [myUserData, setMyUserData] = useState<LocalUserType>({
     uid: 0,
@@ -166,20 +166,20 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const cameraStyle = (index: number, ids: UserType[]) => {
     switch (ids.length) {
       case 1: {
-        return styles.camera_1;
+        return styles.cameraFullScreen;
       }
       case 2: {
-        return styles.camera_2;
+        return styles.cameraTwoUsers;
       }
       case 3: {
         if (index === 2) {
-          return styles.camera_2;
+          return styles.cameraTwoUsers;
         } else {
-          return styles.camera_3;
+          return styles.defaultCamera;
         }
       }
       default:
-        return styles.camera_3;
+        return styles.defaultCamera;
     }
   };
 
