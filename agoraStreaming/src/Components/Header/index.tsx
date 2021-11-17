@@ -6,7 +6,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {FC} from 'react';
-import {Animated, Dimensions, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {styles} from './styles';
 import {HeaderAppType} from './types';
 

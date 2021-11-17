@@ -1,25 +1,25 @@
+import database from '@react-native-firebase/database';
+import {useNavigation} from '@react-navigation/native';
 import React, {FC, useEffect, useState} from 'react';
 import {
-  View,
-  Platform,
   PermissionsAndroid,
+  Platform,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {styles} from './style';
+import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
 import MapView from 'react-native-map-clustering';
 import {Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
+import {LiveType} from '../../Navigation/types';
+import {styles} from './style';
 import {
   HomeScreenProps,
   ListChannelsType,
   StackNavigationPropNavigation,
 } from './types';
-import Geolocation from 'react-native-geolocation-service';
-import {LiveType} from '../../Navigation/types';
-import database from '@react-native-firebase/database';
-import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
 
 const INITIAL_COORDS = {
   latitude: 53.5078788,

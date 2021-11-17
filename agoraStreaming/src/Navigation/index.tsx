@@ -1,11 +1,10 @@
-import React from 'react';
+import {getHeaderTitle} from '@react-navigation/elements';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import React from 'react';
+import {HeaderApp} from '../Components/Header';
 import {Home} from '../Screens/Home';
 import {Live} from '../Screens/Live';
-import {HeaderApp} from '../Components/Header';
-import {styles} from '../Screens/Home/style';
-import {getHeaderTitle} from '@react-navigation/elements';
 const Stack = createStackNavigator();
 
 export const Navigation = () => {
