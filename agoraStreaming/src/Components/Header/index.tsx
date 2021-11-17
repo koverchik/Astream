@@ -8,9 +8,9 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {FC} from 'react';
 import {Text, View} from 'react-native';
 import {styles} from './styles';
-import {HeaderAppType} from './types';
+import {HeaderAppType as CustomHeaderType} from './types';
 
-export const HeaderApp: FC<HeaderAppType> = (props) => {
+export const CustomHeader: FC<CustomHeaderType> = (props) => {
   const {title} = props;
 
   return (
