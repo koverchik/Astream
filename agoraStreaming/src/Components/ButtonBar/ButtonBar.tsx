@@ -1,14 +1,15 @@
 import React, {FC} from 'react';
 import {View} from 'react-native';
-import {RoundButton} from './RoundButton/RoundButton';
-import {ButtonBarPropsType} from './types';
-import {ExitSvg} from '../../Icons/ExitSvg';
-import {styles} from './styles';
+
+import {CameraMutedSvg} from '../../Icons/CameraMutedSvg';
 import {CameraSvg} from '../../Icons/CameraSvg';
+import {ExitSvg} from '../../Icons/ExitSvg';
+import {MicroMutedSvg} from '../../Icons/MicroMutedSvg';
 import {MicroSvg} from '../../Icons/MicroSvg';
 import {SwitchCameraSvg} from '../../Icons/SwitchCameraSvg';
-import {CameraMutedSvg} from '../../Icons/CameraMutedSvg';
-import {MicroMutedSvg} from '../../Icons/MicroMutedSvg';
+import {RoundButton} from './RoundButton/RoundButton';
+import {styles} from './styles';
+import {ButtonBarPropsType} from './types';
 
 export const ButtonBar: FC<ButtonBarPropsType> = (props) => {
   const {

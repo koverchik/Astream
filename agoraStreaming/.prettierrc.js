@@ -6,4 +6,8 @@ module.exports = {
   arrowParens: 'always',
   tabWidth: 2,
   endOfLine: 'auto',
+  semi: true,
+  importOrder: ['^@core/(.*)$', '^@server/(.*)$', '^@ui/(.*)$', '^[./]'],
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
 };

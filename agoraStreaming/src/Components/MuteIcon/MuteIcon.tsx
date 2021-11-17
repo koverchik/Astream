@@ -1,7 +1,8 @@
 import React, {FC} from 'react';
 import {View} from 'react-native';
-import {MuteIconPropsType} from './types';
+
 import {styles} from './styles';
+import {MuteIconPropsType} from './types';
 
 export const MuteIcon: FC<MuteIconPropsType> = (props) => {
   const {icon} = props;

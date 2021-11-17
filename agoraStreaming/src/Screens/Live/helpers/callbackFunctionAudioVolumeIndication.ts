@@ -1,7 +1,8 @@
 import {Dispatch, SetStateAction} from 'react';
 import {AudioVolumeCallback} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
-import {UserType} from '../types';
+
 import {LocalUserType} from '../../../Components/RemoteUsers/types';
+import {UserType} from '../types';
 
 export const callbackFunctionAudioVolumeIndication =
   (

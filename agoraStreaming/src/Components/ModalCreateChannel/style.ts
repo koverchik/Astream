@@ -1,4 +1,4 @@
-import {StyleSheet, ViewStyle, TextStyle} from 'react-native';
+import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
 type LifeScreenStyles = {
   centeredView: ViewStyle;
@@ -27,6 +27,8 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     marginBottom: 25,
   },
   button: {
+    alignSelf: 'flex-end',
+    alignContent: 'space-between',
     width: '100%',
     marginTop: 15,
     borderRadius: 8,
@@ -77,9 +79,9 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     borderColor: '#FF7070',
   },
   createContainer: {
-    position: 'absolute',
-    left: 50,
-    top: -25,
+    flex: 1,
+    justifyContent: 'flex-end',
+    margin: 15,
     width: 250,
   },
 });
