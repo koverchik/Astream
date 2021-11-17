@@ -79,9 +79,9 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     borderColor: '#FF7070',
   },
   createContainer: {
-    position: 'absolute',
-    left: 35,
-    bottom: 15,
+    flex: 1,
+    justifyContent: 'flex-end',
+    margin: 15,
     width: 250,
   },
 });
