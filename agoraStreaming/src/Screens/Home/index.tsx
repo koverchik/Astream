@@ -106,8 +106,7 @@ export const Home: FC<HomeScreenProps> = () => {
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         clusterColor={'#FF7070'}
-        zoomControlEnabled={true}
-        showsUserLocation={true}>
+        zoomControlEnabled={true}>
         {allMarkers}
       </MapView>
       <ModalCreateChannel coordinates={coordinates} />

@@ -27,6 +27,8 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     marginBottom: 25,
   },
   button: {
+    alignSelf: 'flex-end',
+    alignContent: 'space-between',
     width: '100%',
     marginTop: 15,
     borderRadius: 8,
@@ -78,8 +80,8 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
   },
   createContainer: {
     position: 'absolute',
-    left: 50,
-    top: -25,
+    left: 35,
+    bottom: 15,
     width: 250,
   },
 });
