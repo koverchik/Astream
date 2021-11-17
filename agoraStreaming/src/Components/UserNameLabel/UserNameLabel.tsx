@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {Text, View} from 'react-native';
+
 import {styles} from './styles';
 import {UserNameLabelPropsType} from './types';
 

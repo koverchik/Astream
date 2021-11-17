@@ -1,11 +1,12 @@
 import React, {FC, useRef} from 'react';
 import {Animated, View} from 'react-native';
 import {RtcRemoteView, VideoRenderMode} from 'react-native-agora';
+
 import {animationCircle} from '../../Screens/Live/helpers/animationCircle';
 import {IconUserName} from '../IconUserName';
+import {UserNameLabel} from '../UserNameLabel/UserNameLabel';
 import {styles} from './styles';
 import {RemoteUsersType} from './types';
-import {UserNameLabel} from '../UserNameLabel/UserNameLabel';
 
 export const RemoteUsers: FC<RemoteUsersType> = (props) => {
   const {

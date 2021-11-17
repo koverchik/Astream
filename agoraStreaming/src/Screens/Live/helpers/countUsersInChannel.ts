@@ -1,4 +1,5 @@
 import database from '@react-native-firebase/database';
+
 import {deleteChannel} from './deleteChannel';
 
 export const countUsersInChannel = async (dataChannelKey: string) => {

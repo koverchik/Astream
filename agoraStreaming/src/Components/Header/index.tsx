@@ -7,6 +7,7 @@ import {
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {FC} from 'react';
 import {Text, View} from 'react-native';
+
 import {styles} from './styles';
 import {HeaderAppType as CustomHeaderType} from './types';
 

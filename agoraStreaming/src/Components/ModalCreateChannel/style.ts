@@ -1,4 +1,4 @@
-import {StyleSheet, ViewStyle, TextStyle} from 'react-native';
+import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
 type LifeScreenStyles = {
   centeredView: ViewStyle;

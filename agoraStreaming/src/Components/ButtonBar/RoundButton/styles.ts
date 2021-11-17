@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+
 const ButtonSize = 50;
 
 export const styles = StyleSheet.create({

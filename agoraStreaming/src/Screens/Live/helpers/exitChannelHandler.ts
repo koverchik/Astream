@@ -1,4 +1,5 @@
 import RtcEngine from 'react-native-agora';
+
 import {StackNavigationPropNavigation} from '../../Home/types';
 
 export const exitChannelHandler = (

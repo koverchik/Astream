@@ -1,5 +1,5 @@
-import {UserType} from '../types';
 import {LifeScreenStyles} from '../style';
+import {UserType} from '../types';
 
 export const cameraStyle = (
   index: number,
