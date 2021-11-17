@@ -16,15 +16,15 @@ export const Navigation = () => {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={options}
-          // TODO:
-          // options={{
-          //   headerTransparent: true,
-          //   header: ({navigation, route, options, back}) => {
-          //     const title = getHeaderTitle(options, route.name);
-          //     return <HeaderApp title={title} />;
-          //   },
-          // }}
+          // options={options}
+          // TODO: You need use this fragment after create user page or notification
+          options={{
+            headerTransparent: true,
+            header: ({navigation, route, options, back}) => {
+              const title = getHeaderTitle(options, route.name);
+              return <HeaderApp title={title} />;
+            },
+          }}
         />
         <Stack.Screen name="Live" component={Live} options={options} />
       </Stack.Navigator>
