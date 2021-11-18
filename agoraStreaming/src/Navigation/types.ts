@@ -1,3 +1,5 @@
+import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
+import {ParamListBase, RouteProp} from '@react-navigation/native';
 import {Region} from 'react-native-maps';
 
 export enum LiveType {
@@ -19,3 +21,8 @@ export enum HomeStackScreens {
   Home = 'Home',
   Live = 'Live',
 }
+
+export type ScreenOptionsType = (props: {
+  route: RouteProp<ParamListBase, string>;
+  navigation: any;
+}) => BottomTabNavigationOptions;

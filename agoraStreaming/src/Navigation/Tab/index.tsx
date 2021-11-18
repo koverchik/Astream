@@ -2,11 +2,7 @@ import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import {
-  NavigationContainer,
-  ParamListBase,
-  RouteProp,
-} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {Dimensions} from 'react-native';
 
@@ -17,14 +13,10 @@ import {HomeSvg} from '../../Icons/HomeSvg';
 import {PlusSvg} from '../../Icons/PlusSvg';
 import {Calendar} from '../../Screens/Calendar';
 import {MainStack} from '../index';
+import {ScreenOptionsType} from '../types';
 
 const {height} = Dimensions.get('window');
 const Tab = createBottomTabNavigator();
-
-type ScreenOptionsType = (props: {
-  route: RouteProp<ParamListBase, string>;
-  navigation: any;
-}) => BottomTabNavigationOptions;
 
 export const BottomTabs = () => {
   const options: BottomTabNavigationOptions = {
