@@ -13,10 +13,10 @@ import {HomeSvg} from '../../Icons/HomeSvg';
 import {PlusSvg} from '../../Icons/PlusSvg';
 import {Calendar} from '../../Screens/Calendar';
 import {MainStack} from '../index';
-import {ScreenOptionsType} from '../types';
+import {ScreenOptionsType, TabNavigation, TabParamList} from '../types';
 
 const {height} = Dimensions.get('window');
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<TabParamList>();
 
 export const BottomTabs = () => {
   const options: BottomTabNavigationOptions = {
@@ -27,15 +27,15 @@ export const BottomTabs = () => {
   const screenOptions: ScreenOptionsType = ({route}) => ({
     tabBarIcon: ({color, size}) => {
       switch (route.name) {
-        case 'Main':
+        case TabNavigation.Main:
           return <HomeSvg color={color} size={size} />;
-        case 'Discover':
+        case TabNavigation.Discover:
           return <DiscoverSvg color={color} size={size} />;
-        case 'Plus':
+        case TabNavigation.Plus:
           return <PlusSvg color={color} size={size} />;
-        case 'Calendar':
+        case TabNavigation.Calendar:
           return <CalendarSvg color={color} size={size} />;
-        case 'Circle':
+        case TabNavigation.Circle:
           return <CircleSvg color={color} size={size} />;
       }
     },
@@ -51,11 +51,31 @@ export const BottomTabs = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={screenOptions}>
-        <Tab.Screen name="Main" component={MainStack} options={options} />
-        <Tab.Screen name="Discover" component={Calendar} options={options} />
-        <Tab.Screen name="Plus" component={Calendar} options={options} />
-        <Tab.Screen name="Calendar" component={Calendar} options={options} />
-        <Tab.Screen name="Circle" component={Calendar} options={options} />
+        <Tab.Screen
+          name={TabNavigation.Main}
+          component={MainStack}
+          options={options}
+        />
+        <Tab.Screen
+          name={TabNavigation.Discover}
+          component={Calendar}
+          options={options}
+        />
+        <Tab.Screen
+          name={TabNavigation.Plus}
+          component={Calendar}
+          options={options}
+        />
+        <Tab.Screen
+          name={TabNavigation.Calendar}
+          component={Calendar}
+          options={options}
+        />
+        <Tab.Screen
+          name={TabNavigation.Circle}
+          component={Calendar}
+          options={options}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -1,13 +1,17 @@
-import {createStackNavigator} from '@react-navigation/stack';
+import {
+  StackNavigationOptions,
+  createStackNavigator,
+} from '@react-navigation/stack';
 import React from 'react';
 
 import {Home} from '../Screens/Home';
 import {Live} from '../Screens/Live';
+import {RootStackParamList} from './types';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export const MainStack = () => {
-  const options = {headerShown: false};
+  const options: StackNavigationOptions = {headerShown: false};
 
   return (
     <Stack.Navigator>

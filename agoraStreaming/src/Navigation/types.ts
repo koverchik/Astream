@@ -22,7 +22,23 @@ export enum HomeStackScreens {
   Live = 'Live',
 }
 
+export enum TabNavigation {
+  Main = 'Main',
+  Discover = 'Discover',
+  Plus = 'Plus',
+  Calendar = 'Calendar',
+  Circle = 'Circle',
+}
+
 export type ScreenOptionsType = (props: {
   route: RouteProp<ParamListBase, string>;
-  navigation: any;
+  navigation: TabParamList;
 }) => BottomTabNavigationOptions;
+
+export type TabParamList = {
+  Main: undefined;
+  Discover: undefined;
+  Plus: undefined;
+  Calendar: undefined;
+  Circle: undefined;
+};
