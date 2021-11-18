@@ -6,7 +6,7 @@ import {Live} from '../Screens/Live';
 
 const Stack = createStackNavigator();
 
-export const Navigation = () => {
+export const MainStack = () => {
   const options = {headerShown: false};
 
   return (
