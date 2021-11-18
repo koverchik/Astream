@@ -7,6 +7,7 @@ type HomeScreenStyles = {
   map: ViewStyle;
   calloutStyle: ViewStyle;
   itemChannel: ViewStyle;
+  background: ViewStyle;
 };
 
 export const styles = StyleSheet.create<HomeScreenStyles>({
@@ -16,6 +17,14 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     left: 0,
     right: 0,
     bottom: 0,
+    backgroundColor: '#000',
+    borderBottomEndRadius: 35,
+    borderBottomStartRadius: 35,
+    overflow: 'hidden',
+  },
+  background: {
+    flex: 1,
+    backgroundColor: '#000',
   },
   button: {
     width: '100%',
