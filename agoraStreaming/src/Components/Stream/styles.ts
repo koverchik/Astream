@@ -49,7 +49,7 @@ export const styles = StyleSheet.create<StreamStylesType>({
     height: STREAM_TYPE_SIZE,
     width: STREAM_TYPE_SIZE,
     borderRadius: STREAM_TYPE_SIZE / 2,
-    backgroundColor: '#78adea',
+    backgroundColor: '#a5c5ec',
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -4,3 +4,9 @@ export type StreamType = {
   type: 'Audio' | 'Video' | 'Chat';
   name: string;
 };
+
+export enum CallTypes {
+  Audio = 'Audio',
+  Video = 'Video',
+  Chat = 'Chat',
+}
