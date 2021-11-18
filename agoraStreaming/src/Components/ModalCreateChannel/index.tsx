@@ -57,7 +57,8 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
           setName('');
           setError(null);
           setModalVisible(!modalVisible);
-        }}>
+        }}
+      >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.title}>Create new channel</Text>
@@ -73,7 +74,8 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
             <Pressable
               style={[styles.button, !!error && styles.buttonDisabled]}
               onPress={pressStart}
-              disabled={!!error}>
+              disabled={!!error}
+            >
               <Text style={styles.buttonText}>Start</Text>
             </Pressable>
           </View>

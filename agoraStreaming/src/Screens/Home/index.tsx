@@ -90,7 +90,8 @@ export const Home: FC<HomeScreenProps> = () => {
           longitude,
         }}
         onCalloutPress={() => choseChannelAndJoinLive(channelId)}
-        title={name}>
+        title={name}
+      >
         <Callout style={styles.calloutStyle}>
           <TouchableOpacity key={channelId} style={styles.itemChannel}>
             <Text style={styles.buttonText}>{name}</Text>
