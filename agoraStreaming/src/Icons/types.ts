@@ -7,3 +7,7 @@ export type TabIconPropsType = {
   color: string;
   size: number;
 };
+
+export type AvatarPropsType = {
+  size: number;
+};
