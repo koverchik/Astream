@@ -25,7 +25,7 @@ import {findKeyDataInDatabase} from './helpers/findKeyDataInDatabase';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {requestCameraAndAudioPermission} from './helpers/permission';
 import {switchCamera} from './helpers/switchCamera';
-import {LifeScreenStyles, styles} from './style';
+import {styles} from './style';
 import {LiveScreenProps, MuteSettingsType, UserType} from './types';
 
 export const Live: FC<LiveScreenProps> = (props) => {
