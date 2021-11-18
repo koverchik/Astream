@@ -1,5 +1,6 @@
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import database from '@react-native-firebase/database';
 import React, {FC, useState} from 'react';
 import {
   Modal,
@@ -24,8 +25,14 @@ export const ModalCreatEvent: FC = () => {
 
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
-  const createEvent = () => {
-    // TODO: Space for function which create new entry into the database
+  const newReference = database().ref('/events').push();
+
+  const createEvent = async () => {
+    await newReference.set({
+      name,
+      video: isEnabled,
+      dateTime: date,
+    });
   };
   const pressStart = () => {
     if (!name.trim()) {
@@ -77,7 +84,15 @@ export const ModalCreatEvent: FC = () => {
                   value={isEnabled}
                 />
               </View>
-              <DatePicker date={date} mode="time" onDateChange={setDate} />
+              <DatePicker
+                date={date}
+                mode="time"
+                onDateChange={(event) => {
+                  console.log(event);
+                  setDate(event);
+                }}
+                androidVariant={'iosClone'}
+              />
             </View>
             <Pressable
               style={[styles.button, !!error && styles.buttonDisabled]}
