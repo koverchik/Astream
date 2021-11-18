@@ -13,6 +13,7 @@ import 'react-native-get-random-values';
 import MapView from 'react-native-map-clustering';
 import {Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
+import {ModalCreatEvent} from '../../Components/ModalCreatEvent';
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
 import {LiveType} from '../../Navigation/types';
 import {styles} from './style';
@@ -90,8 +91,7 @@ export const Home: FC<HomeScreenProps> = () => {
           longitude,
         }}
         onCalloutPress={() => choseChannelAndJoinLive(channelId)}
-        title={name}
-      >
+        title={name}>
         <Callout style={styles.calloutStyle}>
           <TouchableOpacity key={channelId} style={styles.itemChannel}>
             <Text style={styles.buttonText}>{name}</Text>
@@ -108,10 +108,10 @@ export const Home: FC<HomeScreenProps> = () => {
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         clusterColor={'#FF7070'}
-        zoomControlEnabled={true}
-      >
+        zoomControlEnabled={true}>
         {allMarkers}
       </MapView>
+      <ModalCreatEvent />
       <ModalCreateChannel coordinates={coordinates} />
     </View>
   );
