@@ -15,17 +15,21 @@ import {
 import DatePicker from 'react-native-date-picker';
 
 import {styles} from './style';
+import {ModalCreatEventType} from './types';
 
-export const ModalCreatEvent: FC = () => {
+export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
+  const {day} = props;
+
   const [isModalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState('event');
   const [error, setError] = useState<string | null>(null);
   const [isEnabled, setIsEnabled] = useState(false);
+
   const [date, setDate] = useState(new Date());
 
   const changeBooleanValue = (value: boolean) => !value;
 
-  const newReference = database().ref('/events').push();
+  const newReference = database().ref(`/events/${day}`).push();
 
   const createEvent = async () => {
     await newReference.set({
