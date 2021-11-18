@@ -5,11 +5,11 @@ import React, {FC, useState} from 'react';
 import {
   Modal,
   NativeSyntheticEvent,
-  Pressable,
   Switch,
   Text,
   TextInput,
   TextInputChangeEventData,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
@@ -17,13 +17,13 @@ import DatePicker from 'react-native-date-picker';
 import {styles} from './style';
 
 export const ModalCreatEvent: FC = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState('event');
   const [error, setError] = useState<string | null>(null);
   const [isEnabled, setIsEnabled] = useState(false);
   const [date, setDate] = useState(new Date());
 
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const changeBooleanValue = (value: boolean) => !value;
 
   const newReference = database().ref('/events').push();
 
@@ -34,11 +34,12 @@ export const ModalCreatEvent: FC = () => {
       dateTime: date,
     });
   };
+
   const pressStart = () => {
     if (!name.trim()) {
       setError('Name is required field!');
     } else {
-      setModalVisible(!modalVisible);
+      setModalVisible(changeBooleanValue);
       setName('');
       createEvent();
     }
@@ -49,23 +50,23 @@ export const ModalCreatEvent: FC = () => {
   };
 
   return (
-    <View style={styles.centeredView}>
+    <View style={styles.wrapperAllModalView}>
       <Modal
         animationType="fade"
         transparent={false}
-        visible={modalVisible}
+        visible={isModalVisible}
         onRequestClose={() => {
           setName('');
           setError(null);
-          setModalVisible(!modalVisible);
+          setModalVisible(changeBooleanValue);
         }}>
-        <View style={styles.centeredView}>
+        <View style={styles.wrapperModalView}>
           <View style={styles.modalView}>
-            <Pressable
+            <TouchableOpacity
               style={styles.closeButton}
-              onPress={() => setModalVisible(false)}>
+              onPress={() => setModalVisible(changeBooleanValue)}>
               <FontAwesomeIcon icon={faPlus} color={'white'} size={20} />
-            </Pressable>
+            </TouchableOpacity>
             <Text style={styles.title}>Create new event</Text>
             <View style={styles.inputContainer}>
               <TextInput
@@ -76,11 +77,11 @@ export const ModalCreatEvent: FC = () => {
               />
               {error && <Text style={styles.error}>{error}</Text>}
               <View style={styles.wrapperView}>
-                <Text> Video</Text>
+                <Text>Video</Text>
                 <Switch
                   trackColor={{false: '#767577', true: '#81b0ff'}}
                   thumbColor={isEnabled ? '#FF7070' : '#f4f3f4'}
-                  onValueChange={toggleSwitch}
+                  onValueChange={() => setIsEnabled(changeBooleanValue)}
                   value={isEnabled}
                 />
               </View>
@@ -88,25 +89,24 @@ export const ModalCreatEvent: FC = () => {
                 date={date}
                 mode="time"
                 onDateChange={(event) => {
-                  console.log(event);
                   setDate(event);
                 }}
                 androidVariant={'iosClone'}
               />
             </View>
-            <Pressable
+            <TouchableOpacity
               style={[styles.button, !!error && styles.buttonDisabled]}
               onPress={pressStart}
               disabled={!!error}>
               <Text style={styles.buttonText}>Create</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
-      <View style={styles.createContainer}>
-        <Pressable style={styles.button} onPress={() => setModalVisible(true)}>
+      <View style={styles.addNewEvent}>
+        <TouchableOpacity onPress={() => setModalVisible(changeBooleanValue)}>
           <FontAwesomeIcon icon={faPlus} color={'white'} size={18} />
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

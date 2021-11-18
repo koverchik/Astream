@@ -13,7 +13,6 @@ import 'react-native-get-random-values';
 import MapView from 'react-native-map-clustering';
 import {Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
-import {ModalCreatEvent} from '../../Components/ModalCreatEvent';
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
 import {LiveType} from '../../Navigation/types';
 import {styles} from './style';
@@ -111,7 +110,7 @@ export const Home: FC<HomeScreenProps> = () => {
         zoomControlEnabled={true}>
         {allMarkers}
       </MapView>
-      <ModalCreatEvent />
+
       <ModalCreateChannel coordinates={coordinates} />
     </View>
   );

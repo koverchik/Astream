@@ -1,10 +1,14 @@
 import React, {FC} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import {Calendar} from 'react-native-calendars';
 
-export const Calendar: FC = () => {
+import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
+
+export const ScreenCalendar: FC = () => {
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{color: '#000'}}>Calendar Screen</Text>
+    <View>
+      <Calendar />
+      <ModalCreatEvent />
     </View>
   );
 };

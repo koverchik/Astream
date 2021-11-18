@@ -1,7 +1,7 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
 type LifeScreenStyles = {
-  centeredView: ViewStyle;
+  wrapperAllModalView: ViewStyle;
   button: ViewStyle;
   closeButton: ViewStyle;
   buttonText: TextStyle;
@@ -11,18 +11,18 @@ type LifeScreenStyles = {
   modalView: ViewStyle;
   input: ViewStyle;
   errorInput: ViewStyle;
-  createContainer: ViewStyle;
+  addNewEvent: ViewStyle;
+  wrapperModalView: ViewStyle;
   buttonDisabled: ViewStyle;
   inputContainer: ViewStyle;
 };
 const SIZE_CLOSE_BUTTON = 30;
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
-  centeredView: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  wrapperAllModalView: {
+    margin: 20,
   },
+  wrapperModalView: {flex: 1, alignItems: 'center', justifyContent: 'center'},
   modalView: {
     paddingBottom: 50,
     margin: 20,
@@ -49,6 +49,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginLeft: 5,
   },
   button: {
     alignContent: 'space-between',
@@ -94,10 +95,12 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
   errorInput: {
     borderColor: '#FF7070',
   },
-  createContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    margin: 15,
-    width: 250,
+  addNewEvent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FF7070',
+    width: SIZE_CLOSE_BUTTON,
+    height: SIZE_CLOSE_BUTTON,
+    borderRadius: 8,
   },
 });
