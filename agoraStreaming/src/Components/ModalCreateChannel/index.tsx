@@ -1,18 +1,19 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {FC, useState} from 'react';
 import {
-  View,
-  Text,
   Modal,
-  Pressable,
-  TextInput,
   NativeSyntheticEvent,
+  Pressable,
+  Text,
+  TextInput,
   TextInputChangeEventData,
+  View,
 } from 'react-native';
+import {v4 as uuid} from 'uuid';
+
 import {LiveType} from '../../Navigation/types';
 import {StackNavigationPropNavigation} from '../../Screens/Home/types';
 import {styles} from './style';
-import {v4 as uuid} from 'uuid';
 import {ModalCreateChannelType} from './types';
 
 export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {

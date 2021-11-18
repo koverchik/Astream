@@ -1,5 +1,6 @@
-import {LocalUserType} from '../RemoteUsers/types';
 import {Animated, ViewStyle} from 'react-native';
+
+import {LocalUserType} from '../RemoteUsers/types';
 
 export type LocalUserPropsType = {
   myUserData: LocalUserType;

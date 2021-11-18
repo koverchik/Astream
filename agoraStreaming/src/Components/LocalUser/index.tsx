@@ -1,10 +1,11 @@
 import React, {FC} from 'react';
 import {View} from 'react-native';
-import {IconUserName} from '../IconUserName';
 import {RtcLocalView} from 'react-native-agora';
+
+import {IconUserName} from '../IconUserName';
 import {UserNameLabel} from '../UserNameLabel/UserNameLabel';
-import {LocalUserPropsType} from './types';
 import {styles} from './styles';
+import {LocalUserPropsType} from './types';
 
 export const LocalUser: FC<LocalUserPropsType> = (props) => {
   const {

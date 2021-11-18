@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
@@ -8,14 +7,16 @@ import {
   ParamListBase,
   RouteProp,
 } from '@react-navigation/native';
-import {Calendar} from '../../Screens/Calendar';
-import {MainStack} from '../index';
+import React from 'react';
 import {Dimensions} from 'react-native';
-import {HomeSvg} from '../../Icons/HomeSvg';
+
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
-import {PlusSvg} from '../../Icons/PlusSvg';
 import {DiscoverSvg} from '../../Icons/DiscoverSvg';
+import {HomeSvg} from '../../Icons/HomeSvg';
+import {PlusSvg} from '../../Icons/PlusSvg';
+import {Calendar} from '../../Screens/Calendar';
+import {MainStack} from '../index';
 
 const {height} = Dimensions.get('window');
 const Tab = createBottomTabNavigator();

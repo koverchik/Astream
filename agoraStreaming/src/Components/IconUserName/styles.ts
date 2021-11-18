@@ -19,14 +19,13 @@ const roundStyles: ViewStyle = {
   justifyContent: 'center',
   position: 'absolute',
   left: dimensions.height / 4 - 20,
- borderRadius: 20,
+  borderRadius: 20,
 };
 
 export const styles = StyleSheet.create<UserNameLabelType>({
   pointUserName: {
     ...roundStyles,
     backgroundColor: '#5ebf9d',
-   
   },
   wavesAroundUserPoint: {
     ...roundStyles,

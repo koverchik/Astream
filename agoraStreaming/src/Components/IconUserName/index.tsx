@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {Animated, Dimensions, Text} from 'react-native';
+
 import {styles} from './styles';
 import {IconUserNameType} from './types';
 

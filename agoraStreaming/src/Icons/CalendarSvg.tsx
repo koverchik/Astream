@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import Svg, {Path} from 'react-native-svg';
+
 import {TabIconPropsType} from './types';
 
 export const CalendarSvg: FC<TabIconPropsType> = (props) => {

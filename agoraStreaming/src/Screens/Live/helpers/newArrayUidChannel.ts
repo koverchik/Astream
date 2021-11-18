@@ -1,4 +1,5 @@
 import database from '@react-native-firebase/database';
+
 import {updateDataChannel} from './updateDataChannelUids';
 
 export const addUserInArrayUidChannel = async (
