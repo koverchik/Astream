@@ -11,7 +11,7 @@ import {CircleSvg} from '../../Icons/CircleSvg';
 import {DiscoverSvg} from '../../Icons/DiscoverSvg';
 import {HomeSvg} from '../../Icons/HomeSvg';
 import {PlusSvg} from '../../Icons/PlusSvg';
-import {Calendar} from '../../Screens/Calendar';
+import {ScreenCalendar} from '../../Screens/Calendar';
 import {MainStack} from '../index';
 import {ScreenOptionsType, TabNavigation, TabParamList} from '../types';
 
@@ -58,22 +58,22 @@ export const BottomTabs = () => {
         />
         <Tab.Screen
           name={TabNavigation.Discover}
-          component={Calendar}
+          component={ScreenCalendar}
           options={options}
         />
         <Tab.Screen
           name={TabNavigation.Plus}
-          component={Calendar}
+          component={ScreenCalendar}
           options={options}
         />
         <Tab.Screen
           name={TabNavigation.Calendar}
-          component={Calendar}
+          component={ScreenCalendar}
           options={options}
         />
         <Tab.Screen
           name={TabNavigation.Circle}
-          component={Calendar}
+          component={ScreenCalendar}
           options={options}
         />
       </Tab.Navigator>
