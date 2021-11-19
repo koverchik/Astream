@@ -92,9 +92,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
               <DatePicker
                 date={date}
                 mode="time"
-                onDateChange={(event) => {
-                  setDate(event);
-                }}
+                onDateChange={setDate}
                 androidVariant={'iosClone'}
               />
             </View>
