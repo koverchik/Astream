@@ -1,10 +1,24 @@
-import React, {FC} from 'react';
-import {Text, View} from 'react-native';
+import React, {FC, useState} from 'react';
+import {View} from 'react-native';
+import {Calendar} from 'react-native-calendars';
 
-export const Calendar: FC = () => {
+import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
+
+export const ScreenCalendar: FC = () => {
+  const dataSystem = new Date();
+  const [chosenDay, setChoseDay] = useState(
+    `${dataSystem.getFullYear()}-${
+      dataSystem.getMonth() + 1
+    }-${dataSystem.getDate()}`,
+  );
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{color: '#000'}}>Calendar Screen</Text>
+    <View>
+      <Calendar
+        onDayPress={(day) => {
+          setChoseDay(day.dateString);
+        }}
+      />
+      <ModalCreatEvent day={chosenDay} />
     </View>
   );
 };

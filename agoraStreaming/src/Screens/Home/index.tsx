@@ -90,8 +90,7 @@ export const Home: FC<HomeScreenProps> = () => {
           longitude,
         }}
         onCalloutPress={() => choseChannelAndJoinLive(channelId)}
-        title={name}
-      >
+        title={name}>
         <Callout style={styles.calloutStyle}>
           <TouchableOpacity key={channelId} style={styles.itemChannel}>
             <Text style={styles.buttonText}>{name}</Text>
@@ -102,19 +101,16 @@ export const Home: FC<HomeScreenProps> = () => {
   });
 
   return (
-    <View style={styles.background}>
-      <View style={styles.container}>
-        <MapView
-          initialRegion={coordinates}
-          provider={PROVIDER_GOOGLE}
-          style={styles.map}
-          clusterColor={'#FF7070'}
-          zoomControlEnabled={true}
-          showsUserLocation={true}>
-          {allMarkers}
-        </MapView>
-        <ModalCreateChannel coordinates={coordinates} />
-      </View>
+    <View style={styles.container}>
+      <MapView
+        initialRegion={coordinates}
+        provider={PROVIDER_GOOGLE}
+        style={styles.map}
+        clusterColor={'#FF7070'}
+        zoomControlEnabled={true}>
+        {allMarkers}
+      </MapView>
+      <ModalCreateChannel coordinates={coordinates} />
     </View>
   );
 };
