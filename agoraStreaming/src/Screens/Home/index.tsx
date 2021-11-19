@@ -110,7 +110,6 @@ export const Home: FC<HomeScreenProps> = () => {
         zoomControlEnabled={true}>
         {allMarkers}
       </MapView>
-
       <ModalCreateChannel coordinates={coordinates} />
     </View>
   );

@@ -26,8 +26,9 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
   const [isEnabled, setIsEnabled] = useState(false);
 
   const [date, setDate] = useState(new Date());
+  console.log('date', date);
 
-  const changeBooleanValue = (value: boolean) => !value;
+  const changeModalVisible = () => setModalVisible(!isModalVisible);
 
   const newReference = database().ref(`/events/${day}`).push();
 
@@ -43,7 +44,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
     if (!name.trim()) {
       setError('Name is required field!');
     } else {
-      setModalVisible(changeBooleanValue);
+      changeModalVisible();
       setName('');
       createEvent();
     }
@@ -62,13 +63,13 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
         onRequestClose={() => {
           setName('');
           setError(null);
-          setModalVisible(changeBooleanValue);
+          changeModalVisible();
         }}>
         <View style={styles.wrapperModalView}>
           <View style={styles.modalView}>
             <TouchableOpacity
               style={styles.closeButton}
-              onPress={() => setModalVisible(changeBooleanValue)}>
+              onPress={changeModalVisible}>
               <FontAwesomeIcon icon={faPlus} color={'white'} size={20} />
             </TouchableOpacity>
             <Text style={styles.title}>Create new event</Text>
@@ -85,7 +86,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
                 <Switch
                   trackColor={{false: '#767577', true: '#81b0ff'}}
                   thumbColor={isEnabled ? '#FF7070' : '#f4f3f4'}
-                  onValueChange={() => setIsEnabled(changeBooleanValue)}
+                  onValueChange={setIsEnabled}
                   value={isEnabled}
                 />
               </View>
@@ -108,7 +109,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
         </View>
       </Modal>
       <View style={styles.addNewEvent}>
-        <TouchableOpacity onPress={() => setModalVisible(changeBooleanValue)}>
+        <TouchableOpacity onPress={changeModalVisible}>
           <FontAwesomeIcon icon={faPlus} color={'white'} size={18} />
         </TouchableOpacity>
       </View>
