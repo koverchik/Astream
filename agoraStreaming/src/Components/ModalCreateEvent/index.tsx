@@ -22,11 +22,10 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState('event');
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>('');
   const [isEnabled, setIsEnabled] = useState(false);
 
   const [date, setDate] = useState(new Date());
-  console.log('date', date);
 
   const changeModalVisible = () => setModalVisible(!isModalVisible);
 
@@ -51,7 +50,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
   };
   const onChangeTitle = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setName(e.nativeEvent.text);
-    setError(null);
+    setError('');
   };
 
   return (
@@ -62,7 +61,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
         visible={isModalVisible}
         onRequestClose={() => {
           setName('');
-          setError(null);
+          setError('');
           changeModalVisible();
         }}>
         <View style={styles.wrapperModalView}>
@@ -80,7 +79,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
                 placeholder="Name event"
                 value={name}
               />
-              {error && <Text style={styles.error}>{error}</Text>}
+              {!!error && <Text style={styles.error}>{error}</Text>}
               <View style={styles.wrapperView}>
                 <Text>Video</Text>
                 <Switch
