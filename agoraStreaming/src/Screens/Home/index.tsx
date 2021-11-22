@@ -1,8 +1,8 @@
+import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import {useNavigation} from '@react-navigation/native';
 import React, {FC, useEffect, useState} from 'react';
 import {
-  Button,
   PermissionsAndroid,
   Platform,
   Text,
@@ -16,6 +16,8 @@ import {Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
 import {LiveType} from '../../Navigation/types';
+import {setUser} from '../../Redux/actions/AuthActions/AuthActions';
+import {useAppDispatch} from '../../Redux/hooks';
 import {styles} from './style';
 import {
   HomeScreenProps,
@@ -32,10 +34,16 @@ const INITIAL_COORDS = {
 
 export const Home: FC<HomeScreenProps> = () => {
   const navigation = useNavigation<StackNavigationPropNavigation>();
+  const dispatch = useAppDispatch();
 
   const [coordinates, setCoordinates] = useState(INITIAL_COORDS);
 
   const [listChannels, setListChannels] = useState<ListChannelsType[]>([]);
+
+  const logoutHandler = async () => {
+    await auth().signOut();
+    dispatch(setUser(null));
+  };
 
   async function requestPermissions() {
     if (Platform.OS === 'android') {
@@ -111,6 +119,11 @@ export const Home: FC<HomeScreenProps> = () => {
           zoomControlEnabled={true}>
           {allMarkers}
         </MapView>
+        <TouchableOpacity onPress={logoutHandler}>
+          <View style={styles.logout}>
+            <Text style={styles.buttonText}>LOGOUT</Text>
+          </View>
+        </TouchableOpacity>
         <ModalCreateChannel coordinates={coordinates} />
       </View>
     </View>

@@ -1,4 +1,13 @@
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = any; //ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = any; //typeof store.dispatch;
+import {combineReducers, createStore} from 'redux';
+
+import {authReducer} from './reducers/Auth';
+
+const rootReducer = combineReducers({
+  auth: authReducer,
+});
+
+export const store = createStore(rootReducer);
+
+export type RootState = ReturnType<typeof store.getState>;
+
+export type AppDispatch = typeof store.dispatch;

@@ -1,9 +1,11 @@
+import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Dimensions} from 'react-native';
 
 import {CalendarSvg} from '../../Icons/CalendarSvg';
@@ -11,6 +13,10 @@ import {CircleSvg} from '../../Icons/CircleSvg';
 import {DiscoverSvg} from '../../Icons/DiscoverSvg';
 import {HomeSvg} from '../../Icons/HomeSvg';
 import {PlusSvg} from '../../Icons/PlusSvg';
+import {setUser} from '../../Redux/actions/AuthActions/AuthActions';
+import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
+import {selectUser} from '../../Redux/selectors/AuthSelectors';
+import {AuthScreen} from '../../Screens/Auth';
 import {ScreenCalendar} from '../../Screens/Calendar';
 import {MainStack} from '../index';
 import {ScreenOptionsType, TabNavigation, TabParamList} from '../types';
@@ -23,7 +29,6 @@ export const BottomTabs = () => {
     headerShown: false,
     tabBarShowLabel: false,
   };
-
   const screenOptions: ScreenOptionsType = ({route}) => ({
     tabBarIcon: ({color, size}) => {
       switch (route.name) {
@@ -47,6 +52,28 @@ export const BottomTabs = () => {
       backgroundColor: '#000',
     },
   });
+
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '1088468777432-7titji4f8tsu0oorpqfibu469sl8jvnj.apps.googleusercontent.com',
+    });
+    auth().onAuthStateChanged((userInfo) => {
+      if (userInfo) {
+        const {uid, email, displayName} = userInfo;
+        dispatch(setUser({displayName, uid, email}));
+      } else {
+        console.log('User not logged in');
+      }
+    });
+  }, []);
+
+  if (!user) {
+    return <AuthScreen />;
+  }
 
   return (
     <NavigationContainer>
