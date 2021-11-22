@@ -100,16 +100,18 @@ export const Home: FC<HomeScreenProps> = () => {
   });
 
   return (
-    <View style={styles.container}>
-      <MapView
-        initialRegion={coordinates}
-        provider={PROVIDER_GOOGLE}
-        style={styles.map}
-        clusterColor={'#FF7070'}
-        zoomControlEnabled={true}>
-        {allMarkers}
-      </MapView>
-      <ModalCreateChannel coordinates={coordinates} />
+    <View style={styles.background}>
+      <View style={styles.container}>
+        <MapView
+          initialRegion={coordinates}
+          provider={PROVIDER_GOOGLE}
+          style={styles.map}
+          clusterColor={'#FF7070'}
+          zoomControlEnabled={true}>
+          {allMarkers}
+        </MapView>
+        <ModalCreateChannel coordinates={coordinates} />
+      </View>
     </View>
   );
 };
