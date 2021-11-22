@@ -64,7 +64,6 @@ export const Home: FC<HomeScreenProps> = () => {
     database()
       .ref('/channels')
       .on('value', (snapshot) => {
-        console.log(snapshot.val());
         if (snapshot.val() != null) {
           setListChannels(Object.values(snapshot.val()));
         } else {
