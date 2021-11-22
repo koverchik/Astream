@@ -27,12 +27,10 @@ export const ScreenCalendar: FC = () => {
     .once('value')
     .then((snapshot) => {
       getKeyNotification();
-
       const data: eventInDatabases[] = snapshot.val();
       if (data != null) {
         for (const key in data) {
           const dateTimeNotification = Date.parse(data[key].dateTime) - 900000;
-          keyNotification.indexOf(key);
           if (
             Date.now() < dateTimeNotification &&
             keyNotification.indexOf(key) === -1
