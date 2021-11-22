@@ -41,17 +41,14 @@ export const ScreenCalendar: FC = () => {
           }}
         />
         <ModalCreatEvent day={chosenDay} />
-        {streams.length ? (
-          <FlatList
-            data={streams}
-            style={styles.flatList}
-            renderItem={({item}) => <Stream stream={item} />}
-            keyExtractor={(item) => 'Stream' + item.id}
-            contentContainerStyle={styles.flatListContent}
-          />
-        ) : (
-          <Text>No scheduled streams</Text>
-        )}
+        <FlatList
+          data={streams}
+          style={styles.flatList}
+          renderItem={({item}) => <Stream stream={item} />}
+          keyExtractor={(item) => 'Stream' + item.id}
+          contentContainerStyle={styles.flatListContent}
+          ListFooterComponent={<Text>No scheduled streams</Text>}
+        />
       </View>
     </View>
   );
