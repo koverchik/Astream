@@ -4,7 +4,7 @@ export type ModalCreatEventType = {
   day: DateData['dateString'];
 };
 
-export type eventInDatabases = {
+export type EventInDatabases = {
   name: string;
   video: boolean;
   dateTime: string;

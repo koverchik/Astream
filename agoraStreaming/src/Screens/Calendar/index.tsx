@@ -5,8 +5,11 @@ import {View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
-import {eventInDatabases} from '../../Components/ModalCreateEvent/types';
+import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
 import {addZeroForMinutes} from './helpers/addZero';
+
+// Time notification in milliseconds (15 minutes)
+const TIME_NOTIFICATION = 900000;
 
 export const ScreenCalendar: FC = () => {
   const dataSystem = new Date();
@@ -27,10 +30,11 @@ export const ScreenCalendar: FC = () => {
     .once('value')
     .then((snapshot) => {
       getKeyNotification();
-      const data: eventInDatabases[] = snapshot.val();
+      const data: EventInDatabases[] = snapshot.val();
       if (data != null) {
         for (const key in data) {
-          const dateTimeNotification = Date.parse(data[key].dateTime) - 900000;
+          const dateTimeNotification =
+            Date.parse(data[key].dateTime) - TIME_NOTIFICATION;
           if (
             Date.now() < dateTimeNotification &&
             keyNotification.indexOf(key) === -1
@@ -46,13 +50,15 @@ export const ScreenCalendar: FC = () => {
     });
 
   const onCreateTriggerNotification = async (
-    dataTime: eventInDatabases['dateTime'],
-    name: eventInDatabases['name'],
+    dataTime: EventInDatabases['dateTime'],
+    name: EventInDatabases['name'],
     key: string,
   ) => {
     const dateNotification = new Date(dataTime);
     const dateEvent = new Date(dataTime);
-    const dateTimeNotification = new Date(Date.parse(dataTime) - 900000);
+    const dateTimeNotification = new Date(
+      Date.parse(dataTime) - TIME_NOTIFICATION,
+    );
     dateNotification.setHours(
       dateTimeNotification.getHours(),
       dateTimeNotification.getMinutes(),
