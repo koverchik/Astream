@@ -6,13 +6,13 @@ import {Calendar} from 'react-native-calendars';
 
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
 import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
+import {Stream} from '../../Components/Stream';
 import {addZeroForMinutes} from './helpers/addZero';
+import {styles} from './styles';
+import {CallTypes, StreamType} from './types';
 
 // Time notification in milliseconds (15 minutes)
 const TIME_NOTIFICATION = 900000;
-import {Stream} from '../../Components/Stream';
-import {styles} from './styles';
-import {CallTypes, StreamType} from './types';
 
 export const ScreenCalendar: FC = () => {
   const dataSystem = new Date();
@@ -23,24 +23,24 @@ export const ScreenCalendar: FC = () => {
     }-${dataSystem.getDate()}`,
   );
   const [keyNotification, setKeyNotification] = useState<string[]>([]);
-    const [streams, setStreams] = useState<StreamType[]>([
-        // TODO: Fake data for stream item
-        {id: 322, time: '10:00 PM', type: CallTypes.Audio, name: 'Lol'},
-        {id: 228, time: '11:00 AM', type: CallTypes.Video, name: 'Kek'},
-        {id: 1239, time: '09:00 PM', type: CallTypes.Chat, name: 'Cheburek'},
-        {id: 456, time: '10:00 PM', type: CallTypes.Video, name: 'Chik'},
-        {id: 741, time: '05:00 AM', type: CallTypes.Video, name: 'Chik'},
-        {id: 258, time: '10:00 AM', type: CallTypes.Video, name: 'Chik'},
-        {id: 2342456, time: '10:00 PM', type: CallTypes.Audio, name: 'Chik'},
-        {id: 354741, time: '05:00 AM', type: CallTypes.Video, name: 'Chik'},
-        {id: 23458, time: '10:00 AM', type: CallTypes.Audio, name: 'Chik'},
-        {id: 453456, time: '10:00 PM', type: CallTypes.Video, name: 'Chik'},
-        {id: 73441, time: '05:00 AM', type: CallTypes.Video, name: 'Chik'},
-        {id: 243558, time: '10:00 AM', type: CallTypes.Video, name: 'Chik'},
-        {id: 434556, time: '10:00 PM', type: CallTypes.Video, name: 'Chik'},
-        {id: 734541, time: '05:00 AM', type: CallTypes.Video, name: 'Chik'},
-        {id: 254358, time: '10:00 AM', type: CallTypes.Video, name: 'Chik'},
-    ]);
+  const [streams, setStreams] = useState<StreamType[]>([
+    // TODO: Fake data for stream item
+    {id: 322, time: '10:00 PM', type: CallTypes.Audio, name: 'Lol'},
+    {id: 228, time: '11:00 AM', type: CallTypes.Video, name: 'Kek'},
+    {id: 1239, time: '09:00 PM', type: CallTypes.Chat, name: 'Cheburek'},
+    {id: 456, time: '10:00 PM', type: CallTypes.Video, name: 'Chik'},
+    {id: 741, time: '05:00 AM', type: CallTypes.Video, name: 'Chik'},
+    {id: 258, time: '10:00 AM', type: CallTypes.Video, name: 'Chik'},
+    {id: 2342456, time: '10:00 PM', type: CallTypes.Audio, name: 'Chik'},
+    {id: 354741, time: '05:00 AM', type: CallTypes.Video, name: 'Chik'},
+    {id: 23458, time: '10:00 AM', type: CallTypes.Audio, name: 'Chik'},
+    {id: 453456, time: '10:00 PM', type: CallTypes.Video, name: 'Chik'},
+    {id: 73441, time: '05:00 AM', type: CallTypes.Video, name: 'Chik'},
+    {id: 243558, time: '10:00 AM', type: CallTypes.Video, name: 'Chik'},
+    {id: 434556, time: '10:00 PM', type: CallTypes.Video, name: 'Chik'},
+    {id: 734541, time: '05:00 AM', type: CallTypes.Video, name: 'Chik'},
+    {id: 254358, time: '10:00 AM', type: CallTypes.Video, name: 'Chik'},
+  ]);
   const getKeyNotification = () => {
     notifee.getTriggerNotificationIds().then((ids) => setKeyNotification(ids));
   };
@@ -103,7 +103,6 @@ export const ScreenCalendar: FC = () => {
       trigger,
     );
   };
-
 
   return (
     <View style={styles.background}>
