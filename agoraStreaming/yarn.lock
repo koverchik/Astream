@@ -1313,10 +1313,20 @@
     "opencollective-postinstall" "^2.0.1"
     "superstruct" "^0.6.2"
 
+"@react-native-firebase/auth@^12.9.2":
+  "integrity" "sha512-aSGqPLHVsXrDgvyOMd7aAFLzex6Bpv5B9X5GATCaHppYoGMT2c1fRUwCXY6iRD377bS51Pf5ptXdShhbco94Jg=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-12.9.2.tgz"
+  "version" "12.9.2"
+
 "@react-native-firebase/database@^12.9.2":
   "integrity" "sha512-Nj25Ua2PGKtmmL3jIYRBw5hIS8SeqLWQCEmpZ5+cbQm5YgfBW8KOoF4mBxjyoqg9RZVqJMIx3TFBoqTpP7ekgQ=="
   "resolved" "https://registry.npmjs.org/@react-native-firebase/database/-/database-12.9.2.tgz"
   "version" "12.9.2"
+
+"@react-native-google-signin/google-signin@^7.0.1":
+  "integrity" "sha512-iG1OkFx1ohSupofWnlbV+Re74L2HF823SOL1KNl1gGDiVxzNKJTZm/wuaPuujzci4kr8GuwR9PRgxLShiAZwlg=="
+  "resolved" "https://registry.npmjs.org/@react-native-google-signin/google-signin/-/google-signin-7.0.1.tgz"
+  "version" "7.0.1"
 
 "@react-native/assets@1.0.0":
   "integrity" "sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ=="
@@ -6308,7 +6318,7 @@
     "source-map" "~0.6.1"
     "tslib" "^2.0.1"
 
-"redux@^4.0.0":
+"redux@^4.0.0", "redux@^4.1.2":
   "integrity" "sha512-SH8PglcebESbd/shgf6mii6EIoRM0zrQyjcuQ+ojmfxjTtE0z9Y8pa62iA/OJ58qjP6j27uyW4kUF4jl/jd6sw=="
   "resolved" "https://registry.npmjs.org/redux/-/redux-4.1.2.tgz"
   "version" "4.1.2"

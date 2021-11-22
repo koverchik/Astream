@@ -2,6 +2,7 @@ import database from '@react-native-firebase/database';
 import {useNavigation} from '@react-navigation/native';
 import React, {FC, useEffect, useState} from 'react';
 import {
+  Button,
   PermissionsAndroid,
   Platform,
   Text,

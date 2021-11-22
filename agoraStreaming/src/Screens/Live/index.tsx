@@ -194,7 +194,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   }, []);
 
   if (!error && !joined) {
-    return <Preloader />;
+    return <Preloader text={'Joining Stream, Please Wait'} />;
   }
   const countUsers = () => {
     return peerIds.length + 1;
