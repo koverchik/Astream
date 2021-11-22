@@ -5,5 +5,9 @@ export type CameraMutePropsType = {
 
 export type TabIconPropsType = {
   color: string;
+  size: number | string;
+};
+
+export type AvatarPropsType = {
   size: number;
 };
