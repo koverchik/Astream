@@ -7,13 +7,13 @@ import {Calendar} from 'react-native-calendars';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
 import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
 import {Stream} from '../../Components/Stream';
-import {addZeroForMinutes} from './helpers/addZero';
+import {arrayListData} from './helpers/arrayListData';
 import {
   TIME_NOTIFICATION,
   onCreateTriggerNotification,
 } from './helpers/onCreateTriggerNotification';
 import {styles} from './styles';
-import {CallTypes, StreamType} from './types';
+import {StreamType} from './types';
 
 export const ScreenCalendar: FC = () => {
   const dataSystem = new Date();
@@ -32,23 +32,7 @@ export const ScreenCalendar: FC = () => {
       .once('value')
       .then((snapshot) => {
         const data: EventInDatabases[] = snapshot.val();
-        const dataForList = [];
-        if (data != null) {
-          for (const key in data) {
-            const time = new Date(data[key].dateTime);
-            dataForList.push({
-              id: key,
-              time: `${time.getHours()}:${addZeroForMinutes(
-                time.getMinutes(),
-              )}`,
-              type: data[key].video ? CallTypes.Video : CallTypes.Audio,
-              name: data[key].name,
-            });
-          }
-          setStreams(dataForList);
-        } else {
-          setStreams([]);
-        }
+        data != null ? setStreams(arrayListData(data)) : setStreams([]);
       });
   }, [chosenDay]);
 
