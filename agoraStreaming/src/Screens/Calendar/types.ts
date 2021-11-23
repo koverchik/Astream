@@ -1,7 +1,7 @@
 export type StreamType = {
   id: string;
-  time: string;
-  type: 'Audio' | 'Video' | 'Chat';
+  time: number;
+  type: CallTypes;
   name: string;
 };
 

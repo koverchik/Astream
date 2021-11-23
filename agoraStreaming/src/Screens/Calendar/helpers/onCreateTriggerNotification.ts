@@ -32,7 +32,7 @@ export const onCreateTriggerNotification = async (
       id: key,
       body: `The meeting will be at ${dateEvent.getHours()}:${addZeroForMinutes(
         dateEvent.getMinutes(),
-      )}am`,
+      )}`,
       android: {
         channelId: 'default',
       },
