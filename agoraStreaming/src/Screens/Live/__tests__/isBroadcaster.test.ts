@@ -1,4 +1,4 @@
-import {LiveType} from '../../../Navigation/types';
+import {LiveType} from '../../../Navigation/Tab/types';
 import {isBroadcasterFunction} from '../helpers/isBroadcaster';
 
 describe('Check broadcaster', () => {

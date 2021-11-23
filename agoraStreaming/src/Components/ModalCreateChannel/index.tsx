@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {v4 as uuid} from 'uuid';
 
-import {LiveType} from '../../Navigation/types';
+import {LiveType} from '../../Navigation/Tab/types';
 import {StackNavigationPropNavigation} from '../../Screens/Home/types';
 import {styles} from './style';
 import {ModalCreateChannelType} from './types';
@@ -57,8 +57,7 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
           setName('');
           setError(null);
           setModalVisible(!modalVisible);
-        }}
-      >
+        }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.title}>Create new channel</Text>
@@ -74,8 +73,7 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
             <Pressable
               style={[styles.button, !!error && styles.buttonDisabled]}
               onPress={pressStart}
-              disabled={!!error}
-            >
+              disabled={!!error}>
               <Text style={styles.buttonText}>Start</Text>
             </Pressable>
           </View>

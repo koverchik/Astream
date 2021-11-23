@@ -15,8 +15,8 @@ import MapView from 'react-native-map-clustering';
 import {Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
-import {LiveType} from '../../Navigation/types';
-import {setUser} from '../../Redux/actions/AuthActions/AuthActions';
+import {LiveType} from '../../Navigation/Stack/types';
+import {setUser} from '../../Redux/actions/AuthActions';
 import {useAppDispatch} from '../../Redux/hooks';
 import {styles} from './style';
 import {
@@ -45,13 +45,14 @@ export const Home: FC<HomeScreenProps> = () => {
     dispatch(setUser(null));
   };
 
-  async function requestPermissions() {
+  const requestPermissions = async () => {
     if (Platform.OS === 'android') {
       await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       );
     }
-  }
+  };
+
   useEffect(() => {
     requestPermissions();
     Geolocation.getCurrentPosition(
@@ -65,7 +66,7 @@ export const Home: FC<HomeScreenProps> = () => {
           };
         });
       },
-      (e) => {
+      () => {
         setCoordinates(INITIAL_COORDS);
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},

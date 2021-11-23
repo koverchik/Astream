@@ -12,7 +12,7 @@ export const styles = StyleSheet.create<AuthScreenStylesType>({
     alignItems: 'center',
   },
   button: {
-    width: 192,
-    height: 48,
+    width: 200,
+    height: 50,
   },
 });
