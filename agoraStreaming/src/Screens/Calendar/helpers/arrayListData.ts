@@ -1,11 +1,15 @@
-import {EventInDatabases} from '../../../Components/ModalCreateEvent/types';
-import {CallTypes, StreamType} from '../types';
+import {
+  ArrayListDataType,
+  CallTypes,
+  FunctionSortByTimeType,
+  StreamType,
+} from '../types';
 
-const sortByTime = (arr: StreamType[]) => {
+const sortByTime: FunctionSortByTimeType = (arr) => {
   return arr.sort((a: StreamType, b: StreamType) => (a.time > b.time ? 1 : -1));
 };
 
-export const arrayListData = (data: EventInDatabases[]): StreamType[] => {
+export const arrayListData: ArrayListDataType = (data) => {
   const dataForList = [];
 
   for (const key in data) {

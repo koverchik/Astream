@@ -1,3 +1,5 @@
+import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
+
 export type StreamType = {
   id: string;
   time: number;
@@ -10,3 +12,7 @@ export enum CallTypes {
   Video = 'Video',
   Chat = 'Chat',
 }
+
+export type FunctionSortByTimeType = (arr: StreamType[]) => StreamType[];
+
+export type ArrayListDataType = (data: EventInDatabases[]) => StreamType[];
