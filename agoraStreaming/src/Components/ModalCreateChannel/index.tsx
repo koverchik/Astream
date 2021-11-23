@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {v4 as uuid} from 'uuid';
 
-import {LiveType} from '../../Navigation/Tab/types';
+import {LiveType} from '../../Navigation/Stack/types';
 import {StackNavigationPropNavigation} from '../../Screens/Home/types';
 import {styles} from './style';
 import {ModalCreateChannelType} from './types';
