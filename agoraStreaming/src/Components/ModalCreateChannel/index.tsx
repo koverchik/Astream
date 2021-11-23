@@ -33,7 +33,7 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
       channelId: uuid(),
       name: name,
       coords: coordinates,
-      video: isEnabled,
+      isVideo: isEnabled,
     });
   };
   const pressStart = () => {

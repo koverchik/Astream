@@ -29,7 +29,7 @@ import {styles} from './style';
 import {LiveScreenProps, MuteSettingsType, UserType} from './types';
 
 export const Live: FC<LiveScreenProps> = (props) => {
-  const {channelId, name, coords, video} = props.route.params;
+  const {channelId, name, coords, isVideo: video} = props.route.params;
 
   const [joined, setJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -150,6 +150,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
       name,
       channelId,
       coords,
+      isVideo: video,
     });
   };
 
