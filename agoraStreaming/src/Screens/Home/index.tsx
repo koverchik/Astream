@@ -72,14 +72,16 @@ export const Home: FC<HomeScreenProps> = () => {
       });
   }, []);
 
-  const choseChannelAndJoinLive = (channelId: string) => {
+  const choseChannelAndJoinLive = (channelId: string, isVideo: boolean) => {
     navigation.navigate('Live', {
       type: LiveType.JOIN,
       channelId,
+      isVideo,
     });
   };
+
   const allMarkers = listChannels.map((data) => {
-    const {name, channelId, coords} = data;
+    const {name, channelId, coords, isVideo} = data;
     const {latitude, longitude} = coords;
     return (
       <Marker
@@ -88,11 +90,12 @@ export const Home: FC<HomeScreenProps> = () => {
           latitude,
           longitude,
         }}
-        onCalloutPress={() => choseChannelAndJoinLive(channelId)}
+        onCalloutPress={() => choseChannelAndJoinLive(channelId, isVideo)}
         title={name}>
         <Callout style={styles.calloutStyle}>
           <TouchableOpacity key={channelId} style={styles.itemChannel}>
             <Text style={styles.buttonText}>{name}</Text>
+            <Text>{isVideo ? 'Video' : 'Audio'}</Text>
           </TouchableOpacity>
         </Callout>
       </Marker>

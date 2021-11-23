@@ -18,4 +18,5 @@ export type ListChannelsType = {
   name: string;
   coords: Region;
   channelId: string;
+  isVideo: boolean;
 };
