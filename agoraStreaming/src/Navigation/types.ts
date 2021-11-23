@@ -12,6 +12,7 @@ export type RootStackParamList = {
   Live: {
     type: LiveType;
     channelId: string;
+    video: boolean;
     name?: string;
     coords?: Region;
   };
