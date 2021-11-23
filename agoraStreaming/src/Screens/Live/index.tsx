@@ -29,7 +29,7 @@ import {styles} from './style';
 import {LiveScreenProps, MuteSettingsType, UserType} from './types';
 
 export const Live: FC<LiveScreenProps> = (props) => {
-  const {channelId, name, coords} = props.route.params;
+  const {channelId, name, coords, isVideo} = props.route.params;
 
   const [joined, setJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -150,6 +150,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
       name,
       channelId,
       coords,
+      isVideo,
     });
   };
 
@@ -174,6 +175,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
       callbackUserMuteAudio,
       callbackFunctionLocalUserRegistered,
       callbackFunctionAudioVolumeIndication(setMyUserData, setPeerIds),
+      isVideo,
     )
       .then(() => {
         AgoraEngine.current?.joinChannelWithUserAccount(
@@ -241,6 +243,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
           switchCamera={() => switchCamera(AgoraEngine)}
           muteCamera={myUserData.camera}
           muteVoice={myUserData.voice}
+          isVideo={isVideo}
         />
       </View>
       <ListUsers hiddenUsers={hiddenUsers} />

@@ -32,7 +32,7 @@ export const ScreenCalendar: FC = () => {
       .once('value')
       .then((snapshot) => {
         const data: EventInDatabases[] = snapshot.val();
-        data != null ? setStreams(arrayListData(data)) : setStreams([]);
+        data !== null ? setStreams(arrayListData(data)) : setStreams([]);
       });
   }, [chosenDay]);
 
@@ -47,7 +47,7 @@ export const ScreenCalendar: FC = () => {
       .then((snapshot) => {
         const data: EventInDatabases[] = snapshot.val();
         notifee.getTriggerNotificationIds().then((ids) => {
-          if (data != null) {
+          if (data !== null) {
             for (const key in data) {
               const dateTimeNotification =
                 Date.parse(data[key].dateTime) - TIME_NOTIFICATION;

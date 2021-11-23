@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
+import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
 import {ModalCreatEventType} from './types';
 
@@ -80,15 +81,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
                 value={name}
               />
               {!!error && <Text style={styles.error}>{error}</Text>}
-              <View style={styles.wrapperView}>
-                <Text>Video</Text>
-                <Switch
-                  trackColor={{false: '#767577', true: '#81b0ff'}}
-                  thumbColor={isEnabled ? '#FF7070' : '#f4f3f4'}
-                  onValueChange={setIsEnabled}
-                  value={isEnabled}
-                />
-              </View>
+              <SwitchVideo setIsEnabled={setIsEnabled} isEnabled={isEnabled} />
               <DatePicker
                 date={date}
                 mode="time"
