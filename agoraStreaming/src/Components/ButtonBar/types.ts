@@ -5,4 +5,5 @@ export type ButtonBarPropsType = {
   switchCamera: () => void;
   muteCamera: boolean;
   muteVoice: boolean;
+  isVideo: boolean;
 };

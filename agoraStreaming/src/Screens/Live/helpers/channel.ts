@@ -20,10 +20,13 @@ export const initChannel = async (
   callBackUserMuteAudio: UidWithMutedCallback,
   callbackFunctionLocalUserRegistered: UserAccountCallback,
   callbackFunctionAudioVolumeIndication: AudioVolumeCallback,
+  isVideo: boolean,
 ) => {
   AgoraEngine.current = await RtcEngine.create(appID);
 
-  AgoraEngine.current?.enableVideo();
+  isVideo
+    ? AgoraEngine.current?.enableVideo()
+    : AgoraEngine.current?.disableVideo();
 
   AgoraEngine.current?.enableAudioVolumeIndication(3000, 6, true);
 

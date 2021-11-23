@@ -174,6 +174,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
       callbackUserMuteAudio,
       callbackFunctionLocalUserRegistered,
       callbackFunctionAudioVolumeIndication(setMyUserData, setPeerIds),
+      video,
     )
       .then(() => {
         AgoraEngine.current?.joinChannelWithUserAccount(
@@ -241,6 +242,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
           switchCamera={() => switchCamera(AgoraEngine)}
           muteCamera={myUserData.camera}
           muteVoice={myUserData.voice}
+          isVideo={video}
         />
       </View>
       <ListUsers hiddenUsers={hiddenUsers} />
