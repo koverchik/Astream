@@ -1,10 +1,10 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
-type SwitchVideoType = {
+type SwitchVideoStyleTypes = {
   wrapperView: ViewStyle;
 };
 
-export const styles = StyleSheet.create<SwitchVideoType>({
+export const styles = StyleSheet.create<SwitchVideoStyleTypes>({
   wrapperView: {
     width: '100%',
     flexDirection: 'row',

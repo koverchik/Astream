@@ -14,7 +14,7 @@ import MapView from 'react-native-map-clustering';
 import {Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
-import {LiveType} from '../../Navigation/types';
+import {LiveType, RootStackParamList} from '../../Navigation/types';
 import {styles} from './style';
 import {
   HomeScreenProps,
@@ -72,7 +72,10 @@ export const Home: FC<HomeScreenProps> = () => {
       });
   }, []);
 
-  const choseChannelAndJoinLive = (channelId: string, isVideo: boolean) => {
+  const choseChannelAndJoinLive = (
+    channelId: string,
+    isVideo: RootStackParamList['Live']['isVideo'],
+  ) => {
     navigation.navigate('Live', {
       type: LiveType.JOIN,
       channelId,

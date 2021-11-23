@@ -150,7 +150,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
       name,
       channelId,
       coords,
-      isVideo: isVideo,
+      isVideo,
     });
   };
 

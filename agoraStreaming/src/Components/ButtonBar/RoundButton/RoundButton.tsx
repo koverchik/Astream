@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Pressable} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 
 import {styles} from './styles';
 import {RoundButtonPropsType} from './types';
@@ -7,10 +7,10 @@ import {RoundButtonPropsType} from './types';
 export const RoundButton: FC<RoundButtonPropsType> = (props) => {
   const {handler, icon, color} = props;
   return (
-    <Pressable
+    <TouchableOpacity
       style={[styles.wrapper, {backgroundColor: color ?? '#10b4ef'}]}
       onPress={handler}>
       {icon}
-    </Pressable>
+    </TouchableOpacity>
   );
 };
