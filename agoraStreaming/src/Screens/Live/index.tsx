@@ -13,7 +13,6 @@ import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader/Preloader';
 import {RemoteUsers} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
-import {StackNavigationPropNavigation} from '../Home/types';
 import {hiddenUsers} from './fakeData';
 import {cameraStyle} from './helpers/CameraStyle';
 import {errorAlert} from './helpers/alert';
@@ -27,7 +26,12 @@ import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {requestCameraAndAudioPermission} from './helpers/permission';
 import {switchCamera} from './helpers/switchCamera';
 import {styles} from './style';
-import {LiveScreenProps, MuteSettingsType, UserType} from './types';
+import {
+  LiveScreenProps,
+  MuteSettingsType,
+  StackNavigationPropLive,
+  UserType,
+} from './types';
 import {v4 as uuid} from 'uuid';
 
 export const Live: FC<LiveScreenProps> = (props) => {
@@ -52,7 +56,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const newReference = database().ref('/channels').push();
 
-  const navigation = useNavigation<StackNavigationPropNavigation>();
+  const navigation = useNavigation<StackNavigationPropLive>();
 
   const goHome = () => navigation.navigate('Home');
 

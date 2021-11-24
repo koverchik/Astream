@@ -6,11 +6,11 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {HomeStackScreens, RootStackParamList} from '../../Navigation/Tab/types';
 
 export type HomeScreenProps = {
-  navigation: StackNavigationPropNavigation;
+  navigation: StackNavigationPropHome;
   route: RouteProp<RootStackParamList, HomeStackScreens.Home>;
 };
 
-export type StackNavigationPropNavigation = StackNavigationProp<
+export type StackNavigationPropHome = StackNavigationProp<
   RootStackParamList,
   HomeStackScreens.Home
 >;

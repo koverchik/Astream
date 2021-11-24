@@ -1,4 +1,4 @@
-import {RootStackParamList} from '../../Navigation/types';
+import {RootStackParamList} from '../../Navigation/Tab/types';
 
 export type ButtonBarPropsType = {
   exitHandler: () => void;

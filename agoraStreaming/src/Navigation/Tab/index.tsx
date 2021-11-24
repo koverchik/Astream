@@ -1,11 +1,12 @@
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import React, {useEffect} from 'react';
+
 import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
@@ -17,12 +18,11 @@ import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
 import {AuthScreen} from '../../Screens/Auth';
 import {ScreenCalendar} from '../../Screens/Calendar';
+import {ProfileScreen} from '../../Screens/Profile';
 import {MainStack} from '../Stack';
 import {styles} from './styles';
 import {ScreenOptionsType, TabNavigation, TabParamList} from './types';
-import {ProfileScreen} from '../../Screens/Profile';
-import {MainStack} from '../index';
-import {ScreenOptionsType, TabNavigation, TabParamList} from '../types';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 

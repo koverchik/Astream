@@ -1,6 +1,8 @@
-import auth from '@react-native-firebase/auth';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {Alert} from 'react-native';
+
+import auth from '@react-native-firebase/auth';
+
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 export const onGoogleButtonPress = async () => {
   try {

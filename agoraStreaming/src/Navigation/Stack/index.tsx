@@ -1,12 +1,13 @@
+import React from 'react';
+
 import {
   StackNavigationOptions,
   createStackNavigator,
 } from '@react-navigation/stack';
-import React from 'react';
 
 import {Home} from '../../Screens/Home';
 import {Live} from '../../Screens/Live';
-import {HomeStackScreens, RootStackParamList} from './types';
+import {HomeStackScreens, RootStackParamList} from '../Tab/types';
 
 const Stack = createStackNavigator<RootStackParamList>();
 

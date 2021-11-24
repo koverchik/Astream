@@ -1,6 +1,3 @@
-import auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database';
-import {useNavigation} from '@react-navigation/native';
 import React, {FC, useEffect, useState} from 'react';
 import {
   Image,
@@ -20,15 +17,12 @@ import {useNavigation} from '@react-navigation/native';
 import database from '@react-native-firebase/database';
 
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
-import {LiveType} from '../../Navigation/Stack/types';
-import {setUser} from '../../Redux/actions/AuthActions';
-import {useAppDispatch} from '../../Redux/hooks';
-import {LiveType, RootStackParamList} from '../../Navigation/types';
+import {LiveType, RootStackParamList} from '../../Navigation/Tab/types';
 import {styles} from './style';
 import {
   HomeScreenProps,
   ListChannelsType,
-  StackNavigationPropNavigation,
+  StackNavigationPropHome,
 } from './types';
 
 const INITIAL_COORDS = {
@@ -39,17 +33,11 @@ const INITIAL_COORDS = {
 };
 
 export const Home: FC<HomeScreenProps> = () => {
-  const navigation = useNavigation<StackNavigationPropNavigation>();
-  const dispatch = useAppDispatch();
+  const navigation = useNavigation<StackNavigationPropHome>();
 
   const [coordinates, setCoordinates] = useState(INITIAL_COORDS);
 
   const [listChannels, setListChannels] = useState<ListChannelsType[]>([]);
-
-  const logoutHandler = async () => {
-    await auth().signOut();
-    dispatch(setUser(null));
-  };
 
   const requestPermissions = async () => {
     if (Platform.OS === 'android') {
@@ -144,11 +132,6 @@ export const Home: FC<HomeScreenProps> = () => {
           zoomControlEnabled={true}>
           {allMarkers}
         </MapView>
-        <TouchableOpacity onPress={logoutHandler}>
-          <View style={styles.logout}>
-            <Text style={styles.buttonText}>LOGOUT</Text>
-          </View>
-        </TouchableOpacity>
         <ModalCreateChannel coordinates={coordinates} />
       </View>
     </View>

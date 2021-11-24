@@ -8,8 +8,7 @@ export const MicroMutedSvg: FC = () => {
       height="60%"
       viewBox="0 0 788 788"
       fill="#000"
-      style={{transform: [{scaleX: -1}, {translateX: -0.3}]}}
-    >
+      style={{transform: [{scaleX: -1}, {translateX: -0.3}]}}>
       <G>
         <G>
           <G>
