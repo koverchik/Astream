@@ -3,6 +3,7 @@ import database from '@react-native-firebase/database';
 import {useNavigation} from '@react-navigation/native';
 import React, {FC, useEffect, useState} from 'react';
 import {
+  Image,
   PermissionsAndroid,
   Platform,
   Text,
@@ -14,10 +15,15 @@ import 'react-native-get-random-values';
 import MapView from 'react-native-map-clustering';
 import {Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
+import {useNavigation} from '@react-navigation/native';
+
+import database from '@react-native-firebase/database';
+
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
 import {LiveType} from '../../Navigation/Stack/types';
 import {setUser} from '../../Redux/actions/AuthActions';
 import {useAppDispatch} from '../../Redux/hooks';
+import {LiveType, RootStackParamList} from '../../Navigation/types';
 import {styles} from './style';
 import {
   HomeScreenProps,
@@ -82,14 +88,19 @@ export const Home: FC<HomeScreenProps> = () => {
       });
   }, []);
 
-  const choseChannelAndJoinLive = (channelId: string) => {
+  const choseChannelAndJoinLive = (
+    channelId: string,
+    isVideo: RootStackParamList['Live']['isVideo'],
+  ) => {
     navigation.navigate('Live', {
       type: LiveType.JOIN,
       channelId,
+      isVideo,
     });
   };
+
   const allMarkers = listChannels.map((data) => {
-    const {name, channelId, coords} = data;
+    const {name, channelId, coords, isVideo} = data;
     const {latitude, longitude} = coords;
     return (
       <Marker
@@ -98,11 +109,24 @@ export const Home: FC<HomeScreenProps> = () => {
           latitude,
           longitude,
         }}
-        onCalloutPress={() => choseChannelAndJoinLive(channelId)}
+        onCalloutPress={() => choseChannelAndJoinLive(channelId, isVideo)}
         title={name}>
+        <View style={styles.marker}>
+          <Image
+            source={
+              isVideo
+                ? require('../../../assets/images/video-camera.png')
+                : require('../../../assets/images/sound-bars.png')
+            }
+            style={styles.markerImage}
+            resizeMode="contain"
+          />
+        </View>
+
         <Callout style={styles.calloutStyle}>
           <TouchableOpacity key={channelId} style={styles.itemChannel}>
             <Text style={styles.buttonText}>{name}</Text>
+            <Text>{isVideo ? 'Video' : 'Audio'}</Text>
           </TouchableOpacity>
         </Callout>
       </Marker>

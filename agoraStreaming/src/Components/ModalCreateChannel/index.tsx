@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import React, {FC, useState} from 'react';
 import {
   Modal,
@@ -9,12 +8,15 @@ import {
   TextInputChangeEventData,
   View,
 } from 'react-native';
-import {v4 as uuid} from 'uuid';
+
+import {useNavigation} from '@react-navigation/native';
 
 import {LiveType} from '../../Navigation/Stack/types';
 import {StackNavigationPropNavigation} from '../../Screens/Home/types';
+import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
 import {ModalCreateChannelType} from './types';
+import {v4 as uuid} from 'uuid';
 
 export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
   const coordinates = props.coordinates;
@@ -22,6 +24,7 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState('channel');
   const [error, setError] = useState<string | null>(null);
+  const [isEnabled, setIsEnabled] = useState(false);
 
   const navigation = useNavigation<StackNavigationPropNavigation>();
 
@@ -31,6 +34,7 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
       channelId: uuid(),
       name: name,
       coords: coordinates,
+      isVideo: isEnabled,
     });
   };
   const pressStart = () => {
@@ -70,6 +74,7 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
               />
               {error && <Text style={styles.error}>{error}</Text>}
             </View>
+            <SwitchVideo setIsEnabled={setIsEnabled} isEnabled={isEnabled} />
             <Pressable
               style={[styles.button, !!error && styles.buttonDisabled]}
               onPress={pressStart}

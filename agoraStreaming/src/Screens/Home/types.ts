@@ -1,6 +1,7 @@
+import {Region} from 'react-native-maps';
+
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Region} from 'react-native-maps';
 
 import {HomeStackScreens, RootStackParamList} from '../../Navigation/Tab/types';
 
@@ -18,4 +19,5 @@ export type ListChannelsType = {
   name: string;
   coords: Region;
   channelId: string;
+  isVideo: RootStackParamList['Live']['isVideo'];
 };

@@ -20,6 +20,9 @@ import {ScreenCalendar} from '../../Screens/Calendar';
 import {MainStack} from '../Stack';
 import {styles} from './styles';
 import {ScreenOptionsType, TabNavigation, TabParamList} from './types';
+import {ProfileScreen} from '../../Screens/Profile';
+import {MainStack} from '../index';
+import {ScreenOptionsType, TabNavigation, TabParamList} from '../types';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -95,7 +98,7 @@ export const BottomTabs = () => {
         />
         <Tab.Screen
           name={TabNavigation.Circle}
-          component={ScreenCalendar}
+          component={ProfileScreen}
           options={options}
         />
       </Tab.Navigator>
