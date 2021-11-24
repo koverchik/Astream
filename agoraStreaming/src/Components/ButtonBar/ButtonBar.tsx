@@ -26,24 +26,22 @@ export const ButtonBar: FC<ButtonBarPropsType> = (props) => {
     <View style={styles.buttonBar}>
       <RoundButton
         handler={microphoneHandler}
-        icon={muteVoice ? MicroMutedSvg : MicroSvg}
+        icon={muteVoice ? <MicroMutedSvg /> : <MicroSvg />}
       />
       {isVideo && (
-        <>
-          <RoundButton
-            handler={cameraHandler}
-            icon={
-              muteCamera ? (
-                CameraMutedSvg
-              ) : (
-                <CameraSvg color={'#000'} size={'60%'} />
-              )
-            }
-          />
-          <RoundButton handler={switchCamera} icon={SwitchCameraSvg} />
-        </>
+        <RoundButton
+          handler={cameraHandler}
+          icon={
+            muteCamera ? (
+              <CameraMutedSvg />
+            ) : (
+              <CameraSvg color={'#000'} size={'60%'} />
+            )
+          }
+        />
       )}
-      <RoundButton handler={exitHandler} icon={ExitSvg} color={'#da2b55'} />
+      <RoundButton handler={switchCamera} icon={<SwitchCameraSvg />} />
+      <RoundButton handler={exitHandler} icon={<ExitSvg />} color={'#da2b55'} />
     </View>
   );
 };
