@@ -7,7 +7,14 @@ module.exports = {
   tabWidth: 2,
   endOfLine: 'auto',
   semi: true,
-  importOrder: ['^@core/(.*)$', '^@server/(.*)$', '^@ui/(.*)$', '^[./]'],
+  importOrder: [
+    '^react',
+    '^react/(.*)$',
+    '^@react-navigation/(.*)$',
+    '^@react-native-firebase/(.*)$',
+    '^(.*)$',
+    '^[./]',
+  ],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
 };
