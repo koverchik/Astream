@@ -6,7 +6,6 @@ type HomeScreenStyles = {
   button: ViewStyle;
   profile: ViewStyle;
   imageUser: ImageStyle;
-  text: TextStyle;
 };
 
 const SIZE_ICON_USER = 60;
@@ -38,9 +37,6 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     borderRadius: SIZE_ICON_USER / 2,
     height: SIZE_ICON_USER,
     width: SIZE_ICON_USER,
-  },
-  text: {
-    color: 'black',
   },
   button: {
     alignItems: 'center',
