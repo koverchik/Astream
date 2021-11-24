@@ -58,11 +58,11 @@ export const BottomTabs = () => {
     }
   };
 
+  const webClientId =
+    '1088468777432-7titji4f8tsu0oorpqfibu469sl8jvnj.apps.googleusercontent.com';
+
   useEffect(() => {
-    GoogleSignin.configure({
-      webClientId:
-        '1088468777432-7titji4f8tsu0oorpqfibu469sl8jvnj.apps.googleusercontent.com',
-    });
+    GoogleSignin.configure({webClientId});
     auth().onAuthStateChanged(onAuthStateChanged);
   }, []);
 
