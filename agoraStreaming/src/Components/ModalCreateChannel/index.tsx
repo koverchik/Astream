@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import React, {FC, useState} from 'react';
 import {
   Modal,
@@ -9,13 +8,15 @@ import {
   TextInputChangeEventData,
   View,
 } from 'react-native';
-import {v4 as uuid} from 'uuid';
+
+import {useNavigation} from '@react-navigation/native';
 
 import {LiveType} from '../../Navigation/types';
 import {StackNavigationPropNavigation} from '../../Screens/Home/types';
 import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
 import {ModalCreateChannelType} from './types';
+import {v4 as uuid} from 'uuid';
 
 export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
   const coordinates = props.coordinates;
