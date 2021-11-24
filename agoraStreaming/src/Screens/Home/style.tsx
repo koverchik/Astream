@@ -12,7 +12,7 @@ type HomeScreenStyles = {
   markerImage: ImageStyle;
 };
 
-export const SIZE_MARKER = 30;
+const SIZE_MARKER = 30;
 const BORDER_SIZE = 4;
 
 export const styles = StyleSheet.create<HomeScreenStyles>({
