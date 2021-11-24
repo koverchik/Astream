@@ -8,7 +8,10 @@ type HomeScreenStyles = {
   calloutStyle: ViewStyle;
   itemChannel: ViewStyle;
   background: ViewStyle;
+  marker: ViewStyle;
 };
+
+export const SIZE_MARKER = 30;
 
 export const styles = StyleSheet.create<HomeScreenStyles>({
   container: {
@@ -22,6 +25,22 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     borderBottomStartRadius: 35,
     overflow: 'hidden',
   },
+  marker: {
+    position: 'absolute',
+    top: 2,
+    left: 2,
+    borderRadius: SIZE_MARKER / 2,
+    width: SIZE_MARKER,
+    height: SIZE_MARKER,
+    overflow: 'hidden',
+    backgroundColor: '#a5c5ec',
+    flex: 1,
+    borderWidth: 4,
+    borderColor: 'rgba(165, 197, 236, .5)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
   background: {
     flex: 1,
     backgroundColor: '#000',
@@ -47,6 +66,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
   calloutStyle: {
     flex: 1,
     justifyContent: 'center',
+
     alignItems: 'center',
   },
   map: {
