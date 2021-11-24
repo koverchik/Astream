@@ -11,8 +11,8 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 
-import {LiveType} from '../../Navigation/types';
-import {StackNavigationPropNavigation} from '../../Screens/Home/types';
+import {LiveType} from '../../Navigation/Tab/types';
+import {StackNavigationPropHome} from '../../Screens/Home/types';
 import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
 import {ModalCreateChannelType} from './types';
@@ -26,7 +26,7 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
   const [error, setError] = useState<string | null>(null);
   const [isEnabled, setIsEnabled] = useState(false);
 
-  const navigation = useNavigation<StackNavigationPropNavigation>();
+  const navigation = useNavigation<StackNavigationPropHome>();
 
   const createLive = () => {
     navigation.navigate('Live', {

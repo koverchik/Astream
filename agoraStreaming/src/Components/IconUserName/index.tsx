@@ -46,8 +46,7 @@ export const IconUserName: FC<IconUserNameType> = (props) => {
             top: valueTop,
             transform: transformAround,
           },
-        ]}
-      >
+        ]}>
         <Text>{userName.slice(0, 1)}</Text>
       </Animated.View>
     </>

@@ -2,8 +2,11 @@ import React, {FC, useRef} from 'react';
 import {Animated, View} from 'react-native';
 import {RtcRemoteView, VideoRenderMode} from 'react-native-agora';
 
+import {CameraMutedSvg} from '../../Icons/CameraMutedSvg';
+import {MicroMutedSvg} from '../../Icons/MicroMutedSvg';
 import {animationCircle} from '../../Screens/Live/helpers/animationCircle';
 import {IconUserName} from '../IconUserName';
+import {MuteIcon} from '../MuteIcon/MuteIcon';
 import {UserNameLabel} from '../UserNameLabel/UserNameLabel';
 import {styles} from './styles';
 import {RemoteUsersType} from './types';
@@ -17,6 +20,7 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
     camera,
     activeVoice,
     cameraStyle,
+    voice,
   } = props;
 
   const sizeUserPoint = useRef(new Animated.Value(5)).current;
@@ -47,6 +51,10 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
       )}
       <View style={styles.userNameContainer}>
         <UserNameLabel userName={userAccount} />
+        <View style={styles.iconContainer}>
+          {voice && <MuteIcon icon={<MicroMutedSvg />} />}
+          {camera && <MuteIcon icon={<CameraMutedSvg />} />}
+        </View>
       </View>
     </View>
   );

@@ -5,7 +5,7 @@ import {TabIconPropsType} from './types';
 
 export const PlusSvg: FC<TabIconPropsType> = (props) => {
   const {color, size} = props;
-  const largerSize = size * 1.17;
+  const largerSize = +size * 1.17;
 
   return (
     <Svg

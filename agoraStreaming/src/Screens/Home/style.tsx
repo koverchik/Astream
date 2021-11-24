@@ -8,6 +8,7 @@ type HomeScreenStyles = {
   calloutStyle: ViewStyle;
   itemChannel: ViewStyle;
   background: ViewStyle;
+  logout: ViewStyle;
   marker: ViewStyle;
   markerImage: ImageStyle;
 };
@@ -59,9 +60,20 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     justifyContent: 'center',
     backgroundColor: '#FF7070',
   },
+  logout: {
+    width: 80,
+    height: 40,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FF7070',
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
   buttonText: {
-    color: 'black',
-    fontSize: 20,
+    color: '#fff',
+    fontSize: 16,
   },
   itemChannel: {
     flex: 1,

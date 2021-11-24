@@ -1,14 +1,14 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-import {HomeStackScreens, RootStackParamList} from '../../Navigation/types';
+import {HomeStackScreens, RootStackParamList} from '../../Navigation/Tab/types';
 
 export type LiveScreenProps = {
-  navigation: StackNavigationPropNavigation;
+  navigation: StackNavigationPropLive;
   route: RouteProp<RootStackParamList, HomeStackScreens.Live>;
 };
 
-export type StackNavigationPropNavigation = StackNavigationProp<
+export type StackNavigationPropLive = StackNavigationProp<
   RootStackParamList,
   HomeStackScreens.Live
 >;

@@ -1,5 +1,4 @@
-import React from 'react';
-import {Dimensions} from 'react-native';
+import React, {useEffect} from 'react';
 
 import {
   BottomTabNavigationOptions,
@@ -7,17 +6,24 @@ import {
 } from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
 import {DiscoverSvg} from '../../Icons/DiscoverSvg';
 import {HomeSvg} from '../../Icons/HomeSvg';
 import {PlusSvg} from '../../Icons/PlusSvg';
+import {setUser} from '../../Redux/actions/AuthActions';
+import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
+import {selectUser} from '../../Redux/selectors/AuthSelectors';
+import {AuthScreen} from '../../Screens/Auth';
 import {ScreenCalendar} from '../../Screens/Calendar';
 import {ProfileScreen} from '../../Screens/Profile';
-import {MainStack} from '../index';
-import {ScreenOptionsType, TabNavigation, TabParamList} from '../types';
+import {MainStack} from '../Stack';
+import {styles} from './styles';
+import {ScreenOptionsType, TabNavigation, TabParamList} from './types';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-const {height} = Dimensions.get('window');
 const Tab = createBottomTabNavigator<TabParamList>();
 
 export const BottomTabs = () => {
@@ -25,7 +31,6 @@ export const BottomTabs = () => {
     headerShown: false,
     tabBarShowLabel: false,
   };
-
   const screenOptions: ScreenOptionsType = ({route}) => ({
     tabBarIcon: ({color, size}) => {
       switch (route.name) {
@@ -43,12 +48,30 @@ export const BottomTabs = () => {
     },
     tabBarActiveTintColor: '#38a1e3',
     tabBarInactiveTintColor: '#fff',
-    tabBarStyle: {
-      borderTopColor: '#000',
-      height: height * 0.1,
-      backgroundColor: '#000',
-    },
+    tabBarStyle: styles.tabBar,
   });
+
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
+
+  const onAuthStateChanged = (userInfo: FirebaseAuthTypes.User | null) => {
+    if (userInfo) {
+      const {uid, email, displayName} = userInfo;
+      dispatch(setUser({displayName, uid, email}));
+    }
+  };
+
+  const webClientId =
+    '1088468777432-7titji4f8tsu0oorpqfibu469sl8jvnj.apps.googleusercontent.com';
+
+  useEffect(() => {
+    GoogleSignin.configure({webClientId});
+    auth().onAuthStateChanged(onAuthStateChanged);
+  }, []);
+
+  if (!user) {
+    return <AuthScreen />;
+  }
 
   return (
     <NavigationContainer>

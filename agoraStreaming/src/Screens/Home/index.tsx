@@ -17,12 +17,12 @@ import {useNavigation} from '@react-navigation/native';
 import database from '@react-native-firebase/database';
 
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
-import {LiveType, RootStackParamList} from '../../Navigation/types';
+import {LiveType, RootStackParamList} from '../../Navigation/Tab/types';
 import {styles} from './style';
 import {
   HomeScreenProps,
   ListChannelsType,
-  StackNavigationPropNavigation,
+  StackNavigationPropHome,
 } from './types';
 
 const INITIAL_COORDS = {
@@ -33,19 +33,20 @@ const INITIAL_COORDS = {
 };
 
 export const Home: FC<HomeScreenProps> = () => {
-  const navigation = useNavigation<StackNavigationPropNavigation>();
+  const navigation = useNavigation<StackNavigationPropHome>();
 
   const [coordinates, setCoordinates] = useState(INITIAL_COORDS);
 
   const [listChannels, setListChannels] = useState<ListChannelsType[]>([]);
 
-  async function requestPermissions() {
+  const requestPermissions = async () => {
     if (Platform.OS === 'android') {
       await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       );
     }
-  }
+  };
+
   useEffect(() => {
     requestPermissions();
     Geolocation.getCurrentPosition(
@@ -59,7 +60,7 @@ export const Home: FC<HomeScreenProps> = () => {
           };
         });
       },
-      (e) => {
+      () => {
         setCoordinates(INITIAL_COORDS);
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
