@@ -17,11 +17,13 @@ export type RootStackParamList = {
     name?: string;
     coords?: Region;
   };
+  Profile: undefined;
 };
 
 export enum HomeStackScreens {
   Home = 'Home',
   Live = 'Live',
+  Profile = 'Profile',
 }
 
 export enum TabNavigation {

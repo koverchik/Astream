@@ -1,10 +1,11 @@
+import React from 'react';
+import {Dimensions} from 'react-native';
+
 import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import React from 'react';
-import {Dimensions} from 'react-native';
 
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
@@ -12,6 +13,7 @@ import {DiscoverSvg} from '../../Icons/DiscoverSvg';
 import {HomeSvg} from '../../Icons/HomeSvg';
 import {PlusSvg} from '../../Icons/PlusSvg';
 import {ScreenCalendar} from '../../Screens/Calendar';
+import {ProfileScreen} from '../../Screens/Profile';
 import {MainStack} from '../index';
 import {ScreenOptionsType, TabNavigation, TabParamList} from '../types';
 
@@ -73,7 +75,7 @@ export const BottomTabs = () => {
         />
         <Tab.Screen
           name={TabNavigation.Circle}
-          component={ScreenCalendar}
+          component={ProfileScreen}
           options={options}
         />
       </Tab.Navigator>

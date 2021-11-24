@@ -1,11 +1,7 @@
-import {faPlus} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import database from '@react-native-firebase/database';
 import React, {FC, useState} from 'react';
 import {
   Modal,
   NativeSyntheticEvent,
-  Switch,
   Text,
   TextInput,
   TextInputChangeEventData,
@@ -14,9 +10,13 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
+import database from '@react-native-firebase/database';
+
 import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
 import {ModalCreatEventType} from './types';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
   const {day} = props;
