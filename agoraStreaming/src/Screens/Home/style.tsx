@@ -1,4 +1,4 @@
-import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
+import {ImageStyle, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
 type HomeScreenStyles = {
   container: ViewStyle;
@@ -9,6 +9,7 @@ type HomeScreenStyles = {
   itemChannel: ViewStyle;
   background: ViewStyle;
   marker: ViewStyle;
+  markerImage: ImageStyle;
 };
 
 export const SIZE_MARKER = 30;
@@ -41,7 +42,10 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
+  markerImage: {
+    height: SIZE_MARKER - 15,
+    width: SIZE_MARKER - 15,
+  },
   background: {
     flex: 1,
     backgroundColor: '#000',

@@ -1,5 +1,3 @@
-import database from '@react-native-firebase/database';
-import {useNavigation} from '@react-navigation/native';
 import React, {FC, useEffect, useState} from 'react';
 import {
   Image,
@@ -14,9 +12,13 @@ import 'react-native-get-random-values';
 import MapView from 'react-native-map-clustering';
 import {Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
+import {useNavigation} from '@react-navigation/native';
+
+import database from '@react-native-firebase/database';
+
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
 import {LiveType, RootStackParamList} from '../../Navigation/types';
-import {SIZE_MARKER, styles} from './style';
+import {styles} from './style';
 import {
   HomeScreenProps,
   ListChannelsType,
@@ -103,7 +105,7 @@ export const Home: FC<HomeScreenProps> = () => {
                 ? require('../../../assets/images/video-camera.png')
                 : require('../../../assets/images/sound-bars.png')
             }
-            style={{height: SIZE_MARKER - 15, width: SIZE_MARKER - 15}}
+            style={styles.markerImage}
             resizeMode="contain"
           />
         </View>

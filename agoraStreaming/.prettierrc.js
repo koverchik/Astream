@@ -12,6 +12,7 @@ module.exports = {
     '^react/(.*)$',
     '^@react-navigation/(.*)$',
     '^@react-native-firebase/(.*)$',
+    '^@notifee/(.*)$',
     '^(.*)$',
     '^[./]',
   ],

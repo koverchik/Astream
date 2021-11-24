@@ -1,6 +1,7 @@
+import {Region} from 'react-native-maps';
+
 import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
 import {ParamListBase, RouteProp} from '@react-navigation/native';
-import {Region} from 'react-native-maps';
 
 export enum LiveType {
   CREATE = 'create',
