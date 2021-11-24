@@ -66,7 +66,6 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
   calloutStyle: {
     flex: 1,
     justifyContent: 'center',
-
     alignItems: 'center',
   },
   map: {
