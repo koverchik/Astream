@@ -1,7 +1,6 @@
-import database from '@react-native-firebase/database';
-import {useNavigation} from '@react-navigation/native';
 import React, {FC, useEffect, useState} from 'react';
 import {
+  Image,
   PermissionsAndroid,
   Platform,
   Text,
@@ -12,6 +11,10 @@ import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
 import MapView from 'react-native-map-clustering';
 import {Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+
+import {useNavigation} from '@react-navigation/native';
+
+import database from '@react-native-firebase/database';
 
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
 import {LiveType, RootStackParamList} from '../../Navigation/types';
@@ -95,6 +98,18 @@ export const Home: FC<HomeScreenProps> = () => {
         }}
         onCalloutPress={() => choseChannelAndJoinLive(channelId, isVideo)}
         title={name}>
+        <View style={styles.marker}>
+          <Image
+            source={
+              isVideo
+                ? require('../../../assets/images/video-camera.png')
+                : require('../../../assets/images/sound-bars.png')
+            }
+            style={styles.markerImage}
+            resizeMode="contain"
+          />
+        </View>
+
         <Callout style={styles.calloutStyle}>
           <TouchableOpacity key={channelId} style={styles.itemChannel}>
             <Text style={styles.buttonText}>{name}</Text>

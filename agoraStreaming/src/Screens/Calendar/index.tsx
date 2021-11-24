@@ -1,8 +1,10 @@
-import notifee from '@notifee/react-native';
-import database from '@react-native-firebase/database';
 import React, {FC, useEffect, useState} from 'react';
 import {FlatList, Text, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
+
+import database from '@react-native-firebase/database';
+
+import notifee from '@notifee/react-native';
 
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
 import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
