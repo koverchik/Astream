@@ -248,7 +248,8 @@ export const Live: FC<LiveScreenProps> = (props) => {
           isVideo={isVideo}
         />
       </View>
-      <ListUsers hiddenUsers={hiddenUsers} />
+      {/* // TODO: hide element for demo*/}
+      {/* <ListUsers hiddenUsers={hiddenUsers} /> */}
     </View>
   );
 };
