@@ -81,7 +81,8 @@ export const BottomTabs = () => {
           component={MainStack}
           options={options}
         />
-        <Tab.Screen
+        {/* // TODO: hide element for demo*/}
+        {/*<Tab.Screen
           name={TabNavigation.Discover}
           component={ScreenCalendar}
           options={options}
@@ -90,7 +91,7 @@ export const BottomTabs = () => {
           name={TabNavigation.Plus}
           component={ScreenCalendar}
           options={options}
-        />
+        />*/}
         <Tab.Screen
           name={TabNavigation.Calendar}
           component={ScreenCalendar}

@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   TextInputChangeEventData,
+  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -16,6 +17,8 @@ import {StackNavigationPropHome} from '../../Screens/Home/types';
 import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
 import {ModalCreateChannelType} from './types';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {v4 as uuid} from 'uuid';
 
 export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
@@ -64,6 +67,11 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <FontAwesomeIcon icon={faPlus} color={'white'} size={20} />
+            </TouchableOpacity>
             <Text style={styles.title}>Create new channel</Text>
             <View style={styles.inputContainer}>
               <TextInput
