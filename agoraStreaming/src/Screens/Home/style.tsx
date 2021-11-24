@@ -12,6 +12,7 @@ type HomeScreenStyles = {
 };
 
 export const SIZE_MARKER = 30;
+const BORDER_SIZE = 4;
 
 export const styles = StyleSheet.create<HomeScreenStyles>({
   container: {
@@ -27,15 +28,15 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
   },
   marker: {
     position: 'absolute',
-    top: 2,
-    left: 2,
+    top: BORDER_SIZE / 2,
+    left: BORDER_SIZE / 2,
     borderRadius: SIZE_MARKER / 2,
     width: SIZE_MARKER,
     height: SIZE_MARKER,
     overflow: 'hidden',
     backgroundColor: '#a5c5ec',
     flex: 1,
-    borderWidth: 4,
+    borderWidth: BORDER_SIZE,
     borderColor: 'rgba(165, 197, 236, .5)',
     alignItems: 'center',
     justifyContent: 'center',
