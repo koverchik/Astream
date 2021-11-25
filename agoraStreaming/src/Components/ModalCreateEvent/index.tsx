@@ -36,7 +36,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
     await newReference.set({
       name,
       video: isEnabled,
-      dateTime: date,
+      dateTime: date.toUTCString(),
     });
   };
 
