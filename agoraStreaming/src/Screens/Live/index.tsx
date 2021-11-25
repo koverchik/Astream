@@ -8,12 +8,10 @@ import {useNavigation} from '@react-navigation/native';
 import database from '@react-native-firebase/database';
 
 import {ButtonBar} from '../../Components/ButtonBar/ButtonBar';
-import {ListUsers} from '../../Components/ListUsers';
 import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader/Preloader';
 import {RemoteUsers} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
-import {hiddenUsers} from './fakeData';
 import {cameraStyle} from './helpers/CameraStyle';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
@@ -230,6 +228,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
             } else if (joined) {
               return (
                 <LocalUser
+                  key={user.uid}
                   cameraSize={cameraStyle(index, ids, styles)}
                   myUserData={myUserData}
                   channelId={channelId}

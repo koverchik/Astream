@@ -9,5 +9,5 @@ export type TabIconPropsType = {
 };
 
 export type AvatarPropsType = {
-  size: number;
+  size: number | string;
 };
