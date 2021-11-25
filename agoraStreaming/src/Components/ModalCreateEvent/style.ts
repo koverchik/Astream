@@ -20,7 +20,6 @@ const SIZE_CLOSE_BUTTON = 30;
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
   wrapperAllModalView: {
-    position: 'absolute',
     margin: 20,
   },
   wrapperModalView: {
