@@ -31,8 +31,7 @@ export const ScreenCalendar: FC = () => {
   useEffect(() => {
     database()
       .ref(`/events/${chosenDay}`)
-      .once('value')
-      .then((snapshot) => {
+      .on('value', (snapshot) => {
         const data: EventInDatabases[] = snapshot.val();
         data !== null ? setStreams(arrayListData(data)) : setStreams([]);
       });
@@ -41,9 +40,9 @@ export const ScreenCalendar: FC = () => {
   useEffect(() => {
     database()
       .ref(
-        `/events/${`${dataSystem.getFullYear()}-${
+        `/events/${dataSystem.getFullYear()}-${
           dataSystem.getMonth() + 1
-        }-${dataSystem.getDate()}`}`,
+        }-${dataSystem.getDate()}`,
       )
       .once('value')
       .then((snapshot) => {

@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
 import {CalendarSvg} from '../../Icons/CalendarSvg';
+import {DefaultAvatar} from '../../Icons/DefaultAvatar';
 import {addZeroForMinutes} from '../../Screens/Calendar/helpers/addZero';
 import {getStreamTypeIcon} from './helpers/getStreamTypeIcon';
 import {styles} from './styles';
@@ -13,7 +14,9 @@ export const Stream: FC<StreamPropsType> = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.avatarBox}>
-        <View style={styles.avatar} />
+        <View style={styles.avatar}>
+          <DefaultAvatar size={'70%'} />
+        </View>
         <View style={styles.type}>{getStreamTypeIcon(type)}</View>
       </View>
       <View style={styles.middleBox}>

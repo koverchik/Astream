@@ -33,10 +33,10 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     padding: 10,
   },
   imageUser: {
-    backgroundColor: '#FFF',
-    borderRadius: SIZE_ICON_USER / 2,
+    backgroundColor: '#ffffff',
     height: SIZE_ICON_USER,
     width: SIZE_ICON_USER,
+    borderRadius: SIZE_ICON_USER / 2,
   },
   button: {
     alignItems: 'center',

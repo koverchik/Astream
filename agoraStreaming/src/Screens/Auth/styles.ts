@@ -13,6 +13,6 @@ export const styles = StyleSheet.create<AuthScreenStylesType>({
   },
   button: {
     width: 200,
-    height: 50,
+    height: 55,
   },
 });

@@ -6,17 +6,15 @@ import {
 } from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 
-import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
 import {DiscoverSvg} from '../../Icons/DiscoverSvg';
 import {HomeSvg} from '../../Icons/HomeSvg';
 import {PlusSvg} from '../../Icons/PlusSvg';
-import {setUser} from '../../Redux/actions/AuthActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
 import {AuthScreen} from '../../Screens/Auth';
+import {getUserData} from '../../Screens/Auth/helpers/googleSignIn';
 import {ScreenCalendar} from '../../Screens/Calendar';
 import {ProfileScreen} from '../../Screens/Profile';
 import {MainStack} from '../Stack';
@@ -50,26 +48,18 @@ export const BottomTabs = () => {
     tabBarInactiveTintColor: '#fff',
     tabBarStyle: styles.tabBar,
   });
-
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectUser);
-
-  const onAuthStateChanged = (userInfo: FirebaseAuthTypes.User | null) => {
-    if (userInfo) {
-      const {uid, email, displayName} = userInfo;
-      dispatch(setUser({displayName, uid, email}));
-    }
-  };
+  const userData = useAppSelector(selectUser);
 
   const webClientId =
     '1088468777432-7titji4f8tsu0oorpqfibu469sl8jvnj.apps.googleusercontent.com';
 
   useEffect(() => {
     GoogleSignin.configure({webClientId});
-    auth().onAuthStateChanged(onAuthStateChanged);
+    getUserData(dispatch);
   }, []);
 
-  if (!user) {
+  if (!userData) {
     return <AuthScreen />;
   }
 

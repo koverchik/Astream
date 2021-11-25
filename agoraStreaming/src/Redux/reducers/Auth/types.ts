@@ -3,7 +3,10 @@ export type AuthStateType = {
 };
 
 export type AuthDataType = {
-  displayName: string | null;
   email: string | null;
-  uid: string | null;
+  familyName: string | null;
+  givenName: string | null;
+  id: string | null;
+  name: string | null;
+  photo: string | null;
 };

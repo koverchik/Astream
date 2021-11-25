@@ -128,7 +128,7 @@ export const Home: FC<HomeScreenProps> = () => {
           initialRegion={coordinates}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
-          clusterColor={'#FF7070'}
+          clusterColor={'#a5c5ec'}
           zoomControlEnabled={true}>
           {allMarkers}
         </MapView>

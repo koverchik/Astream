@@ -24,10 +24,10 @@ import {v4 as uuid} from 'uuid';
 export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
   const coordinates = props.coordinates;
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [name, setName] = useState('channel');
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [name, setName] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState<boolean>(false);
 
   const navigation = useNavigation<StackNavigationPropHome>();
 

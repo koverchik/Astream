@@ -72,7 +72,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     right: 10,
   },
   buttonText: {
-    color: '#fff',
+    color: '#000000',
     fontSize: 16,
   },
   itemChannel: {

@@ -21,10 +21,10 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
   const {day} = props;
 
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [name, setName] = useState('event');
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [name, setName] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState<boolean>(false);
 
   const [date, setDate] = useState(new Date());
 
@@ -40,18 +40,24 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
     });
   };
 
-  const pressStart = () => {
+  const pressStart = async () => {
     if (!name.trim()) {
       setError('Name is required field!');
     } else {
       changeModalVisible();
       setName('');
-      createEvent();
+      await createEvent();
     }
   };
   const onChangeTitle = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setName(e.nativeEvent.text);
     setError('');
+  };
+
+  const onRequestClose = () => {
+    setName('');
+    setError('');
+    changeModalVisible();
   };
 
   return (
@@ -60,11 +66,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
         animationType="fade"
         transparent={false}
         visible={isModalVisible}
-        onRequestClose={() => {
-          setName('');
-          setError('');
-          changeModalVisible();
-        }}>
+        onRequestClose={onRequestClose}>
         <View style={styles.wrapperModalView}>
           <View style={styles.modalView}>
             <TouchableOpacity
