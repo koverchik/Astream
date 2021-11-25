@@ -2,7 +2,7 @@ import {Moment} from 'moment';
 import {Dispatch, MutableRefObject, SetStateAction} from 'react';
 import {PointPropType} from 'react-native';
 
-import {CalendarActions} from '../TestScreen';
+import {CalendarActions} from '../index';
 import {CalendarStateType, DateStateType} from '../types';
 
 export type DateInfoType = {

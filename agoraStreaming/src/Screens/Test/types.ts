@@ -1,12 +1,14 @@
+import {Moment} from 'moment';
+
 export type CalendarStateType = {
-  year: number;
-  month: number;
+  year: ReturnType<Moment['year']>;
+  month: ReturnType<Moment['month']>;
 };
 
 export type DateStateType = {
   selectedDayIndex: number | null;
-  selectedMonth: number;
-  selectedYear: number;
+  selectedMonth: ReturnType<Moment['month']>;
+  selectedYear: ReturnType<Moment['year']>;
 };
 
 export enum CalendarActions {
@@ -15,9 +17,9 @@ export enum CalendarActions {
 }
 
 export type DateInfoType = {
-  day: number;
-  month: number;
-  year: number;
+  day: ReturnType<Moment['day']>;
+  month: ReturnType<Moment['month']>;
+  year: ReturnType<Moment['year']>;
 };
 
 export type HorizontalCalendarPropsType = {
