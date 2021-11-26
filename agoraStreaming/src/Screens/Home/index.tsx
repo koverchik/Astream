@@ -16,7 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
 
-import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
+import {ModalCreatEvent} from '../../Components/ModalCreateStream';
 import {LiveType, RootStackParamList} from '../../Navigation/Tab/types';
 import {styles} from './style';
 import {
@@ -36,8 +36,10 @@ export const Home: FC<HomeScreenProps> = () => {
   const navigation = useNavigation<StackNavigationPropHome>();
 
   const [coordinates, setCoordinates] = useState(INITIAL_COORDS);
-
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [listChannels, setListChannels] = useState<ListChannelsType[]>([]);
+
+  const changeModalVisible = () => setModalVisible(!modalVisible);
 
   const requestPermissions = async () => {
     if (Platform.OS === 'android') {
@@ -65,6 +67,7 @@ export const Home: FC<HomeScreenProps> = () => {
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
+
     database()
       .ref('/channels')
       .on('value', (snapshot) => {
@@ -110,10 +113,9 @@ export const Home: FC<HomeScreenProps> = () => {
             resizeMode="contain"
           />
         </View>
-
         <Callout style={styles.calloutStyle}>
           <TouchableOpacity key={channelId} style={styles.itemChannel}>
-            <Text style={styles.buttonText}>{name}</Text>
+            <Text style={styles.markerText}>{name}</Text>
             <Text>{isVideo ? 'Video' : 'Audio'}</Text>
           </TouchableOpacity>
         </Callout>
@@ -132,7 +134,18 @@ export const Home: FC<HomeScreenProps> = () => {
           zoomControlEnabled={true}>
           {allMarkers}
         </MapView>
-        <ModalCreateChannel coordinates={coordinates} />
+        <ModalCreatEvent
+          changeModalVisible={changeModalVisible}
+          isModalVisible={modalVisible}
+          coordinates={coordinates}
+        />
+        <View style={styles.createContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setModalVisible(true)}>
+            <Text style={styles.buttonText}>Create channel</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

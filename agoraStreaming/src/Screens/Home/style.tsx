@@ -3,6 +3,7 @@ import {ImageStyle, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 type HomeScreenStyles = {
   container: ViewStyle;
   button: TextStyle;
+  markerText: TextStyle;
   buttonText: TextStyle;
   map: ViewStyle;
   calloutStyle: ViewStyle;
@@ -10,6 +11,7 @@ type HomeScreenStyles = {
   background: ViewStyle;
   logout: ViewStyle;
   marker: ViewStyle;
+  createContainer: ViewStyle;
   markerImage: ImageStyle;
 };
 
@@ -51,15 +53,6 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     flex: 1,
     backgroundColor: '#000',
   },
-  button: {
-    width: '100%',
-    marginTop: 15,
-    borderRadius: 8,
-    paddingVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FF7070',
-  },
   logout: {
     width: 80,
     height: 40,
@@ -71,8 +64,12 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     top: 10,
     right: 10,
   },
-  buttonText: {
+  markerText: {
     color: '#000000',
+    fontSize: 16,
+  },
+  buttonText: {
+    color: '#fff',
     fontSize: 16,
   },
   itemChannel: {
@@ -93,5 +90,19 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  createContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    margin: 15,
+    width: 250,
+  },
+  button: {
+    width: 250,
+    marginTop: 15,
+    borderRadius: 8,
+    paddingVertical: 10,
+    alignItems: 'center',
+    backgroundColor: '#FF7070',
   },
 });
