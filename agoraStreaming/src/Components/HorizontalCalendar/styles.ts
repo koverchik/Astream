@@ -1,6 +1,6 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
-type HorizontalCalendarStylesType = {
+export type HorizontalCalendarStylesType = {
   monthAndYear: ViewStyle;
   monthAndYearContainer: ViewStyle;
 };

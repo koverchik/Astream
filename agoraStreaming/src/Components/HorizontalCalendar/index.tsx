@@ -25,7 +25,7 @@ import {
 } from './types';
 
 export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
-  const {onDayPress} = props;
+  const {onDayPress, activeDayColor} = props;
   const {currentMonth, currentYear, today} = getCurrentDate();
 
   const coords = useRef<PointPropType>({x: 0, y: 0});
@@ -51,7 +51,7 @@ export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
       width,
       coords,
     });
-  }, [calendarState, dateState]);
+  }, [calendarState, dateState, width]);
 
   const onSelectDay = (index: number, date: Moment) => {
     setDateState((prev) => {
@@ -65,23 +65,15 @@ export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
 
     onDayPress &&
       onDayPress({
-        day: +date.format('DD'),
+        day: date.date(),
         month: date.month() + 1,
         year: date.year(),
       });
   };
 
-  const onPressPrev = () => {
+  const onPressButton = (action: CalendarActions) => {
     buttonsHandler({
-      action: CalendarActions.PREV,
-      calendarMonth: calendarState.month,
-      setCalendarState,
-    });
-  };
-
-  const onPressNext = () => {
-    buttonsHandler({
-      action: CalendarActions.NEXT,
+      action,
       calendarMonth: calendarState.month,
       setCalendarState,
     });
@@ -90,9 +82,15 @@ export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
   return (
     <View>
       <View style={styles.monthAndYearContainer}>
-        <CalendarButton onPress={onPressPrev} title={'Prev'} />
+        <CalendarButton
+          onPress={() => onPressButton(CalendarActions.PREV)}
+          title={'Prev'}
+        />
         <Text style={styles.monthAndYear}>{getDateTitle(calendarState)}</Text>
-        <CalendarButton onPress={onPressNext} title={'Next'} />
+        <CalendarButton
+          onPress={() => onPressButton(CalendarActions.NEXT)}
+          title={'Next'}
+        />
       </View>
       <ScrollView
         horizontal

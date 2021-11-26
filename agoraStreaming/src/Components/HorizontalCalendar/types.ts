@@ -17,11 +17,12 @@ export enum CalendarActions {
 }
 
 export type DateInfoType = {
-  day: ReturnType<Moment['day']>;
+  day: ReturnType<Moment['date']>;
   month: ReturnType<Moment['month']>;
   year: ReturnType<Moment['year']>;
 };
 
 export type HorizontalCalendarPropsType = {
   onDayPress?: (date: DateInfoType) => void;
+  activeDayColor?: string;
 };
