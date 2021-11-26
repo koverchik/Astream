@@ -11,12 +11,11 @@ type LifeScreenStyles = {
   modalView: ViewStyle;
   input: ViewStyle;
   errorInput: ViewStyle;
-
   wrapperModalView: ViewStyle;
   buttonDisabled: ViewStyle;
   inputContainer: ViewStyle;
 };
-export const SIZE_CLOSE_BUTTON = 30;
+export const SIZE_BUTTON = 30;
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
   wrapperAllModalView: {
@@ -62,10 +61,10 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     backgroundColor: '#FF7070',
   },
   closeButton: {
-    borderRadius: SIZE_CLOSE_BUTTON / 2,
+    borderRadius: SIZE_BUTTON / 2,
     transform: [{rotate: '45deg'}, {translateX: 0}, {translateY: -25}],
-    width: SIZE_CLOSE_BUTTON,
-    height: SIZE_CLOSE_BUTTON,
+    width: SIZE_BUTTON,
+    height: SIZE_BUTTON,
     alignSelf: 'flex-end',
     alignItems: 'center',
     justifyContent: 'center',

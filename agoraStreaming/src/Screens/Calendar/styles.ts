@@ -1,6 +1,6 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
-import {SIZE_CLOSE_BUTTON as SIZE_BUTTON} from '../../Components/ModalCreateEvent/style';
+import {SIZE_BUTTON} from '../../Components/ModalCreateEvent/style';
 
 type CalendarStylesType = {
   container: ViewStyle;
