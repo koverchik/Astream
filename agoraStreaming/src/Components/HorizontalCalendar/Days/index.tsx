@@ -1,17 +1,13 @@
-import {Moment} from 'moment';
 import React, {FC} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 
-import {Day} from './Day';
-
-type DatesType = {
-  currentDateIndex: number | null;
-  dates: Moment[];
-  onSelectDay: (index: number, date: Moment) => void;
-};
+import {Day} from '../Day';
+import {styles} from './styles';
+import {DatesType} from './types';
 
 export const Dates: FC<DatesType> = (props) => {
-  const {currentDateIndex, dates, onSelectDay} = props;
+  const {currentDateIndex, dates, onSelectDay, activeDayColor, textDayColor} =
+    props;
 
   return (
     <View style={styles.container}>
@@ -23,15 +19,11 @@ export const Dates: FC<DatesType> = (props) => {
             isActive={index === currentDateIndex}
             onPress={onSelectDay}
             key={index}
+            activeDayColor={activeDayColor}
+            textDayColor={textDayColor}
           />
         </View>
       ))}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-  },
-});

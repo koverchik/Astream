@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet, TextStyle, ViewStyle} from 'react-native';
+import {ScaledSize, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
 type DayStylesType = {
   container: ViewStyle;
@@ -9,31 +9,35 @@ type DayStylesType = {
   textActive: TextStyle;
 };
 
-const {width} = Dimensions.get('window');
-
-export const styles = StyleSheet.create<DayStylesType>({
-  container: {
-    borderBottomColor: 'transparent',
-    borderBottomWidth: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 65,
-    width: width / 7,
-  },
-  containerActive: {
-    borderBottomColor: '#a975d9',
-  },
-  day: {
-    fontSize: 12,
-  },
-  date: {
-    fontSize: 20,
-  },
-  text: {
-    color: '#000',
-    textAlign: 'center',
-  },
-  textActive: {
-    color: '#a975d9',
-  },
-});
+export const DayStyles = (
+  width: ScaledSize['width'],
+  activeDayColor?: string,
+  textDayColor?: string,
+) => {
+  return StyleSheet.create<DayStylesType>({
+    container: {
+      borderBottomColor: 'transparent',
+      borderBottomWidth: 4,
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 65,
+      width: width / 7,
+    },
+    containerActive: {
+      borderBottomColor: activeDayColor ?? '#a975d9',
+    },
+    day: {
+      fontSize: 12,
+    },
+    date: {
+      fontSize: 20,
+    },
+    text: {
+      color: textDayColor ?? '#000',
+      textAlign: 'center',
+    },
+    textActive: {
+      color: activeDayColor ?? '#a975d9',
+    },
+  });
+};

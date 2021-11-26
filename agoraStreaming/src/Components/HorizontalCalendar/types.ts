@@ -25,4 +25,7 @@ export type DateInfoType = {
 export type HorizontalCalendarPropsType = {
   onDayPress?: (date: DateInfoType) => void;
   activeDayColor?: string;
+  textDayColor?: string;
+  buttonsColor?: string;
+  titleColor?: string;
 };

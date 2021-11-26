@@ -9,14 +9,14 @@ import {
 } from 'react-native';
 
 import {CalendarButton} from './CalendarButton';
-import {Dates} from './Dates';
+import {Dates} from './Days';
 import {buttonsHandler} from './Helpers/calendarButtonHandler';
 import {getCurrentDate} from './Helpers/getCurrentDate';
 import {getDateIndex} from './Helpers/getDateIndex';
 import {getDateTitle} from './Helpers/getDateTitle';
 import {getDates} from './Helpers/getDates';
 import {scrollToSelectedDate} from './Helpers/scrollToSelectedDate';
-import {styles} from './styles';
+import {CalendarStyles} from './styles';
 import {
   CalendarActions,
   CalendarStateType,
@@ -25,8 +25,10 @@ import {
 } from './types';
 
 export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
-  const {onDayPress, activeDayColor} = props;
+  const {onDayPress, activeDayColor, textDayColor, buttonsColor, titleColor} =
+    props;
   const {currentMonth, currentYear, today} = getCurrentDate();
+  const styles = CalendarStyles(titleColor);
 
   const coords = useRef<PointPropType>({x: 0, y: 0});
   const {width} = useWindowDimensions();
@@ -80,16 +82,18 @@ export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.monthAndYearContainer}>
         <CalendarButton
           onPress={() => onPressButton(CalendarActions.PREV)}
           title={'Prev'}
+          buttonsColor={buttonsColor}
         />
         <Text style={styles.monthAndYear}>{getDateTitle(calendarState)}</Text>
         <CalendarButton
           onPress={() => onPressButton(CalendarActions.NEXT)}
           title={'Next'}
+          buttonsColor={buttonsColor}
         />
       </View>
       <ScrollView
@@ -101,6 +105,8 @@ export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
           dates={days}
           currentDateIndex={getDateIndex(calendarState, dateState)}
           onSelectDay={onSelectDay}
+          activeDayColor={activeDayColor}
+          textDayColor={textDayColor}
         />
       </ScrollView>
     </View>
