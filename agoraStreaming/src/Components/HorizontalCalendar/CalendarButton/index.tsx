@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 
-import {CalendarButtonStyles} from './stypes';
+import {CalendarButtonStyles} from './styles';
 import {CalendarButtonPropsType} from './types';
 
 export const CalendarButton: FC<CalendarButtonPropsType> = (props) => {
