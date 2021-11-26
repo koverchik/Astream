@@ -1,10 +1,13 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
+import {SIZE_CLOSE_BUTTON as SIZE_BUTTON} from '../../Components/ModalCreateEvent/style';
+
 type CalendarStylesType = {
   container: ViewStyle;
   background: ViewStyle;
   flatList: ViewStyle;
   flatListContent: ViewStyle;
+  addNewEvent: ViewStyle;
 };
 
 export const styles = StyleSheet.create<CalendarStylesType>({
@@ -25,5 +28,16 @@ export const styles = StyleSheet.create<CalendarStylesType>({
   },
   flatListContent: {
     alignItems: 'center',
+  },
+  addNewEvent: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FF7070',
+    width: SIZE_BUTTON,
+    height: SIZE_BUTTON,
+    borderRadius: 8,
   },
 });

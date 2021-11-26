@@ -19,16 +19,13 @@ import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
-  const {day} = props;
+  const {day, changeModalVisible, isModalVisible} = props;
 
-  const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [name, setName] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
 
   const [date, setDate] = useState(new Date());
-
-  const changeModalVisible = () => setModalVisible(!isModalVisible);
 
   const newReference = database().ref(`/events/${day}`).push();
 
@@ -61,50 +58,44 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
   };
 
   return (
-    <View style={styles.wrapperAllModalView}>
-      <Modal
-        animationType="fade"
-        transparent={false}
-        visible={isModalVisible}
-        onRequestClose={onRequestClose}>
-        <View style={styles.wrapperModalView}>
-          <View style={styles.modalView}>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={changeModalVisible}>
-              <FontAwesomeIcon icon={faPlus} color={'white'} size={20} />
-            </TouchableOpacity>
-            <Text style={styles.title}>Create new event</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={[styles.input, !!error && styles.errorInput]}
-                onChange={onChangeTitle}
-                placeholder="Name event"
-                value={name}
-              />
-              {!!error && <Text style={styles.error}>{error}</Text>}
-              <SwitchVideo setIsEnabled={setIsEnabled} isEnabled={isEnabled} />
-              <DatePicker
-                date={date}
-                mode="time"
-                onDateChange={setDate}
-                androidVariant={'iosClone'}
-              />
-            </View>
-            <TouchableOpacity
-              style={[styles.button, !!error && styles.buttonDisabled]}
-              onPress={pressStart}
-              disabled={!!error}>
-              <Text style={styles.buttonText}>Create</Text>
-            </TouchableOpacity>
+    <Modal
+      style={styles.wrapperAllModalView}
+      animationType="fade"
+      transparent={false}
+      visible={isModalVisible}
+      onRequestClose={onRequestClose}>
+      <View style={styles.wrapperModalView}>
+        <View style={styles.modalView}>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={changeModalVisible}>
+            <FontAwesomeIcon icon={faPlus} color={'white'} size={20} />
+          </TouchableOpacity>
+          <Text style={styles.title}>Create new event</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[styles.input, !!error && styles.errorInput]}
+              onChange={onChangeTitle}
+              placeholder="Name event"
+              value={name}
+            />
+            {!!error && <Text style={styles.error}>{error}</Text>}
+            <SwitchVideo setIsEnabled={setIsEnabled} isEnabled={isEnabled} />
+            <DatePicker
+              date={date}
+              mode="time"
+              onDateChange={setDate}
+              androidVariant={'iosClone'}
+            />
           </View>
+          <TouchableOpacity
+            style={[styles.button, !!error && styles.buttonDisabled]}
+            onPress={pressStart}
+            disabled={!!error}>
+            <Text style={styles.buttonText}>Create</Text>
+          </TouchableOpacity>
         </View>
-      </Modal>
-      <View style={styles.addNewEvent}>
-        <TouchableOpacity onPress={changeModalVisible}>
-          <FontAwesomeIcon icon={faPlus} color={'white'} size={18} />
-        </TouchableOpacity>
       </View>
-    </View>
+    </Modal>
   );
 };
