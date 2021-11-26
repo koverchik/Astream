@@ -7,8 +7,8 @@ import database from '@react-native-firebase/database';
 
 import notifee from '@notifee/react-native';
 
-import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
-import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
+import {ModalCreatEvent} from '../../Components/ModalCreateStream';
+import {EventInDatabases} from '../../Components/ModalCreateStream/types';
 import {Stream} from '../../Components/Stream';
 import {arrayListData} from './helpers/arrayListData';
 import {
