@@ -44,8 +44,7 @@ export const ScreenCalendar: FC = () => {
           dataSystem.getMonth() + 1
         }-${dataSystem.getDate()}`,
       )
-      .once('value')
-      .then((snapshot) => {
+      .on('value', (snapshot) => {
         const data: EventInDatabases[] = snapshot.val();
         notifee.getTriggerNotificationIds().then((ids) => {
           if (data !== null) {
@@ -66,7 +65,7 @@ export const ScreenCalendar: FC = () => {
           }
         });
       });
-  });
+  }, []);
 
   return (
     <View style={styles.background}>

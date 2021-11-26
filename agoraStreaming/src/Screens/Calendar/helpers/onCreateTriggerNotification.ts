@@ -1,4 +1,8 @@
-import notifee, {TimestampTrigger, TriggerType} from '@notifee/react-native';
+import notifee, {
+  AndroidImportance,
+  TimestampTrigger,
+  TriggerType,
+} from '@notifee/react-native';
 
 import {EventInDatabases} from '../../../Components/ModalCreateEvent/types';
 import {addZeroForMinutes} from './addZero';
@@ -28,13 +32,15 @@ export const onCreateTriggerNotification = async (
 
   await notifee.createTriggerNotification(
     {
-      title: name,
       id: key,
+      title: name,
       body: `The meeting will be at ${dateEvent.getHours()}:${addZeroForMinutes(
         dateEvent.getMinutes(),
       )}`,
       android: {
-        channelId: 'default',
+        channelId: 'channelId',
+        importance: AndroidImportance.HIGH,
+        color: '#a5c5ec',
       },
     },
     trigger,
