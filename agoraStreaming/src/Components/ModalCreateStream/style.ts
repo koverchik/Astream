@@ -21,7 +21,11 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
   wrapperAllModalView: {
     margin: 20,
   },
-  wrapperModalView: {flex: 1, alignItems: 'center', justifyContent: 'center'},
+  wrapperModalView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   modalView: {
     paddingBottom: 50,
     margin: 20,
