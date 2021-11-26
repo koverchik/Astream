@@ -1,11 +1,7 @@
-import {faPlus} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import database from '@react-native-firebase/database';
 import React, {FC, useState} from 'react';
 import {
   Modal,
   NativeSyntheticEvent,
-  Switch,
   Text,
   TextInput,
   TextInputChangeEventData,
@@ -14,16 +10,21 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
+import database from '@react-native-firebase/database';
+
+import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
 import {ModalCreatEventType} from './types';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
   const {day} = props;
 
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [name, setName] = useState('event');
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [name, setName] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState<boolean>(false);
 
   const [date, setDate] = useState(new Date());
 
@@ -35,22 +36,28 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
     await newReference.set({
       name,
       video: isEnabled,
-      dateTime: date,
+      dateTime: date.toUTCString(),
     });
   };
 
-  const pressStart = () => {
+  const pressStart = async () => {
     if (!name.trim()) {
       setError('Name is required field!');
     } else {
       changeModalVisible();
       setName('');
-      createEvent();
+      await createEvent();
     }
   };
   const onChangeTitle = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setName(e.nativeEvent.text);
     setError('');
+  };
+
+  const onRequestClose = () => {
+    setName('');
+    setError('');
+    changeModalVisible();
   };
 
   return (
@@ -59,11 +66,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
         animationType="fade"
         transparent={false}
         visible={isModalVisible}
-        onRequestClose={() => {
-          setName('');
-          setError('');
-          changeModalVisible();
-        }}>
+        onRequestClose={onRequestClose}>
         <View style={styles.wrapperModalView}>
           <View style={styles.modalView}>
             <TouchableOpacity
@@ -80,15 +83,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
                 value={name}
               />
               {!!error && <Text style={styles.error}>{error}</Text>}
-              <View style={styles.wrapperView}>
-                <Text>Video</Text>
-                <Switch
-                  trackColor={{false: '#767577', true: '#81b0ff'}}
-                  thumbColor={isEnabled ? '#FF7070' : '#f4f3f4'}
-                  onValueChange={setIsEnabled}
-                  value={isEnabled}
-                />
-              </View>
+              <SwitchVideo setIsEnabled={setIsEnabled} isEnabled={isEnabled} />
               <DatePicker
                 date={date}
                 mode="time"

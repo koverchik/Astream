@@ -40,7 +40,7 @@ export const styles = StyleSheet.create<StreamStylesType>({
     borderRadius: AVATAR_SIZE / 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#123',
+    backgroundColor: '#ffffff',
   },
   type: {
     position: 'absolute',

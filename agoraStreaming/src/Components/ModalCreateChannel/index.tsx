@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import React, {FC, useState} from 'react';
 import {
   Modal,
@@ -7,23 +6,30 @@ import {
   Text,
   TextInput,
   TextInputChangeEventData,
+  TouchableOpacity,
   View,
 } from 'react-native';
-import {v4 as uuid} from 'uuid';
 
-import {LiveType} from '../../Navigation/types';
-import {StackNavigationPropNavigation} from '../../Screens/Home/types';
+import {useNavigation} from '@react-navigation/native';
+
+import {LiveType} from '../../Navigation/Tab/types';
+import {StackNavigationPropHome} from '../../Screens/Home/types';
+import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
 import {ModalCreateChannelType} from './types';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {v4 as uuid} from 'uuid';
 
 export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
   const coordinates = props.coordinates;
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [name, setName] = useState('channel');
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [name, setName] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [isEnabled, setIsEnabled] = useState<boolean>(false);
 
-  const navigation = useNavigation<StackNavigationPropNavigation>();
+  const navigation = useNavigation<StackNavigationPropHome>();
 
   const createLive = () => {
     navigation.navigate('Live', {
@@ -31,6 +37,7 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
       channelId: uuid(),
       name: name,
       coords: coordinates,
+      isVideo: isEnabled,
     });
   };
   const pressStart = () => {
@@ -57,10 +64,14 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
           setName('');
           setError(null);
           setModalVisible(!modalVisible);
-        }}
-      >
+        }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <FontAwesomeIcon icon={faPlus} color={'white'} size={20} />
+            </TouchableOpacity>
             <Text style={styles.title}>Create new channel</Text>
             <View style={styles.inputContainer}>
               <TextInput
@@ -71,11 +82,11 @@ export const ModalCreateChannel: FC<ModalCreateChannelType> = (props) => {
               />
               {error && <Text style={styles.error}>{error}</Text>}
             </View>
+            <SwitchVideo setIsEnabled={setIsEnabled} isEnabled={isEnabled} />
             <Pressable
               style={[styles.button, !!error && styles.buttonDisabled]}
               onPress={pressStart}
-              disabled={!!error}
-            >
+              disabled={!!error}>
               <Text style={styles.buttonText}>Start</Text>
             </Pressable>
           </View>

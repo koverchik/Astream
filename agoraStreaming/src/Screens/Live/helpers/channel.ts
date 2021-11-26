@@ -8,6 +8,8 @@ import {
   UserOfflineCallback,
 } from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 
+import {RootStackParamList} from '../../../Navigation/Tab/types';
+
 const appID = 'fecf7537eab9494b9612e782053cc546';
 
 export const initChannel = async (
@@ -20,10 +22,13 @@ export const initChannel = async (
   callBackUserMuteAudio: UidWithMutedCallback,
   callbackFunctionLocalUserRegistered: UserAccountCallback,
   callbackFunctionAudioVolumeIndication: AudioVolumeCallback,
-) => {
+  isVideo: RootStackParamList['Live']['isVideo'],
+): Promise<void> => {
   AgoraEngine.current = await RtcEngine.create(appID);
 
-  AgoraEngine.current?.enableVideo();
+  isVideo
+    ? AgoraEngine.current?.enableVideo()
+    : AgoraEngine.current?.disableVideo();
 
   AgoraEngine.current?.enableAudioVolumeIndication(3000, 6, true);
 

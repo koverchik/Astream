@@ -1,19 +1,17 @@
-import database from '@react-native-firebase/database';
-import {useNavigation} from '@react-navigation/native';
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {Animated, Platform, View} from 'react-native';
 import RtcEngine from 'react-native-agora';
 import {UserInfoCallback} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
-import {v4 as uuid} from 'uuid';
+
+import {useNavigation} from '@react-navigation/native';
+
+import database from '@react-native-firebase/database';
 
 import {ButtonBar} from '../../Components/ButtonBar/ButtonBar';
-import {ListUsers} from '../../Components/ListUsers';
 import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader/Preloader';
 import {RemoteUsers} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
-import {StackNavigationPropNavigation} from '../Home/types';
-import {hiddenUsers} from './fakeData';
 import {cameraStyle} from './helpers/CameraStyle';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
@@ -26,10 +24,16 @@ import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {requestCameraAndAudioPermission} from './helpers/permission';
 import {switchCamera} from './helpers/switchCamera';
 import {styles} from './style';
-import {LiveScreenProps, MuteSettingsType, UserType} from './types';
+import {
+  LiveScreenProps,
+  MuteSettingsType,
+  StackNavigationPropLive,
+  UserType,
+} from './types';
+import {v4 as uuid} from 'uuid';
 
 export const Live: FC<LiveScreenProps> = (props) => {
-  const {channelId, name, coords} = props.route.params;
+  const {channelId, name, coords, isVideo} = props.route.params;
 
   const [joined, setJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -50,7 +54,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const newReference = database().ref('/channels').push();
 
-  const navigation = useNavigation<StackNavigationPropNavigation>();
+  const navigation = useNavigation<StackNavigationPropLive>();
 
   const goHome = () => navigation.navigate('Home');
 
@@ -150,6 +154,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
       name,
       channelId,
       coords,
+      isVideo,
     });
   };
 
@@ -174,6 +179,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
       callbackUserMuteAudio,
       callbackFunctionLocalUserRegistered,
       callbackFunctionAudioVolumeIndication(setMyUserData, setPeerIds),
+      isVideo,
     )
       .then(() => {
         AgoraEngine.current?.joinChannelWithUserAccount(
@@ -194,7 +200,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   }, []);
 
   if (!error && !joined) {
-    return <Preloader />;
+    return <Preloader text={'Joining Stream, Please Wait'} />;
   }
   const countUsers = () => {
     return peerIds.length + 1;
@@ -222,6 +228,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
             } else if (joined) {
               return (
                 <LocalUser
+                  key={user.uid}
                   cameraSize={cameraStyle(index, ids, styles)}
                   myUserData={myUserData}
                   channelId={channelId}
@@ -241,9 +248,11 @@ export const Live: FC<LiveScreenProps> = (props) => {
           switchCamera={() => switchCamera(AgoraEngine)}
           muteCamera={myUserData.camera}
           muteVoice={myUserData.voice}
+          isVideo={isVideo}
         />
       </View>
-      <ListUsers hiddenUsers={hiddenUsers} />
+      {/* // TODO: hide element for demo*/}
+      {/* <ListUsers hiddenUsers={hiddenUsers} /> */}
     </View>
   );
 };

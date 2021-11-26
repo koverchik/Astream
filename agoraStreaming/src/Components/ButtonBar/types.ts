@@ -1,3 +1,5 @@
+import {RootStackParamList} from '../../Navigation/Tab/types';
+
 export type ButtonBarPropsType = {
   exitHandler: () => void;
   cameraHandler: () => void;
@@ -5,4 +7,5 @@ export type ButtonBarPropsType = {
   switchCamera: () => void;
   muteCamera: boolean;
   muteVoice: boolean;
+  isVideo: RootStackParamList['Live']['isVideo'];
 };

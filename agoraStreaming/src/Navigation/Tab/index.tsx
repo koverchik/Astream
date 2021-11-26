@@ -1,21 +1,27 @@
+import React, {useEffect} from 'react';
+
 import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import React from 'react';
-import {Dimensions} from 'react-native';
 
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
 import {DiscoverSvg} from '../../Icons/DiscoverSvg';
 import {HomeSvg} from '../../Icons/HomeSvg';
 import {PlusSvg} from '../../Icons/PlusSvg';
+import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
+import {selectUser} from '../../Redux/selectors/AuthSelectors';
+import {AuthScreen} from '../../Screens/Auth';
+import {getUserData} from '../../Screens/Auth/helpers/googleSignIn';
 import {ScreenCalendar} from '../../Screens/Calendar';
-import {MainStack} from '../index';
-import {ScreenOptionsType, TabNavigation, TabParamList} from '../types';
+import {ProfileScreen} from '../../Screens/Profile';
+import {MainStack} from '../Stack';
+import {styles} from './styles';
+import {ScreenOptionsType, TabNavigation, TabParamList} from './types';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-const {height} = Dimensions.get('window');
 const Tab = createBottomTabNavigator<TabParamList>();
 
 export const BottomTabs = () => {
@@ -23,7 +29,6 @@ export const BottomTabs = () => {
     headerShown: false,
     tabBarShowLabel: false,
   };
-
   const screenOptions: ScreenOptionsType = ({route}) => ({
     tabBarIcon: ({color, size}) => {
       switch (route.name) {
@@ -41,12 +46,22 @@ export const BottomTabs = () => {
     },
     tabBarActiveTintColor: '#38a1e3',
     tabBarInactiveTintColor: '#fff',
-    tabBarStyle: {
-      borderTopColor: '#000',
-      height: height * 0.1,
-      backgroundColor: '#000',
-    },
+    tabBarStyle: styles.tabBar,
   });
+  const dispatch = useAppDispatch();
+  const userData = useAppSelector(selectUser);
+
+  const webClientId =
+    '1088468777432-7titji4f8tsu0oorpqfibu469sl8jvnj.apps.googleusercontent.com';
+
+  useEffect(() => {
+    GoogleSignin.configure({webClientId});
+    getUserData(dispatch);
+  }, []);
+
+  if (!userData) {
+    return <AuthScreen />;
+  }
 
   return (
     <NavigationContainer>
@@ -56,7 +71,8 @@ export const BottomTabs = () => {
           component={MainStack}
           options={options}
         />
-        <Tab.Screen
+        {/* // TODO: hide element for demo*/}
+        {/*<Tab.Screen
           name={TabNavigation.Discover}
           component={ScreenCalendar}
           options={options}
@@ -65,7 +81,7 @@ export const BottomTabs = () => {
           name={TabNavigation.Plus}
           component={ScreenCalendar}
           options={options}
-        />
+        />*/}
         <Tab.Screen
           name={TabNavigation.Calendar}
           component={ScreenCalendar}
@@ -73,7 +89,7 @@ export const BottomTabs = () => {
         />
         <Tab.Screen
           name={TabNavigation.Circle}
-          component={ScreenCalendar}
+          component={ProfileScreen}
           options={options}
         />
       </Tab.Navigator>

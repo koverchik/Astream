@@ -5,7 +5,7 @@ import {TabIconPropsType} from './types';
 
 export const CalendarSvg: FC<TabIconPropsType> = (props) => {
   const {color, size} = props;
-  const largerSize = size * 1.3;
+  const largerSize = +size * 1.3;
 
   return (
     <Svg

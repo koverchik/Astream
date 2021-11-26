@@ -1,3 +1,8 @@
+import React, {FC} from 'react';
+import {Text, View} from 'react-native';
+
+import {styles} from './styles';
+import {HeaderAppType as CustomHeaderType} from './types';
 import {
   faBell,
   faSearch,
@@ -5,11 +10,6 @@ import {
   faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React, {FC} from 'react';
-import {Text, View} from 'react-native';
-
-import {styles} from './styles';
-import {HeaderAppType as CustomHeaderType} from './types';
 
 export const CustomHeader: FC<CustomHeaderType> = (props) => {
   const {title} = props;

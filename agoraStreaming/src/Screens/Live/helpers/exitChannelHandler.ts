@@ -1,10 +1,11 @@
+import {MutableRefObject} from 'react';
 import RtcEngine from 'react-native-agora';
 
-import {StackNavigationPropNavigation} from '../../Home/types';
+import {StackNavigationPropLive} from '../types';
 
 export const exitChannelHandler = (
-  AgoraEngine: React.MutableRefObject<RtcEngine | undefined>,
-  navigation: StackNavigationPropNavigation,
+  AgoraEngine: MutableRefObject<RtcEngine | undefined>,
+  navigation: StackNavigationPropLive,
 ) => {
   AgoraEngine.current?.leaveChannel();
   navigation.goBack();

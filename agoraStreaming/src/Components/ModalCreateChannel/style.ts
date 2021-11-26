@@ -12,7 +12,10 @@ type LifeScreenStyles = {
   createContainer: ViewStyle;
   buttonDisabled: ViewStyle;
   inputContainer: ViewStyle;
+  closeButton: ViewStyle;
 };
+
+const SIZE_CLOSE_BUTTON = 30;
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
   centeredView: {
@@ -83,5 +86,15 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     justifyContent: 'flex-end',
     margin: 15,
     width: 250,
+  },
+  closeButton: {
+    borderRadius: SIZE_CLOSE_BUTTON / 2,
+    transform: [{rotate: '45deg'}, {translateX: 0}, {translateY: -25}],
+    width: SIZE_CLOSE_BUTTON,
+    height: SIZE_CLOSE_BUTTON,
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FF7070',
   },
 });

@@ -1,13 +1,15 @@
+import {NumberProp} from 'react-native-svg';
+
 export type CameraMutePropsType = {
   fill?: string;
-  size?: string;
+  size?: NumberProp;
 };
 
 export type TabIconPropsType = {
   color: string;
-  size: number | string;
+  size: NumberProp;
 };
 
 export type AvatarPropsType = {
-  size: number;
+  size: NumberProp;
 };

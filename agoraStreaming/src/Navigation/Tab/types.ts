@@ -1,6 +1,7 @@
+import {Region} from 'react-native-maps';
+
 import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
 import {ParamListBase, RouteProp} from '@react-navigation/native';
-import {Region} from 'react-native-maps';
 
 export enum LiveType {
   CREATE = 'create',
@@ -12,14 +13,17 @@ export type RootStackParamList = {
   Live: {
     type: LiveType;
     channelId: string;
+    isVideo: boolean;
     name?: string;
     coords?: Region;
   };
+  Profile: undefined;
 };
 
 export enum HomeStackScreens {
   Home = 'Home',
   Live = 'Live',
+  Profile = 'Profile',
 }
 
 export enum TabNavigation {

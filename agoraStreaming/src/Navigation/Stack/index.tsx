@@ -1,12 +1,13 @@
+import React from 'react';
+
 import {
   StackNavigationOptions,
   createStackNavigator,
 } from '@react-navigation/stack';
-import React from 'react';
 
-import {Home} from '../Screens/Home';
-import {Live} from '../Screens/Live';
-import {RootStackParamList} from './types';
+import {Home} from '../../Screens/Home';
+import {Live} from '../../Screens/Live';
+import {HomeStackScreens, RootStackParamList} from '../Tab/types';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -16,7 +17,7 @@ export const MainStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Home"
+        name={HomeStackScreens.Home}
         component={Home}
         options={options}
         // TODO: You need use this fragment after create user page or notification
@@ -28,7 +29,11 @@ export const MainStack = () => {
         //   },
         // }}
       />
-      <Stack.Screen name="Live" component={Live} options={options} />
+      <Stack.Screen
+        name={HomeStackScreens.Live}
+        component={Live}
+        options={options}
+      />
     </Stack.Navigator>
   );
 };

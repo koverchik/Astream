@@ -1,7 +1,6 @@
-import database from '@react-native-firebase/database';
-import {useNavigation} from '@react-navigation/native';
 import React, {FC, useEffect, useState} from 'react';
 import {
+  Image,
   PermissionsAndroid,
   Platform,
   Text,
@@ -13,13 +12,17 @@ import 'react-native-get-random-values';
 import MapView from 'react-native-map-clustering';
 import {Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
+import {useNavigation} from '@react-navigation/native';
+
+import database from '@react-native-firebase/database';
+
 import {ModalCreateChannel} from '../../Components/ModalCreateChannel';
-import {LiveType} from '../../Navigation/types';
+import {LiveType, RootStackParamList} from '../../Navigation/Tab/types';
 import {styles} from './style';
 import {
   HomeScreenProps,
   ListChannelsType,
-  StackNavigationPropNavigation,
+  StackNavigationPropHome,
 } from './types';
 
 const INITIAL_COORDS = {
@@ -30,19 +33,20 @@ const INITIAL_COORDS = {
 };
 
 export const Home: FC<HomeScreenProps> = () => {
-  const navigation = useNavigation<StackNavigationPropNavigation>();
+  const navigation = useNavigation<StackNavigationPropHome>();
 
   const [coordinates, setCoordinates] = useState(INITIAL_COORDS);
 
   const [listChannels, setListChannels] = useState<ListChannelsType[]>([]);
 
-  async function requestPermissions() {
+  const requestPermissions = async () => {
     if (Platform.OS === 'android') {
       await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       );
     }
-  }
+  };
+
   useEffect(() => {
     requestPermissions();
     Geolocation.getCurrentPosition(
@@ -56,7 +60,7 @@ export const Home: FC<HomeScreenProps> = () => {
           };
         });
       },
-      (e) => {
+      () => {
         setCoordinates(INITIAL_COORDS);
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
@@ -72,14 +76,19 @@ export const Home: FC<HomeScreenProps> = () => {
       });
   }, []);
 
-  const choseChannelAndJoinLive = (channelId: string) => {
+  const choseChannelAndJoinLive = (
+    channelId: string,
+    isVideo: RootStackParamList['Live']['isVideo'],
+  ) => {
     navigation.navigate('Live', {
       type: LiveType.JOIN,
       channelId,
+      isVideo,
     });
   };
+
   const allMarkers = listChannels.map((data) => {
-    const {name, channelId, coords} = data;
+    const {name, channelId, coords, isVideo} = data;
     const {latitude, longitude} = coords;
     return (
       <Marker
@@ -88,11 +97,24 @@ export const Home: FC<HomeScreenProps> = () => {
           latitude,
           longitude,
         }}
-        onCalloutPress={() => choseChannelAndJoinLive(channelId)}
+        onCalloutPress={() => choseChannelAndJoinLive(channelId, isVideo)}
         title={name}>
+        <View style={styles.marker}>
+          <Image
+            source={
+              isVideo
+                ? require('../../../assets/images/video-camera.png')
+                : require('../../../assets/images/sound-bars.png')
+            }
+            style={styles.markerImage}
+            resizeMode="contain"
+          />
+        </View>
+
         <Callout style={styles.calloutStyle}>
           <TouchableOpacity key={channelId} style={styles.itemChannel}>
             <Text style={styles.buttonText}>{name}</Text>
+            <Text>{isVideo ? 'Video' : 'Audio'}</Text>
           </TouchableOpacity>
         </Callout>
       </Marker>
@@ -106,7 +128,7 @@ export const Home: FC<HomeScreenProps> = () => {
           initialRegion={coordinates}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
-          clusterColor={'#FF7070'}
+          clusterColor={'#a5c5ec'}
           zoomControlEnabled={true}>
           {allMarkers}
         </MapView>
