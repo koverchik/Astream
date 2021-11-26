@@ -1,4 +1,5 @@
 import {ScaledSize, StyleSheet, TextStyle, ViewStyle} from 'react-native';
+import {ActiveDayColorType} from "../types";
 
 type DayStylesType = {
   container: ViewStyle;
@@ -9,10 +10,12 @@ type DayStylesType = {
   textActive: TextStyle;
 };
 
+export const VISIBLE_COUNT_DAY = 7;
+
 export const DayStyles = (
   width: ScaledSize['width'],
-  activeDayColor?: string,
-  textDayColor?: string,
+  activeDayColor?: ActiveDayColorType,
+  textDayColor?: TextStyle['color'],
 ) => {
   return StyleSheet.create<DayStylesType>({
     container: {
@@ -21,7 +24,7 @@ export const DayStyles = (
       justifyContent: 'center',
       alignItems: 'center',
       height: 65,
-      width: width / 7,
+      width: width / VISIBLE_COUNT_DAY,
     },
     containerActive: {
       borderBottomColor: activeDayColor ?? '#a975d9',

@@ -1,3 +1,4 @@
+import {VISIBLE_COUNT_DAY} from '../DayItem/styles';
 import {ScrollDateParamsType} from './types';
 
 export const scrollToSelectedDate = (params: ScrollDateParamsType) => {
@@ -5,14 +6,19 @@ export const scrollToSelectedDate = (params: ScrollDateParamsType) => {
   const {selectedMonth, selectedDayIndex, selectedYear} = date;
   const {month, year} = calendar;
 
-  if (selectedMonth !== month || selectedYear !== year) {
+  const monthMismatch = selectedMonth !== month;
+  const yearMismatch = selectedYear !== year;
+
+  const oneDayWidth = width / VISIBLE_COUNT_DAY;
+  const threeDaysScroll = oneDayWidth * Math.floor(VISIBLE_COUNT_DAY / 2);
+  const scrollFromCurrentDay = selectedDayIndex ? selectedDayIndex * oneDayWidth - threeDaysScroll : 0;
+
+  if (monthMismatch || yearMismatch) {
     coords.current = {y: 0, x: 0};
   } else {
     coords.current = {
       y: 0,
-      x: selectedDayIndex
-        ? (selectedDayIndex * width) / 7 - (width / 7) * 3
-        : 0,
+      x: scrollFromCurrentDay
     };
   }
 };

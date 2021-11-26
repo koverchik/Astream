@@ -1,4 +1,4 @@
-import {StyleSheet, ViewStyle} from 'react-native';
+import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
 export type HorizontalCalendarStylesType = {
   monthAndYear: ViewStyle;
@@ -6,7 +6,7 @@ export type HorizontalCalendarStylesType = {
   container: ViewStyle;
 };
 
-export const CalendarStyles = (titleColor?: string) => {
+export const CalendarStyles = (titleColor?: TextStyle['color']) => {
   return StyleSheet.create<HorizontalCalendarStylesType>({
     monthAndYear: {
       color: titleColor ?? '#000',

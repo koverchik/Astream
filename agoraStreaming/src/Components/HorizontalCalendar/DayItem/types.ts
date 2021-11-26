@@ -1,4 +1,6 @@
 import {Moment} from 'moment';
+import {ActiveDayColorType} from "../types";
+import {TextStyle} from "react-native";
 
 export type DayPropsType = {
   date: Moment;
@@ -6,6 +8,6 @@ export type DayPropsType = {
   isActive: boolean;
   onPress: (index: number, date: Moment) => void;
 
-  activeDayColor?: string;
-  textDayColor?: string;
+  activeDayColor?: ActiveDayColorType;
+  textDayColor?: TextStyle['color'];
 };
