@@ -46,7 +46,7 @@ export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
   });
 
   useEffect(() => {
-    setDays(getDates(calendarState.year, calendarState.month));
+    setDays(getDates(calendarState));
     scrollToSelectedDate({
       calendar: calendarState,
       date: dateState,
