@@ -10,7 +10,7 @@ export const CalendarButton: FC<CalendarButtonPropsType> = (props) => {
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.button}>
-        <Text style={styles.text}>{title}</Text>
+      <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );
 };

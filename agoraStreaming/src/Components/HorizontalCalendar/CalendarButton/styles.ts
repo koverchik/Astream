@@ -5,7 +5,9 @@ type CalendarButtonStylesType = {
   text: TextStyle;
 };
 
-export const CalendarButtonStyles = (buttonsColor?: ViewStyle['backgroundColor']) => {
+export const CalendarButtonStyles = (
+  buttonsColor?: ViewStyle['backgroundColor'],
+) => {
   return StyleSheet.create<CalendarButtonStylesType>({
     button: {
       alignItems: 'center',

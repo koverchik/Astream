@@ -1,5 +1,6 @@
+import {TextStyle, ViewStyle} from 'react-native';
+
 import {Moment} from 'moment';
-import {TextStyle, ViewStyle} from "react-native";
 
 export type CalendarStateType = {
   year: ReturnType<Moment['year']>;
@@ -31,4 +32,6 @@ export type HorizontalCalendarPropsType = {
   titleColor?: TextStyle['color'];
 };
 
-export type ActiveDayColorType = ViewStyle['borderBottomColor'] | TextStyle['color'];
+export type ActiveDayColorType =
+  | ViewStyle['borderBottomColor']
+  | TextStyle['color'];

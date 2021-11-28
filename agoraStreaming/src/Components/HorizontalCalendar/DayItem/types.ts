@@ -1,6 +1,7 @@
+import {TextStyle} from 'react-native';
+
+import {ActiveDayColorType} from '../types';
 import {Moment} from 'moment';
-import {ActiveDayColorType} from "../types";
-import {TextStyle} from "react-native";
 
 export type DayPropsType = {
   date: Moment;

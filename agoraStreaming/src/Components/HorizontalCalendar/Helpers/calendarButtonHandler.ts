@@ -1,13 +1,11 @@
 import {CalendarActions} from '../types';
-import {ButtonHandlerParamsType} from './types';
-
-const JANUARY = 1;
-const DECEMBER = 12;
+import {ButtonHandlerParamsType, Month} from './types';
 
 export const buttonsHandler = (params: ButtonHandlerParamsType) => {
   const {setCalendarState, calendarMonth, action} = params;
-  const firstMonthInYear = calendarMonth === JANUARY;
-  const lastMonthInYear = calendarMonth === DECEMBER;
+
+  const firstMonthInYear = calendarMonth === Month.JANUARY;
+  const lastMonthInYear = calendarMonth === Month.DECEMBER;
 
   switch (action) {
     case CalendarActions.PREV: {
@@ -15,7 +13,7 @@ export const buttonsHandler = (params: ButtonHandlerParamsType) => {
         setCalendarState((prev) => ({
           ...prev,
           year: prev.year - 1,
-          month: DECEMBER,
+          month: Month.DECEMBER,
         }));
       }
 
@@ -36,7 +34,7 @@ export const buttonsHandler = (params: ButtonHandlerParamsType) => {
         setCalendarState((prev) => ({
           ...prev,
           year: prev.year + 1,
-          month: JANUARY,
+          month: Month.JANUARY,
         }));
       }
 

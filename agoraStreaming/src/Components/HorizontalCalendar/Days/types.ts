@@ -1,6 +1,7 @@
-import {Moment} from 'moment';
 import {TextStyle} from 'react-native';
-import {ActiveDayColorType} from "../types";
+
+import {ActiveDayColorType} from '../types';
+import {Moment} from 'moment';
 
 export type DatesType = {
   currentDateIndex: number | null;

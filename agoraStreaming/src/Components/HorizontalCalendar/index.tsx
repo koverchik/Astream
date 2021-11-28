@@ -1,4 +1,3 @@
-import {Moment} from 'moment';
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   PointPropType,
@@ -23,11 +22,13 @@ import {
   DateStateType,
   HorizontalCalendarPropsType,
 } from './types';
+import {Moment} from 'moment';
 
 const SCROLL_EVENT_THROTTLE = 16;
 
 export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
-  const {onDayPress, activeDayColor, textDayColor, buttonsColor, titleColor} = props;
+  const {onDayPress, activeDayColor, textDayColor, buttonsColor, titleColor} =
+    props;
   const {currentMonth, currentYear, today} = getCurrentDate();
   const styles = CalendarStyles(titleColor);
 

@@ -1,14 +1,13 @@
-import moment, {Moment} from 'moment';
-
 import {CalendarStateType} from '../types';
+import moment, {Moment} from 'moment';
 
 export const getDates = (calendarState: CalendarStateType): Moment[] => {
   const {year, month} = calendarState;
 
-  const date = `${year}-${month}`
+  const date = `${year}-${month}`;
   const currentDate = moment(date);
   const startDay = currentDate.subtract(currentDate.date(), 'days');
-  const dayInMonth = moment(date).daysInMonth()
+  const dayInMonth = moment(date).daysInMonth();
 
-  return [...Array(dayInMonth)].map((_) => startDay.add(1, 'day').clone());
+  return [...Array(dayInMonth)].map(() => startDay.add(1, 'day').clone());
 };

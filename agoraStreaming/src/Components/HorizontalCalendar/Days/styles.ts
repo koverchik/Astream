@@ -1,6 +1,10 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, ViewStyle} from 'react-native';
 
-export const styles = StyleSheet.create({
+type DaysStylesType = {
+  container: ViewStyle;
+};
+
+export const styles = StyleSheet.create<DaysStylesType>({
   container: {
     flexDirection: 'row',
   },
