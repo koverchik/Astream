@@ -13,6 +13,7 @@ import {HomeSvg} from '../../Icons/HomeSvg';
 import {PlusSvg} from '../../Icons/PlusSvg';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
+import {selectJoined} from '../../Redux/selectors/LiveSelectors';
 import {AuthScreen} from '../../Screens/Auth';
 import {getUserData} from '../../Screens/Auth/helpers/googleSignIn';
 import {ScreenCalendar} from '../../Screens/Calendar';
@@ -29,6 +30,9 @@ export const BottomTabs = () => {
     headerShown: false,
     tabBarShowLabel: false,
   };
+
+  const joinedStream = useAppSelector(selectJoined);
+
   const screenOptions: ScreenOptionsType = ({route}) => ({
     tabBarIcon: ({color, size}) => {
       switch (route.name) {
@@ -46,8 +50,9 @@ export const BottomTabs = () => {
     },
     tabBarActiveTintColor: '#38a1e3',
     tabBarInactiveTintColor: '#fff',
-    tabBarStyle: styles.tabBar,
+    tabBarStyle: !joinedStream ? styles.tabBar : styles.hiddenTabBar,
   });
+
   const dispatch = useAppDispatch();
   const userData = useAppSelector(selectUser);
 
