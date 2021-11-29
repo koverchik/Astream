@@ -1,8 +1,8 @@
-import {Moment} from 'moment';
 import {Dispatch, MutableRefObject, SetStateAction} from 'react';
 import {PointPropType} from 'react-native';
 
 import {CalendarActions, CalendarStateType, DateStateType} from '../types';
+import {Moment} from 'moment';
 
 export type DateInfoType = {
   currentDate: Moment;
@@ -23,3 +23,8 @@ export type ScrollDateParamsType = {
   coords: MutableRefObject<PointPropType>;
   width: number;
 };
+
+export enum Month {
+  JANUARY = 1,
+  DECEMBER = 12,
+}

@@ -1,4 +1,3 @@
-import {Moment} from 'moment';
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   PointPropType,
@@ -23,6 +22,9 @@ import {
   DateStateType,
   HorizontalCalendarPropsType,
 } from './types';
+import {Moment} from 'moment';
+
+const SCROLL_EVENT_THROTTLE = 16;
 
 export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
   const {onDayPress, activeDayColor, textDayColor, buttonsColor, titleColor} =
@@ -86,20 +88,20 @@ export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
       <View style={styles.monthAndYearContainer}>
         <CalendarButton
           onPress={() => onPressButton(CalendarActions.PREV)}
-          title={'Prev'}
+          title={CalendarActions.PREV}
           buttonsColor={buttonsColor}
         />
         <Text style={styles.monthAndYear}>{getDateTitle(calendarState)}</Text>
         <CalendarButton
           onPress={() => onPressButton(CalendarActions.NEXT)}
-          title={'Next'}
+          title={CalendarActions.NEXT}
           buttonsColor={buttonsColor}
         />
       </View>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        scrollEventThrottle={16}
+        scrollEventThrottle={SCROLL_EVENT_THROTTLE}
         contentOffset={coords.current}>
         <Dates
           dates={days}

@@ -7,7 +7,9 @@ export const getDateIndex = (
   const {month, year} = calendarState;
   const {selectedDayIndex, selectedYear, selectedMonth} = dateState;
 
-  return month === selectedMonth && year === selectedYear
-    ? selectedDayIndex
-    : null;
+  const currentMonth = month === selectedMonth;
+  const currentYear = year === selectedYear;
+  const currentDate = currentMonth && currentYear;
+
+  return currentDate ? selectedDayIndex : null;
 };

@@ -1,8 +1,8 @@
-import {TouchableWithoutFeedbackProps} from 'react-native';
+import {TouchableWithoutFeedbackProps, ViewStyle} from 'react-native';
 
 export type CalendarButtonPropsType = {
   onPress: TouchableWithoutFeedbackProps['onPress'];
   title: string;
 
-  buttonsColor?: string;
+  buttonsColor?: ViewStyle['backgroundColor'];
 };

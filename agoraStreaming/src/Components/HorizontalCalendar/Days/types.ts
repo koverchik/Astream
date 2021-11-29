@@ -1,3 +1,6 @@
+import {TextStyle} from 'react-native';
+
+import {ActiveDayColorType} from '../types';
 import {Moment} from 'moment';
 
 export type DatesType = {
@@ -5,6 +8,6 @@ export type DatesType = {
   dates: Moment[];
   onSelectDay: (index: number, date: Moment) => void;
 
-  activeDayColor?: string;
-  textDayColor?: string;
+  activeDayColor?: ActiveDayColorType;
+  textDayColor?: TextStyle['color'];
 };

@@ -4,7 +4,7 @@ import {Text, TouchableOpacity, useWindowDimensions} from 'react-native';
 import {DayStyles} from './styles';
 import {DayPropsType} from './types';
 
-export const Day: FC<DayPropsType> = (props) => {
+export const DayItem: FC<DayPropsType> = (props) => {
   const {date, index, isActive, onPress, activeDayColor, textDayColor} = props;
   const {width} = useWindowDimensions();
   const styles = DayStyles(width, activeDayColor, textDayColor);

@@ -1,6 +1,5 @@
-import moment from 'moment';
-
 import {DateInfoType} from './types';
+import moment from 'moment';
 
 export const getCurrentDate = (): DateInfoType => {
   const currentDate = moment();

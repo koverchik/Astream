@@ -1,46 +1,54 @@
 import {CalendarActions} from '../types';
-import {ButtonHandlerParamsType} from './types';
+import {ButtonHandlerParamsType, Month} from './types';
 
 export const buttonsHandler = (params: ButtonHandlerParamsType) => {
   const {setCalendarState, calendarMonth, action} = params;
 
-  if (action === CalendarActions.PREV) {
+  const firstMonthInYear = calendarMonth === Month.JANUARY;
+  const lastMonthInYear = calendarMonth === Month.DECEMBER;
 
-    if (calendarMonth === 1) {
-      setCalendarState((prev) => ({
-        ...prev,
-        year: prev.year - 1,
-        month: 12,
-      }));
-    } else {
-      setCalendarState((prev) => {
-        const month = prev.month - 1;
-
-        return {
+  switch (action) {
+    case CalendarActions.PREV: {
+      if (firstMonthInYear) {
+        setCalendarState((prev) => ({
           ...prev,
-          month,
-        };
-      });
+          year: prev.year - 1,
+          month: Month.DECEMBER,
+        }));
+      }
+
+      if (!firstMonthInYear) {
+        setCalendarState((prev) => {
+          const month = prev.month - 1;
+
+          return {
+            ...prev,
+            month,
+          };
+        });
+      }
+      break;
     }
-  }
-
-  if (action === CalendarActions.NEXT) {
-
-    if (calendarMonth === 12) {
-      setCalendarState((prev) => ({
-        ...prev,
-        year: prev.year + 1,
-        month: 1,
-      }));
-    } else {
-      setCalendarState((prev) => {
-        const month = prev.month + 1;
-
-        return {
+    case CalendarActions.NEXT: {
+      if (lastMonthInYear) {
+        setCalendarState((prev) => ({
           ...prev,
-          month,
-        };
-      });
+          year: prev.year + 1,
+          month: Month.JANUARY,
+        }));
+      }
+
+      if (!lastMonthInYear) {
+        setCalendarState((prev) => {
+          const month = prev.month + 1;
+
+          return {
+            ...prev,
+            month,
+          };
+        });
+      }
+      break;
     }
   }
 };

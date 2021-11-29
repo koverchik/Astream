@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {View} from 'react-native';
 
-import {Day} from '../Day';
+import {DayItem} from '../DayItem';
 import {styles} from './styles';
 import {DatesType} from './types';
 
@@ -13,7 +13,7 @@ export const Dates: FC<DatesType> = (props) => {
     <View style={styles.container}>
       {dates.map((date, index) => (
         <View key={index}>
-          <Day
+          <DayItem
             date={date}
             index={index}
             isActive={index === currentDateIndex}
