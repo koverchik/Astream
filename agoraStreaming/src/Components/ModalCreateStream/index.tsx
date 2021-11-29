@@ -14,7 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
 
-import {LiveType} from '../../Navigation/Tab/types';
+import {HomeStackScreens, LiveType} from '../../Navigation/Tab/types';
 import {StackNavigationPropHome} from '../../Screens/Home/types';
 import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
@@ -37,12 +37,12 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
   const navigation = useNavigation<StackNavigationPropHome>();
 
   const createLive = () => {
-    navigation.navigate('Live', {
+    navigation.navigate(HomeStackScreens.Live, {
       type: LiveType.CREATE,
       channelId: uuid(),
-      name: name,
       coords: coordinates,
       isVideo: isEnabled,
+      name,
     });
   };
 
