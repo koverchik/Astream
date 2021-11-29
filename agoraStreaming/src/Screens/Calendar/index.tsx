@@ -1,12 +1,12 @@
 import React, {FC, useEffect, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
-import {Calendar} from 'react-native-calendars';
-import {DateData} from 'react-native-calendars/src/types';
 
 import database from '@react-native-firebase/database';
 
 import notifee from '@notifee/react-native';
 
+import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
+import {DateInfoType} from '../../Components/HorizontalCalendar/types';
 import {ModalCreatEvent} from '../../Components/ModalCreateStream';
 import {EventInDatabases} from '../../Components/ModalCreateStream/types';
 import {Stream} from '../../Components/Stream';
@@ -31,7 +31,9 @@ export const ScreenCalendar: FC = () => {
   );
 
   const changeModalVisible = () => setModalVisible(!isModalVisible);
-  const onPressDay = (day: DateData) => setChoseDay(day.dateString);
+  const selectDay = (date: DateInfoType) => {
+    setChoseDay(`${date.year}-${date.month}-${date.day}`);
+  };
 
   useEffect(() => {
     database()
@@ -44,11 +46,7 @@ export const ScreenCalendar: FC = () => {
 
   useEffect(() => {
     database()
-      .ref(
-        `/events/${dataSystem.getFullYear()}-${
-          dataSystem.getMonth() + 1
-        }-${dataSystem.getDate()}`,
-      )
+      .ref(`/events/${chosenDay}`)
       .on('value', (snapshot) => {
         const data: EventInDatabases[] = snapshot.val();
         notifee.getTriggerNotificationIds().then((ids) => {
@@ -80,16 +78,7 @@ export const ScreenCalendar: FC = () => {
           style={styles.addNewEvent}>
           <FontAwesomeIcon icon={faPlus} color={'white'} size={18} />
         </TouchableOpacity>
-        <Calendar
-          onDayPress={onPressDay}
-          markedDates={{
-            [chosenDay]: {
-              selected: true,
-              marked: true,
-              selectedColor: '#FF7070',
-            },
-          }}
-        />
+        <HorizontalCalendar onDayPress={selectDay} activeDayColor={'#007eff'} />
         <ModalCreatEvent
           day={chosenDay}
           changeModalVisible={changeModalVisible}
