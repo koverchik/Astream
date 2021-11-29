@@ -1,53 +1,33 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
 type LifeScreenStyles = {
-  centeredView: ViewStyle;
+  wrapperAllModalView: ViewStyle;
   button: ViewStyle;
+  closeButton: ViewStyle;
   buttonText: TextStyle;
   title: TextStyle;
   error: TextStyle;
+  wrapperView: ViewStyle;
   modalView: ViewStyle;
   input: ViewStyle;
   errorInput: ViewStyle;
-  createContainer: ViewStyle;
+  wrapperModalView: ViewStyle;
   buttonDisabled: ViewStyle;
   inputContainer: ViewStyle;
-  closeButton: ViewStyle;
 };
-
-const SIZE_CLOSE_BUTTON = 30;
+export const SIZE_BUTTON = 30;
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
-  centeredView: {
+  wrapperAllModalView: {
+    margin: 20,
+  },
+  wrapperModalView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  title: {
-    color: '#FF7070',
-    fontSize: 20,
-    marginBottom: 25,
-  },
-  button: {
-    alignSelf: 'flex-end',
-    alignContent: 'space-between',
-    width: '100%',
-    marginTop: 15,
-    borderRadius: 8,
-    paddingVertical: 7,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FF7070',
-  },
-  buttonDisabled: {
-    backgroundColor: '#b2b2b2',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 20,
   },
   modalView: {
+    paddingBottom: 50,
     margin: 20,
     width: '90%',
     backgroundColor: 'white',
@@ -63,38 +43,59 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     shadowRadius: 4,
     elevation: 5,
   },
+  title: {
+    color: '#FF7070',
+    fontSize: 20,
+    marginBottom: 25,
+  },
+  wrapperView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginLeft: 5,
+  },
+  button: {
+    alignContent: 'space-between',
+    width: '100%',
+    marginTop: 15,
+    borderRadius: 8,
+    paddingVertical: 7,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FF7070',
+  },
+  closeButton: {
+    borderRadius: SIZE_BUTTON / 2,
+    transform: [{rotate: '45deg'}, {translateX: 0}, {translateY: -25}],
+    width: SIZE_BUTTON,
+    height: SIZE_BUTTON,
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FF7070',
+  },
+  buttonDisabled: {
+    backgroundColor: '#b2b2b2',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 20,
+  },
   inputContainer: {
     width: '100%',
-    height: 55,
   },
   error: {
     margin: 5,
     color: '#FF7070',
   },
   input: {
-    height: 40,
     width: '100%',
     borderRadius: 8,
     borderWidth: 1,
     padding: 10,
+    marginBottom: 10,
   },
   errorInput: {
     borderColor: '#FF7070',
-  },
-  createContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    margin: 15,
-    width: 250,
-  },
-  closeButton: {
-    borderRadius: SIZE_CLOSE_BUTTON / 2,
-    transform: [{rotate: '45deg'}, {translateX: 0}, {translateY: -25}],
-    width: SIZE_CLOSE_BUTTON,
-    height: SIZE_CLOSE_BUTTON,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FF7070',
   },
 });

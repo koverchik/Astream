@@ -1,13 +1,14 @@
 import React, {FC, useEffect, useState} from 'react';
-import {FlatList, Text, View} from 'react-native';
+import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
+import {DateData} from 'react-native-calendars/src/types';
 
 import database from '@react-native-firebase/database';
 
 import notifee from '@notifee/react-native';
 
-import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
-import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
+import {ModalCreatEvent} from '../../Components/ModalCreateStream';
+import {EventInDatabases} from '../../Components/ModalCreateStream/types';
 import {Stream} from '../../Components/Stream';
 import {arrayListData} from './helpers/arrayListData';
 import {
@@ -16,17 +17,21 @@ import {
 } from './helpers/onCreateTriggerNotification';
 import {styles} from './styles';
 import {StreamType} from './types';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 export const ScreenCalendar: FC = () => {
   const dataSystem = new Date();
-
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [streams, setStreams] = useState<StreamType[]>([]);
   const [chosenDay, setChoseDay] = useState(
     `${dataSystem.getFullYear()}-${
       dataSystem.getMonth() + 1
     }-${dataSystem.getDate()}`,
   );
 
-  const [streams, setStreams] = useState<StreamType[]>([]);
+  const changeModalVisible = () => setModalVisible(!isModalVisible);
+  const onPressDay = (day: DateData) => setChoseDay(day.dateString);
 
   useEffect(() => {
     database()
@@ -44,8 +49,7 @@ export const ScreenCalendar: FC = () => {
           dataSystem.getMonth() + 1
         }-${dataSystem.getDate()}`,
       )
-      .once('value')
-      .then((snapshot) => {
+      .on('value', (snapshot) => {
         const data: EventInDatabases[] = snapshot.val();
         notifee.getTriggerNotificationIds().then((ids) => {
           if (data !== null) {
@@ -66,15 +70,18 @@ export const ScreenCalendar: FC = () => {
           }
         });
       });
-  });
+  }, []);
 
   return (
     <View style={styles.background}>
       <View style={styles.container}>
+        <TouchableOpacity
+          onPress={changeModalVisible}
+          style={styles.addNewEvent}>
+          <FontAwesomeIcon icon={faPlus} color={'white'} size={18} />
+        </TouchableOpacity>
         <Calendar
-          onDayPress={(day) => {
-            setChoseDay(day.dateString);
-          }}
+          onDayPress={onPressDay}
           markedDates={{
             [chosenDay]: {
               selected: true,
@@ -83,7 +90,11 @@ export const ScreenCalendar: FC = () => {
             },
           }}
         />
-        <ModalCreatEvent day={chosenDay} />
+        <ModalCreatEvent
+          day={chosenDay}
+          changeModalVisible={changeModalVisible}
+          isModalVisible={isModalVisible}
+        />
         <FlatList
           data={streams}
           style={styles.flatList}
