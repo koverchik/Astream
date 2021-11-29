@@ -1,12 +1,12 @@
 import {LiveActions, LiveActionsType} from '../../actions/LiveActions/types';
 import {LiveInitialStateType} from './types';
 
-const LiveInitialState: LiveInitialStateType = {
+const liveInitialState: LiveInitialStateType = {
   isJoined: false,
 };
 
 export const liveReducer = (
-  state = LiveInitialState,
+  state = liveInitialState,
   action: LiveActionsType,
 ): LiveInitialStateType => {
   switch (action.type) {
