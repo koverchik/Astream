@@ -2,7 +2,7 @@ import {LiveActions, LiveActionsType} from '../../actions/LiveActions/types';
 import {LiveInitialStateType} from './types';
 
 const LiveInitialState: LiveInitialStateType = {
-  joined: false,
+  isJoined: false,
 };
 
 export const liveReducer = (
@@ -11,7 +11,7 @@ export const liveReducer = (
 ): LiveInitialStateType => {
   switch (action.type) {
     case LiveActions.SET_JOINED: {
-      return {...state, joined: action.payload};
+      return {...state, isJoined: action.payload};
     }
     default:
       return state;

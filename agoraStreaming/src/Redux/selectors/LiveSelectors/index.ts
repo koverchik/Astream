@@ -1,3 +1,3 @@
 import {RootState} from '../../store';
 
-export const selectJoined = (state: RootState) => state.live.joined;
+export const getIsJoined = (state: RootState) => state.live.isJoined;

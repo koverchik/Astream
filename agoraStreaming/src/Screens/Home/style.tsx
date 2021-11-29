@@ -18,7 +18,7 @@ type HomeScreenStyles = {
 
 const SIZE_MARKER = 30;
 const BORDER_SIZE = 4;
-const BACKGROUND_RADIUS = 35;
+const CORNERS_RADIUS = 35;
 
 export const styles = StyleSheet.create<HomeScreenStyles>({
   container: {
@@ -28,8 +28,8 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     right: 0,
     bottom: 0,
     backgroundColor: '#000',
-    borderBottomEndRadius: BACKGROUND_RADIUS,
-    borderBottomStartRadius: BACKGROUND_RADIUS,
+    borderBottomEndRadius: CORNERS_RADIUS,
+    borderBottomStartRadius: CORNERS_RADIUS,
     overflow: 'hidden',
     alignItems: 'center',
   },

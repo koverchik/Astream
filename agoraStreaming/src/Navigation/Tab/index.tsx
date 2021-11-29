@@ -13,7 +13,7 @@ import {HomeSvg} from '../../Icons/HomeSvg';
 import {PlusSvg} from '../../Icons/PlusSvg';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
-import {selectJoined} from '../../Redux/selectors/LiveSelectors';
+import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
 import {AuthScreen} from '../../Screens/Auth';
 import {getUserData} from '../../Screens/Auth/helpers/googleSignIn';
 import {ScreenCalendar} from '../../Screens/Calendar';
@@ -31,7 +31,7 @@ export const BottomTabs = () => {
     tabBarShowLabel: false,
   };
 
-  const joinedStream = useAppSelector(selectJoined);
+  const joinedStream = useAppSelector(getIsJoined);
 
   const screenOptions: ScreenOptionsType = ({route}) => ({
     tabBarIcon: ({color, size}) => {

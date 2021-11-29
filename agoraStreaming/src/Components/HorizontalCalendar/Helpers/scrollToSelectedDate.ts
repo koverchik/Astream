@@ -1,4 +1,5 @@
 import {VISIBLE_COUNT_DAYS} from '../DayItem/styles';
+import {DateStateType} from '../types';
 import {ScrollDateParamsType} from './types';
 import moment from 'moment';
 
@@ -14,7 +15,9 @@ export const scrollToSelectedDate = (params: ScrollDateParamsType) => {
   const monthMismatch = selectedMonth !== month;
   const yearMismatch = selectedYear !== year;
 
-  const scrollFromCurrentDayHandler = (index: typeof selectedDayIndex) => {
+  const scrollFromCurrentDayHandler = (
+    index: DateStateType['selectedDayIndex'],
+  ) => {
     if (index) {
       if (index > dayInMonth - 7) {
         return (dayInMonth - 7) * oneDayWidth;

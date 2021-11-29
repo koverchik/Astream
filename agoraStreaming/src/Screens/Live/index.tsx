@@ -14,7 +14,7 @@ import {RemoteUsers} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
 import {setJoinedAction} from '../../Redux/actions/LiveActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
-import {selectJoined} from '../../Redux/selectors/LiveSelectors';
+import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
 import {cameraStyle} from './helpers/CameraStyle';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
@@ -39,7 +39,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords, isVideo} = props.route.params;
 
   const dispatch = useAppDispatch();
-  const joined = useAppSelector(selectJoined);
+  const joined = useAppSelector(getIsJoined);
   const [error, setError] = useState<boolean>(false);
   const [peerIds, setPeerIds] = useState<UserType[]>([]);
   const [myUserData, setMyUserData] = useState<LocalUserType>({

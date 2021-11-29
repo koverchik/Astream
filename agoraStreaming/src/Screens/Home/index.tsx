@@ -23,6 +23,8 @@ import {
   LiveType,
   RootStackParamList,
 } from '../../Navigation/Tab/types';
+import {setJoinedAction} from '../../Redux/actions/LiveActions';
+import {useAppDispatch} from '../../Redux/hooks';
 import {styles} from './style';
 import {
   HomeScreenProps,
@@ -39,6 +41,7 @@ const INITIAL_COORDS = {
 
 export const Home: FC<HomeScreenProps> = () => {
   const navigation = useNavigation<StackNavigationPropHome>();
+  const dispatch = useAppDispatch();
 
   const [coordinates, setCoordinates] = useState(INITIAL_COORDS);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -93,6 +96,7 @@ export const Home: FC<HomeScreenProps> = () => {
       channelId,
       isVideo,
     });
+    dispatch(setJoinedAction(true));
   };
 
   const allMarkers = listChannels.map((data) => {

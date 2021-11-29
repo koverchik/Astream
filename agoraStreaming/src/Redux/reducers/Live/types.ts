@@ -1,3 +1,3 @@
 export type LiveInitialStateType = {
-  joined: boolean;
+  isJoined: boolean;
 };

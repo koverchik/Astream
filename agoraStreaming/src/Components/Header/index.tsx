@@ -1,8 +1,8 @@
 import React, {FC} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, useWindowDimensions} from 'react-native';
 
-import {styles} from './styles';
-import {HeaderAppType as CustomHeaderType} from './types';
+import {HeaderStyles} from './styles';
+import {CustomHeaderPropsType} from './types';
 import {
   faBell,
   faSearch,
@@ -11,8 +11,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
-export const CustomHeader: FC<CustomHeaderType> = (props) => {
+export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   const {title} = props;
+
+  const {width} = useWindowDimensions();
+  const styles = HeaderStyles(width);
 
   return (
     <View style={styles.container}>
