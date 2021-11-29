@@ -12,6 +12,7 @@ type HomeScreenStyles = {
   logout: ViewStyle;
   marker: ViewStyle;
   createContainer: ViewStyle;
+  headerContainer: ViewStyle;
   markerImage: ImageStyle;
 };
 
@@ -29,6 +30,10 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     borderBottomEndRadius: 35,
     borderBottomStartRadius: 35,
     overflow: 'hidden',
+  },
+  headerContainer: {
+    position: 'absolute',
+    zIndex: 1,
   },
   marker: {
     position: 'absolute',

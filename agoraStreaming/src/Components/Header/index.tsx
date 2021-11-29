@@ -24,7 +24,9 @@ export const CustomHeader: FC<CustomHeaderType> = (props) => {
           <FontAwesomeIcon icon={faUserPlus} color={'white'} size={20} />
         </View>
       </View>
-      <Text style={styles.title}>{title}</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>{title}</Text>
+      </View>
       <View style={styles.wrapperSectionIcons}>
         <View style={styles.wrapperIcon}>
           <FontAwesomeIcon icon={faBell} color={'white'} size={18} />

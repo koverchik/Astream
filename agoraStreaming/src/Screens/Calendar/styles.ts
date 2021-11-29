@@ -32,7 +32,7 @@ export const styles = StyleSheet.create<CalendarStylesType>({
   },
   addNewEvent: {
     position: 'absolute',
-    top: 13,
+    top: 69,
     left: 10,
     alignItems: 'center',
     justifyContent: 'center',
