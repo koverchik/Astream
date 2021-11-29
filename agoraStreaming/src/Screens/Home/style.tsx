@@ -18,6 +18,7 @@ type HomeScreenStyles = {
 
 const SIZE_MARKER = 30;
 const BORDER_SIZE = 4;
+const BACKGROUND_RADIUS = 35;
 
 export const styles = StyleSheet.create<HomeScreenStyles>({
   container: {
@@ -27,9 +28,10 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     right: 0,
     bottom: 0,
     backgroundColor: '#000',
-    borderBottomEndRadius: 35,
-    borderBottomStartRadius: 35,
+    borderBottomEndRadius: BACKGROUND_RADIUS,
+    borderBottomStartRadius: BACKGROUND_RADIUS,
     overflow: 'hidden',
+    alignItems: 'center',
   },
   headerContainer: {
     position: 'absolute',
@@ -99,7 +101,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
   createContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    margin: 15,
+    marginBottom: 15,
     width: 250,
   },
   button: {
