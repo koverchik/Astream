@@ -100,7 +100,10 @@ export const ScreenCalendar: FC = () => {
           style={styles.flatList}
           renderItem={({item}) => <Stream stream={item} />}
           keyExtractor={(item) => 'Stream' + item.id}
-          contentContainerStyle={styles.flatListContent}
+          contentContainerStyle={[
+            styles.flatListContent,
+            !streams.length && styles.flatListContentCenter,
+          ]}
           ListEmptyComponent={<Text>No scheduled streams</Text>}
         />
       </View>
