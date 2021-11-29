@@ -10,16 +10,21 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
+import {useNavigation} from '@react-navigation/native';
+
 import database from '@react-native-firebase/database';
 
+import {HomeStackScreens, LiveType} from '../../Navigation/Tab/types';
+import {StackNavigationPropHome} from '../../Screens/Home/types';
 import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
 import {ModalCreatEventType} from './types';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {v4 as uuid} from 'uuid';
 
 export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
-  const {day, changeModalVisible, isModalVisible} = props;
+  const {day, changeModalVisible, isModalVisible, coordinates} = props;
 
   const [name, setName] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -28,6 +33,18 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
   const [date, setDate] = useState(new Date());
 
   const newReference = database().ref(`/events/${day}`).push();
+
+  const navigation = useNavigation<StackNavigationPropHome>();
+
+  const createLive = () => {
+    navigation.navigate(HomeStackScreens.Live, {
+      type: LiveType.CREATE,
+      channelId: uuid(),
+      coords: coordinates,
+      isVideo: isEnabled,
+      name,
+    });
+  };
 
   const createEvent = async () => {
     await newReference.set({
@@ -43,9 +60,10 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
     } else {
       changeModalVisible();
       setName('');
-      await createEvent();
+      coordinates ? createLive() : await createEvent();
     }
   };
+
   const onChangeTitle = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
     setName(e.nativeEvent.text);
     setError('');
@@ -81,12 +99,14 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
             />
             {!!error && <Text style={styles.error}>{error}</Text>}
             <SwitchVideo setIsEnabled={setIsEnabled} isEnabled={isEnabled} />
-            <DatePicker
-              date={date}
-              mode="time"
-              onDateChange={setDate}
-              androidVariant={'iosClone'}
-            />
+            {!coordinates && (
+              <DatePicker
+                date={date}
+                mode="time"
+                onDateChange={setDate}
+                androidVariant={'iosClone'}
+              />
+            )}
           </View>
           <TouchableOpacity
             style={[styles.button, !!error && styles.buttonDisabled]}

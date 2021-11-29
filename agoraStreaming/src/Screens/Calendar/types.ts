@@ -1,4 +1,4 @@
-import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
+import {EventInDatabases} from '../../Components/ModalCreateStream/types';
 
 export type StreamType = {
   id: string;
