@@ -140,9 +140,7 @@ export const Home: FC<HomeScreenProps> = () => {
           coordinates={coordinates}
         />
         <View style={styles.createContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => setModalVisible(true)}>
+          <TouchableOpacity style={styles.button} onPress={changeModalVisible}>
             <Text style={styles.buttonText}>Create channel</Text>
           </TouchableOpacity>
         </View>
