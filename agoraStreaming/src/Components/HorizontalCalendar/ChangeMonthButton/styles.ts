@@ -1,14 +1,14 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
-type CalendarButtonStylesType = {
+type ChangeMonthButtonStylesType = {
   button: ViewStyle;
   text: TextStyle;
 };
 
-export const CalendarButtonStyles = (
+export const ChangeMonthButtonStyles = (
   buttonColor?: ViewStyle['backgroundColor'],
 ) => {
-  return StyleSheet.create<CalendarButtonStylesType>({
+  return StyleSheet.create<ChangeMonthButtonStylesType>({
     button: {
       alignItems: 'center',
       justifyContent: 'center',

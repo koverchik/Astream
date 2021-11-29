@@ -1,3 +1,3 @@
-export type HeaderAppType = {
+export type CustomHeaderPropsType = {
   title: string;
 };

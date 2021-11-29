@@ -1,15 +1,17 @@
-import {Dimensions, StyleSheet, ViewStyle} from 'react-native';
-
-const {height} = Dimensions.get('window');
+import {StyleSheet, ViewStyle} from 'react-native';
 
 type TabStylesType = {
   tabBar: ViewStyle;
+  hiddenTabBar: ViewStyle;
 };
 
 export const styles = StyleSheet.create<TabStylesType>({
   tabBar: {
     borderTopColor: '#000',
-    height: height * 0.1,
     backgroundColor: '#000',
+    display: 'flex',
+  },
+  hiddenTabBar: {
+    display: 'none',
   },
 });
