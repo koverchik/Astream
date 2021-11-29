@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 
-import {CalendarButton} from './CalendarButton';
+import {ChangeMonthButton} from './ChangeMonthButton';
 import {Dates} from './Days';
 import {buttonsHandler} from './Helpers/calendarButtonHandler';
 import {getCurrentDate} from './Helpers/getCurrentDate';
@@ -27,7 +27,7 @@ import {Moment} from 'moment';
 const SCROLL_EVENT_THROTTLE = 16;
 
 export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
-  const {onDayPress, activeDayColor, textDayColor, buttonsColor, titleColor} =
+  const {onDayPress, activeDayColor, textDayColor, buttonColor, titleColor} =
     props;
   const {currentMonth, currentYear, today} = getCurrentDate();
   const styles = CalendarStyles(titleColor);
@@ -67,12 +67,13 @@ export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
       };
     });
 
-    onDayPress &&
+    if (onDayPress) {
       onDayPress({
         day: date.date(),
         month: date.month() + 1,
         year: date.year(),
       });
+    }
   };
 
   const onPressButton = (action: CalendarActions) => {
@@ -86,16 +87,16 @@ export const HorizontalCalendar: FC<HorizontalCalendarPropsType> = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.monthAndYearContainer}>
-        <CalendarButton
+        <ChangeMonthButton
           onPress={() => onPressButton(CalendarActions.PREV)}
           title={CalendarActions.PREV}
-          buttonsColor={buttonsColor}
+          buttonColor={buttonColor}
         />
         <Text style={styles.monthAndYear}>{getDateTitle(calendarState)}</Text>
-        <CalendarButton
+        <ChangeMonthButton
           onPress={() => onPressButton(CalendarActions.NEXT)}
           title={CalendarActions.NEXT}
-          buttonsColor={buttonsColor}
+          buttonColor={buttonColor}
         />
       </View>
       <ScrollView

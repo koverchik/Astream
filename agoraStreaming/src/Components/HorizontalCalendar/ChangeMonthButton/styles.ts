@@ -6,13 +6,13 @@ type CalendarButtonStylesType = {
 };
 
 export const CalendarButtonStyles = (
-  buttonsColor?: ViewStyle['backgroundColor'],
+  buttonColor?: ViewStyle['backgroundColor'],
 ) => {
   return StyleSheet.create<CalendarButtonStylesType>({
     button: {
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: buttonsColor ?? '#007eff',
+      backgroundColor: buttonColor ?? '#007eff',
       width: 45,
       height: 30,
       borderRadius: 10,

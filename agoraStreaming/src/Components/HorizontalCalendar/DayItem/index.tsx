@@ -11,19 +11,19 @@ export const DayItem: FC<DayPropsType> = (props) => {
 
   const getContainerStyle = () => ({
     ...styles.container,
-    ...(isActive ? styles.containerActive : {}),
+    ...(isActive && styles.containerActive),
   });
 
   const getDayStyle = () => ({
     ...styles.text,
     ...styles.day,
-    ...(isActive ? styles.textActive : {}),
+    ...(isActive && styles.textActive),
   });
 
   const getDateStyle = () => ({
     ...styles.text,
     ...styles.date,
-    ...(isActive ? styles.textActive : {}),
+    ...(isActive && styles.textActive),
   });
 
   const onPressHandler = () => {

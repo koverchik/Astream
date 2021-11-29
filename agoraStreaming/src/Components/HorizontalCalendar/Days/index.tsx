@@ -12,7 +12,7 @@ export const Dates: FC<DatesType> = (props) => {
   return (
     <View style={styles.container}>
       {dates.map((date, index) => (
-        <View key={index}>
+        <View key={date.format('DD MMMM YYYY')}>
           <DayItem
             date={date}
             index={index}

@@ -2,11 +2,11 @@ import React, {FC} from 'react';
 import {Text, TouchableOpacity} from 'react-native';
 
 import {CalendarButtonStyles} from './styles';
-import {CalendarButtonPropsType} from './types';
+import {ChangeMonthButtonPropsType} from './types';
 
-export const CalendarButton: FC<CalendarButtonPropsType> = (props) => {
-  const {onPress, title, buttonsColor} = props;
-  const styles = CalendarButtonStyles(buttonsColor);
+export const ChangeMonthButton: FC<ChangeMonthButtonPropsType> = (props) => {
+  const {onPress, title, buttonColor} = props;
+  const styles = CalendarButtonStyles(buttonColor);
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.button}>
