@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {DateData} from 'react-native-calendars/src/types';
 import Animated, {
@@ -109,16 +109,20 @@ export const ScreenCalendar: FC = () => {
           scrollEventThrottle={46}
           onScroll={scrollHandler}
           contentContainerStyle={styles.contentContainerStyle}>
-          {streams.map((item, index) => {
-            return (
-              <Stream
-                stream={item}
-                key={item.id}
-                translationY={translationY}
-                index={index}
-              />
-            );
-          })}
+          {streams.length ? (
+            streams.map((item, index) => {
+              return (
+                <Stream
+                  stream={item}
+                  key={item.id}
+                  translationY={translationY}
+                  index={index}
+                />
+              );
+            })
+          ) : (
+            <Text>No scheduled streams</Text>
+          )}
         </Animated.ScrollView>
       </View>
     </View>
