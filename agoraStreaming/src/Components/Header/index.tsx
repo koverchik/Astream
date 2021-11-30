@@ -1,5 +1,6 @@
 import React, {FC, useRef, useState} from 'react';
 import {
+  Alert,
   Animated,
   Image,
   Text,
@@ -9,8 +10,10 @@ import {
   useWindowDimensions,
 } from 'react-native';
 
-import {useAppSelector} from '../../Redux/hooks';
+import {setCoordinatesAction} from '../../Redux/actions/HomeActions';
+import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
+import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {HeaderStyles, MARGIN, SIZE_BLOCKS_ITEM} from './styles';
 import {CustomHeaderPropsType} from './types';
 import {
@@ -29,6 +32,8 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   const styles = HeaderStyles(width);
 
   const user = useAppSelector(selectUser);
+  const channelsList = useAppSelector(selectChannelsList);
+  const dispatch = useAppDispatch();
 
   const inputAnimatedRef = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(1)).current;
@@ -64,6 +69,17 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
     setTimeout(() => {
       setSearchMode(false);
     }, 1720);
+
+    const stream = channelsList.find((channel) => {
+      return channel.name === searchValue;
+    });
+
+    if (stream) {
+      dispatch(setCoordinatesAction(stream.coords));
+    } else {
+      Alert.alert('Stream is not found!');
+    }
+    setSearchValue('');
   };
 
   return (

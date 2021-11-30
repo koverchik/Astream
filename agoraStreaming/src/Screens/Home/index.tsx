@@ -16,10 +16,22 @@ import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
 
-import {ModalCreatEvent} from '../../Components/ModalCreateStream';
-import {LiveType, RootStackParamList} from '../../Navigation/Tab/types';
+import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
+import {
+  HomeStackScreens,
+  LiveType,
+  RootStackParamList,
+} from '../../Navigation/Tab/types';
+import {
+  setChannelsListAction,
+  setCoordinatesAction,
+} from '../../Redux/actions/HomeActions';
 import {setJoinedAction} from '../../Redux/actions/LiveActions';
-import {useAppDispatch} from '../../Redux/hooks';
+import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
+import {
+  selectChannelsList,
+  selectCoordinates,
+} from '../../Redux/selectors/HomeSelectors';
 import {styles} from './style';
 import {
   HomeScreenProps,
@@ -36,11 +48,11 @@ const INITIAL_COORDS = {
 
 export const Home: FC<HomeScreenProps> = () => {
   const navigation = useNavigation<StackNavigationPropHome>();
+  const coordinates = useAppSelector(selectCoordinates);
+  const channelsList = useAppSelector(selectChannelsList);
   const dispatch = useAppDispatch();
 
-  const [coordinates, setCoordinates] = useState(INITIAL_COORDS);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [listChannels, setListChannels] = useState<ListChannelsType[]>([]);
 
   const changeModalVisible = () => setModalVisible(!modalVisible);
 
@@ -57,16 +69,10 @@ export const Home: FC<HomeScreenProps> = () => {
     Geolocation.getCurrentPosition(
       (position) => {
         const {latitude, longitude} = position.coords;
-        setCoordinates((prev) => {
-          return {
-            ...prev,
-            latitude,
-            longitude,
-          };
-        });
+        dispatch(setCoordinatesAction({...coordinates, latitude, longitude}));
       },
       () => {
-        setCoordinates(INITIAL_COORDS);
+        dispatch(setCoordinatesAction(INITIAL_COORDS));
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
@@ -74,19 +80,22 @@ export const Home: FC<HomeScreenProps> = () => {
     database()
       .ref('/channels')
       .on('value', (snapshot) => {
-        if (snapshot.val() != null) {
-          setListChannels(Object.values(snapshot.val()));
+        if (snapshot.val() !== null) {
+          const newChannelList: ListChannelsType[] = Object.values(
+            snapshot.val(),
+          );
+          dispatch(setChannelsListAction(newChannelList));
         } else {
-          setListChannels([]);
+          dispatch(setChannelsListAction([]));
         }
       });
   }, []);
 
   const choseChannelAndJoinLive = (
     channelId: string,
-    isVideo: RootStackParamList['Live']['isVideo'],
+    isVideo: RootStackParamList[HomeStackScreens.Live]['isVideo'],
   ) => {
-    navigation.navigate('Live', {
+    navigation.navigate(HomeStackScreens.Live, {
       type: LiveType.JOIN,
       channelId,
       isVideo,
@@ -94,7 +103,7 @@ export const Home: FC<HomeScreenProps> = () => {
     dispatch(setJoinedAction(true));
   };
 
-  const allMarkers = listChannels.map((data) => {
+  const allMarkers = channelsList.map((data) => {
     const {name, channelId, coords, isVideo} = data;
     const {latitude, longitude} = coords;
     return (
@@ -131,7 +140,7 @@ export const Home: FC<HomeScreenProps> = () => {
     <View style={styles.background}>
       <View style={styles.container}>
         <MapView
-          initialRegion={coordinates}
+          region={coordinates}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
           clusterColor={'#a5c5ec'}
