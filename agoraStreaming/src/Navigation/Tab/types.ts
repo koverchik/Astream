@@ -1,7 +1,7 @@
 import {Region} from 'react-native-maps';
 
 import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
-import {ParamListBase, RouteProp} from '@react-navigation/native';
+import {RouteProp} from '@react-navigation/native';
 
 export enum LiveType {
   CREATE = 'create',
@@ -31,10 +31,12 @@ export enum TabNavigation {
   Profile = 'Profile',
 }
 
-export type ScreenOptionsType = (props: {
-  route: RouteProp<ParamListBase, string>;
-  navigation: TabParamList;
-}) => BottomTabNavigationOptions;
+export type ScreenOptionsType =
+  | BottomTabNavigationOptions
+  | ((props: {
+      route: RouteProp<TabParamList, keyof TabParamList>;
+      navigation: TabNavigation;
+    }) => BottomTabNavigationOptions);
 
 export type TabParamList = {
   Main: undefined;
