@@ -1,9 +1,11 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useRef, useState} from 'react';
 import {
   Animated,
   Image,
+  NativeSyntheticEvent,
   Text,
   TextInput,
+  TextInputChangeEventData,
   TouchableOpacity,
   View,
   useWindowDimensions,
@@ -43,8 +45,8 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   const opacity = useRef(new Animated.Value(1)).current;
 
   const [searchMode, setSearchMode] = useState<boolean>(false);
-  const [searchValue, setSearchValue] = useState<string>('');
 
+  const [searchValue, setSearchValue] = useState<string>('');
   const [searchResult, setSearchResult] = useState<ListChannelsType[]>([]);
 
   const onPressSearch = () => {
@@ -53,14 +55,19 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
     opacityForHeaderAnimation(opacity, 0).start();
   };
 
-  useEffect(() => {
-    const stream = channelsList.filter((channel) => {
-      if (channel.name.includes(searchValue) && searchValue !== '') {
-        return channel.name;
+  const onChangeSearchValue = (
+    event: NativeSyntheticEvent<TextInputChangeEventData>,
+  ) => {
+    const streams = channelsList.filter((channel) => {
+      const matchFound = channel.name.includes(event.nativeEvent.text);
+      const voidString = event.nativeEvent.text === '';
+
+      if (matchFound && !voidString) {
+        return channel;
       }
     });
-    setSearchResult(stream);
-  }, [searchValue]);
+    setSearchResult(streams);
+  };
 
   const resetSearchMode = () => {
     showSearchInputAnimation(inputAnimatedRef, 0).start();
@@ -77,17 +84,35 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
     resetSearchMode();
   };
 
+  const renderPhoto = () => {
+    if (user?.photo) {
+      return <Image source={{uri: user?.photo}} style={styles.image} />;
+    } else {
+      return <FontAwesomeIcon icon={faUser} color={'white'} size={17} />;
+    }
+  };
+
+  const renderSearchButton = () => {
+    if (searchMode) {
+      return (
+        <TouchableOpacity style={styles.wrapperIcon} onPress={resetSearchMode}>
+          <FontAwesomeIcon icon={faCheckCircle} color={'#7adaa8'} size={37} />
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity style={styles.wrapperIcon} onPress={onPressSearch}>
+          <FontAwesomeIcon icon={faSearch} color={'white'} size={18} />
+        </TouchableOpacity>
+      );
+    }
+  };
+
   return (
     <View>
       <View style={styles.container}>
         <Animated.View style={[styles.wrapperSectionIcons, {opacity}]}>
-          <View style={styles.wrapperIcon}>
-            {user?.photo ? (
-              <Image source={{uri: user?.photo}} style={styles.image} />
-            ) : (
-              <FontAwesomeIcon icon={faUser} color={'white'} size={17} />
-            )}
-          </View>
+          <View style={styles.wrapperIcon}>{renderPhoto()}</View>
           <View style={styles.wrapperIcon}>
             <FontAwesomeIcon icon={faUserPlus} color={'white'} size={20} />
           </View>
@@ -99,23 +124,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
           <Animated.View style={[styles.wrapperIcon, {opacity}]}>
             <FontAwesomeIcon icon={faBell} color={'white'} size={18} />
           </Animated.View>
-          {searchMode ? (
-            <TouchableOpacity
-              style={styles.wrapperIcon}
-              onPress={resetSearchMode}>
-              <FontAwesomeIcon
-                icon={faCheckCircle}
-                color={'#7adaa8'}
-                size={37}
-              />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={styles.wrapperIcon}
-              onPress={onPressSearch}>
-              <FontAwesomeIcon icon={faSearch} color={'white'} size={18} />
-            </TouchableOpacity>
-          )}
+          {renderSearchButton()}
         </View>
         {searchMode && (
           <Animated.View
@@ -123,6 +132,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
             <TextInput
               style={styles.input}
               onChangeText={setSearchValue}
+              onChange={onChangeSearchValue}
               value={searchValue}
             />
           </Animated.View>
