@@ -1,10 +1,9 @@
 import React, {FC, useEffect, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {DateData} from 'react-native-calendars/src/types';
 import Animated, {
   useAnimatedScrollHandler,
-  useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
 
@@ -37,6 +36,11 @@ export const ScreenCalendar: FC = () => {
 
   const changeModalVisible = () => setModalVisible(!isModalVisible);
   const onPressDay = (day: DateData) => setChoseDay(day.dateString);
+  const translationY = useSharedValue(0);
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    translationY.value = event.contentOffset.y;
+  });
 
   useEffect(() => {
     database()
@@ -76,16 +80,11 @@ export const ScreenCalendar: FC = () => {
         });
       });
   }, []);
-  const translationY = useSharedValue(0);
-
-  const scrollHandler = useAnimatedScrollHandler((event) => {
-    translationY.value = event.contentOffset.y;
-  });
 
   return (
     <View style={styles.background}>
       <View style={styles.container}>
-        {/* <TouchableOpacity
+        <TouchableOpacity
           onPress={changeModalVisible}
           style={styles.addNewEvent}>
           <FontAwesomeIcon icon={faPlus} color={'white'} size={18} />
@@ -104,16 +103,13 @@ export const ScreenCalendar: FC = () => {
           day={chosenDay}
           changeModalVisible={changeModalVisible}
           isModalVisible={isModalVisible}
-        /> */}
+        />
         <Animated.ScrollView
           style={styles.flatList}
           scrollEventThrottle={46}
           onScroll={scrollHandler}
-          contentContainerStyle={{
-            flexGrow: 1,
-            alignItems: 'center',
-          }}>
-          {streams.map((item, index, array) => {
+          contentContainerStyle={styles.contentContainerStyle}>
+          {streams.map((item, index) => {
             return (
               <Stream
                 stream={item}
@@ -124,15 +120,6 @@ export const ScreenCalendar: FC = () => {
             );
           })}
         </Animated.ScrollView>
-        {/* <FlatList
-          data={streams}
-          style={styles.flatList}
-          renderItem={({item}) => <Stream stream={item} />}
-          keyExtractor={(item) => 'Stream' + item.id}
-          onScroll={scrollHandler}
-          contentContainerStyle={styles.flatListContent}
-          ListEmptyComponent={<Text>No scheduled streams</Text>} */}
-        {/* /> */}
       </View>
     </View>
   );

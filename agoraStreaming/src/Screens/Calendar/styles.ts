@@ -8,6 +8,7 @@ type CalendarStylesType = {
   flatList: ViewStyle;
   flatListContent: ViewStyle;
   addNewEvent: ViewStyle;
+  contentContainerStyle: ViewStyle;
 };
 
 export const styles = StyleSheet.create<CalendarStylesType>({
@@ -39,5 +40,9 @@ export const styles = StyleSheet.create<CalendarStylesType>({
     width: SIZE_BUTTON,
     height: SIZE_BUTTON,
     borderRadius: 8,
+  },
+  contentContainerStyle: {
+    flexGrow: 1,
+    alignItems: 'center',
   },
 });
