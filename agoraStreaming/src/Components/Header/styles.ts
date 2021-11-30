@@ -62,11 +62,12 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
       left: 10,
     },
     input: {
-      paddingLeft: 10,
+      paddingLeft: 15,
       height: SIZE_BLOCKS_ITEM,
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       backgroundColor: 'rgba(52, 52, 52, 1)',
       color: '#fff',
+      alignItems: 'center',
     },
   });
 };

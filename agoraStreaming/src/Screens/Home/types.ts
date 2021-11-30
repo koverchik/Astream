@@ -21,10 +21,3 @@ export type ListChannelsType = {
   channelId: string;
   isVideo: RootStackParamList['Live']['isVideo'];
 };
-
-export type CoordinatesType = {
-  latitude: number;
-  longitude: number;
-  latitudeDelta: number;
-  longitudeDelta: number;
-};
