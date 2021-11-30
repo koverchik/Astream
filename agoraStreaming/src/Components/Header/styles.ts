@@ -13,9 +13,12 @@ type HeaderStyleType = {
   wrapperSectionIcons: ViewStyle;
   wrapperIcon: ViewStyle;
   image: ImageStyle;
+  input: ViewStyle;
+  inputContainer: ViewStyle;
 };
 
-const SIZE_BLOCKS_ITEM = 35;
+export const SIZE_BLOCKS_ITEM = 35;
+export const MARGIN = 5;
 
 export const HeaderStyles = (width: ScaledSize['width']) => {
   return StyleSheet.create<HeaderStyleType>({
@@ -38,14 +41,14 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
     },
     wrapperSectionIcons: {
       flexDirection: 'row',
-      margin: 5,
+      margin: MARGIN,
     },
     wrapperIcon: {
       backgroundColor: 'rgba(52, 52, 52, 0.8)',
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       height: SIZE_BLOCKS_ITEM,
       width: SIZE_BLOCKS_ITEM,
-      margin: 5,
+      margin: MARGIN,
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -53,6 +56,17 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       height: SIZE_BLOCKS_ITEM,
       width: SIZE_BLOCKS_ITEM,
+    },
+    inputContainer: {
+      position: 'absolute',
+      left: 10,
+    },
+    input: {
+      paddingLeft: 10,
+      height: SIZE_BLOCKS_ITEM,
+      borderRadius: SIZE_BLOCKS_ITEM / 2,
+      backgroundColor: 'rgba(52, 52, 52, 1)',
+      color: '#fff',
     },
   });
 };
