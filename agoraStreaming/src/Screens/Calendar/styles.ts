@@ -1,6 +1,6 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
-import {SIZE_BUTTON} from '../../Components/ModalCreateStream/style';
+import {SIZE_BUTTON} from '../../Components/ModalCreateEvent/style';
 import {CORNERS_RADIUS} from '../Home/style';
 
 type CalendarStylesType = {

@@ -7,8 +7,8 @@ import notifee from '@notifee/react-native';
 
 import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
 import {DateInfoType} from '../../Components/HorizontalCalendar/types';
-import {ModalCreatEvent} from '../../Components/ModalCreateStream';
-import {EventInDatabases} from '../../Components/ModalCreateStream/types';
+import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
+import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
 import {Stream} from '../../Components/Stream';
 import {arrayListData} from './helpers/arrayListData';
 import {

@@ -4,7 +4,7 @@ import notifee, {
   TriggerType,
 } from '@notifee/react-native';
 
-import {EventInDatabases} from '../../../Components/ModalCreateStream/types';
+import {EventInDatabases} from '../../../Components/ModalCreateEvent/types';
 import {addZeroForMinutes} from './addZero';
 
 // Time notification in milliseconds (15 minutes)
