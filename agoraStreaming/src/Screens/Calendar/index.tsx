@@ -2,6 +2,11 @@ import React, {FC, useEffect, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {DateData} from 'react-native-calendars/src/types';
+import Animated, {
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 import database from '@react-native-firebase/database';
 
@@ -71,11 +76,16 @@ export const ScreenCalendar: FC = () => {
         });
       });
   }, []);
+  const translationY = useSharedValue(0);
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    translationY.value = event.contentOffset.y;
+  });
 
   return (
     <View style={styles.background}>
       <View style={styles.container}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={changeModalVisible}
           style={styles.addNewEvent}>
           <FontAwesomeIcon icon={faPlus} color={'white'} size={18} />
@@ -94,15 +104,35 @@ export const ScreenCalendar: FC = () => {
           day={chosenDay}
           changeModalVisible={changeModalVisible}
           isModalVisible={isModalVisible}
-        />
-        <FlatList
+        /> */}
+        <Animated.ScrollView
+          style={styles.flatList}
+          scrollEventThrottle={46}
+          onScroll={scrollHandler}
+          contentContainerStyle={{
+            flexGrow: 1,
+            alignItems: 'center',
+          }}>
+          {streams.map((item, index, array) => {
+            return (
+              <Stream
+                stream={item}
+                key={item.id}
+                translationY={translationY}
+                index={index}
+              />
+            );
+          })}
+        </Animated.ScrollView>
+        {/* <FlatList
           data={streams}
           style={styles.flatList}
           renderItem={({item}) => <Stream stream={item} />}
           keyExtractor={(item) => 'Stream' + item.id}
+          onScroll={scrollHandler}
           contentContainerStyle={styles.flatListContent}
-          ListEmptyComponent={<Text>No scheduled streams</Text>}
-        />
+          ListEmptyComponent={<Text>No scheduled streams</Text>} */}
+        {/* /> */}
       </View>
     </View>
   );

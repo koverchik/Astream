@@ -1,5 +1,12 @@
-import React, {FC} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import React, {FC, useEffect} from 'react';
+import {Dimensions, Text, TouchableOpacity, View} from 'react-native';
+import Animated, {
+  interpolate,
+  measure,
+  useAnimatedRef,
+  useAnimatedStyle,
+  useDerivedValue,
+} from 'react-native-reanimated';
 
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {DefaultAvatar} from '../../Icons/DefaultAvatar';
@@ -8,11 +15,35 @@ import {getStreamTypeIcon} from './helpers/getStreamTypeIcon';
 import {styles} from './styles';
 import {StreamPropsType} from './types';
 
+const SIZE_ITEM = 95;
+
 export const Stream: FC<StreamPropsType> = (props) => {
-  const {time, type, name} = props.stream;
+  const {time, type, name, id} = props.stream;
+  const {translationY, index} = props;
+
+  const inputRange = [
+    (-index - 1) * SIZE_ITEM,
+    index * SIZE_ITEM,
+    (index + 1) * SIZE_ITEM,
+  ];
+  const aRef = useAnimatedRef();
+
+  const reanimatedStyle = useAnimatedStyle(() => {
+    const scale = interpolate(translationY.value, inputRange, [1, 1, 0.7]);
+    const opacity = interpolate(translationY.value, inputRange, [1, 1, 0.5]);
+    return {
+      opacity: opacity,
+      transform: [
+        {
+          scale,
+        },
+      ],
+    };
+  });
+
   const dataTime = new Date(time);
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, reanimatedStyle]} key={id}>
       <View style={styles.avatarBox}>
         <View style={styles.avatar}>
           <DefaultAvatar size={'70%'} />
@@ -31,6 +62,6 @@ export const Stream: FC<StreamPropsType> = (props) => {
           <Text style={styles.buttonText}>Add to Call</Text>
         </View>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };

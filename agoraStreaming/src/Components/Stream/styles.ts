@@ -1,6 +1,6 @@
 import {Dimensions, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const AVATAR_SIZE = 50;
 const STREAM_TYPE_SIZE = 20;
