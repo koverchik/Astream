@@ -1,7 +1,6 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   Animated,
-  FlatList,
   Image,
   Text,
   TextInput,
@@ -15,7 +14,7 @@ import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
 import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {ListChannelsType} from '../../Screens/Home/types';
-import {FoundStreamItem} from '../FoundStreamList/FoundStreamItem/FoundStreamItem';
+import {FoundStreamList} from '../FoundStreamList/FoundStreamList';
 import {opacityForHeaderAnimation} from './Animations/opacityForHeader';
 import {showSearchInputAnimation} from './Animations/showSearchInput';
 import {HeaderStyles, MARGIN, SIZE_BLOCKS_ITEM} from './styles';
@@ -130,25 +129,9 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
         )}
       </View>
       {!!searchValue && (
-        <FlatList
-          style={{
-            backgroundColor: 'rgba(52, 52, 52, 1)',
-            marginHorizontal: 10,
-            borderRadius: 35 / 2,
-            padding: 10,
-            width: width - SIZE_BLOCKS_ITEM * 2 + MARGIN,
-          }}
-          data={searchResult}
-          renderItem={({item}) => {
-            return (
-              <FoundStreamItem onPressResult={onPressResult} stream={item} />
-            );
-          }}
-          ListEmptyComponent={
-            <Text style={{color: '#fff', textAlign: 'center'}}>
-              Streams is not found!
-            </Text>
-          }
+        <FoundStreamList
+          searchResult={searchResult}
+          onPressResult={onPressResult}
         />
       )}
     </View>
