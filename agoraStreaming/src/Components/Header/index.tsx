@@ -15,6 +15,7 @@ import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
 import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {ListChannelsType} from '../../Screens/Home/types';
+import {FoundStreamItem} from '../FoundStreamList/FoundStreamItem/FoundStreamItem';
 import {opacityForHeaderAnimation} from './Animations/opacityForHeader';
 import {showSearchInputAnimation} from './Animations/showSearchInput';
 import {HeaderStyles, MARGIN, SIZE_BLOCKS_ITEM} from './styles';
@@ -138,20 +139,11 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
             width: width - SIZE_BLOCKS_ITEM * 2 + MARGIN,
           }}
           data={searchResult}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              style={{
-                height: 40,
-                backgroundColor: '#282727',
-                marginBottom: 5,
-                justifyContent: 'center',
-                paddingHorizontal: 15,
-                borderRadius: 15,
-              }}
-              onPress={() => onPressResult(item)}>
-              <Text style={{color: '#fff'}}>{item.name}</Text>
-            </TouchableOpacity>
-          )}
+          renderItem={({item}) => {
+            return (
+              <FoundStreamItem onPressResult={onPressResult} stream={item} />
+            );
+          }}
           ListEmptyComponent={
             <Text style={{color: '#fff', textAlign: 'center'}}>
               Streams is not found!
