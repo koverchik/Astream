@@ -7,7 +7,6 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 
-
 import database from '@react-native-firebase/database';
 
 import notifee from '@notifee/react-native';
@@ -31,7 +30,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 export const ScreenCalendar: FC = () => {
   const dataSystem = new Date();
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
-  const [streams, setStreams] = useState<StreamType[]>([]);
+  const [streams, setStreams] = useState<StreamType[] | null>(null);
   const [chosenDay, setChoseDay] = useState(
     `${dataSystem.getFullYear()}-${
       dataSystem.getMonth() + 1
@@ -50,7 +49,6 @@ export const ScreenCalendar: FC = () => {
   const selectDay = (date: DateInfoType) => {
     setChoseDay(`${date.year}-${date.month}-${date.day}`);
   };
-
 
   useEffect(() => {
     database()
@@ -107,7 +105,7 @@ export const ScreenCalendar: FC = () => {
           scrollEventThrottle={46}
           onScroll={scrollHandler}
           contentContainerStyle={styles.contentContainerStyle}>
-          {streams.length ? (
+          {streams?.length ? (
             streams.map((item, index) => {
               return (
                 <Stream

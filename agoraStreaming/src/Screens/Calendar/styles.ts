@@ -45,6 +45,7 @@ export const styles = StyleSheet.create<CalendarStylesType>({
   contentContainerStyle: {
     flexGrow: 1,
     alignItems: 'center',
+  },
   flatListContentCenter: {
     flex: 1,
     justifyContent: 'center',
