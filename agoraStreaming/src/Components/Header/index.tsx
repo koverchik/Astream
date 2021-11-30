@@ -15,6 +15,8 @@ import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
 import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {ListChannelsType} from '../../Screens/Home/types';
+import {opacityForHeaderAnimation} from './Animations/opacityForHeader';
+import {showSearchInputAnimation} from './Animations/showSearchInput';
 import {HeaderStyles, MARGIN, SIZE_BLOCKS_ITEM} from './styles';
 import {CustomHeaderPropsType} from './types';
 import {
@@ -31,6 +33,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
 
   const {width} = useWindowDimensions();
   const styles = HeaderStyles(width);
+  const inputWidth = width - SIZE_BLOCKS_ITEM * 2 + MARGIN;
 
   const user = useAppSelector(selectUser);
   const channelsList = useAppSelector(selectChannelsList);
@@ -46,16 +49,8 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
 
   const onPressSearch = () => {
     setSearchMode(true);
-    Animated.timing(inputAnimatedRef, {
-      toValue: width - SIZE_BLOCKS_ITEM * 2 + MARGIN,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(opacity, {
-      toValue: 0,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
+    showSearchInputAnimation(inputAnimatedRef, inputWidth).start();
+    opacityForHeaderAnimation(opacity, 0).start();
   };
 
   useEffect(() => {
@@ -67,26 +62,19 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
     setSearchResult(stream);
   }, [searchValue]);
 
-  const onPressCheck = () => {
-    Animated.timing(inputAnimatedRef, {
-      toValue: 0,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(opacity, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
+  const resetSearchMode = () => {
+    showSearchInputAnimation(inputAnimatedRef, 0).start();
+    opacityForHeaderAnimation(opacity, 1).start();
     setTimeout(() => {
       setSearchMode(false);
     }, 1720);
+    setSearchValue('');
+    setSearchResult([]);
   };
 
   const onPressResult = (stream: ListChannelsType) => {
     dispatch(setCoordinatesAction(stream.coords));
-    onPressCheck();
-    setSearchValue('');
+    resetSearchMode();
   };
 
   return (
@@ -112,7 +100,9 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
             <FontAwesomeIcon icon={faBell} color={'white'} size={18} />
           </Animated.View>
           {searchMode ? (
-            <TouchableOpacity style={styles.wrapperIcon} onPress={onPressCheck}>
+            <TouchableOpacity
+              style={styles.wrapperIcon}
+              onPress={resetSearchMode}>
               <FontAwesomeIcon
                 icon={faCheckCircle}
                 color={'#7adaa8'}
