@@ -1,4 +1,10 @@
-import {ScaledSize, StyleSheet, TextStyle, ViewStyle} from 'react-native';
+import {
+  ImageStyle,
+  ScaledSize,
+  StyleSheet,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
 
 type HeaderStyleType = {
   container: ViewStyle;
@@ -6,6 +12,7 @@ type HeaderStyleType = {
   titleContainer: ViewStyle;
   wrapperSectionIcons: ViewStyle;
   wrapperIcon: ViewStyle;
+  image: ImageStyle;
 };
 
 const SIZE_BLOCKS_ITEM = 35;
@@ -41,6 +48,11 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
       margin: 5,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    image: {
+      borderRadius: SIZE_BLOCKS_ITEM / 2,
+      height: SIZE_BLOCKS_ITEM,
+      width: SIZE_BLOCKS_ITEM,
     },
   });
 };

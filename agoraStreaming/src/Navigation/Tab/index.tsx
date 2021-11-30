@@ -54,6 +54,7 @@ export const BottomTabs = () => {
     tabBarActiveTintColor: '#38a1e3',
     tabBarInactiveTintColor: '#fff',
     tabBarStyle: !joinedStream ? styles.tabBar : styles.hiddenTabBar,
+    headerShown: !joinedStream,
   });
 
   const webClientId =

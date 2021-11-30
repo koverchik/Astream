@@ -1,6 +1,8 @@
 import React, {FC} from 'react';
-import {Text, View, useWindowDimensions} from 'react-native';
+import {Image, Text, View, useWindowDimensions} from 'react-native';
 
+import {useAppSelector} from '../../Redux/hooks';
+import {selectUser} from '../../Redux/selectors/AuthSelectors';
 import {HeaderStyles} from './styles';
 import {CustomHeaderPropsType} from './types';
 import {
@@ -17,11 +19,17 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   const {width} = useWindowDimensions();
   const styles = HeaderStyles(width);
 
+  const user = useAppSelector(selectUser);
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapperSectionIcons}>
         <View style={styles.wrapperIcon}>
-          <FontAwesomeIcon icon={faUser} color={'white'} size={17} />
+          {user?.photo ? (
+            <Image source={{uri: user?.photo}} style={styles.image} />
+          ) : (
+            <FontAwesomeIcon icon={faUser} color={'white'} size={17} />
+          )}
         </View>
         <View style={styles.wrapperIcon}>
           <FontAwesomeIcon icon={faUserPlus} color={'white'} size={20} />
