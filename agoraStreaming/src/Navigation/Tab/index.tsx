@@ -8,9 +8,7 @@ import {NavigationContainer} from '@react-navigation/native';
 
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
-import {DiscoverSvg} from '../../Icons/DiscoverSvg';
 import {HomeSvg} from '../../Icons/HomeSvg';
-import {PlusSvg} from '../../Icons/PlusSvg';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
 import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
@@ -19,6 +17,7 @@ import {getUserData} from '../../Screens/Auth/helpers/googleSignIn';
 import {ScreenCalendar} from '../../Screens/Calendar';
 import {ProfileScreen} from '../../Screens/Profile';
 import {MainStack} from '../Stack';
+import {renderHeader} from './Helpers/header';
 import {styles} from './styles';
 import {ScreenOptionsType, TabNavigation, TabParamList} from './types';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
@@ -26,25 +25,29 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 const Tab = createBottomTabNavigator<TabParamList>();
 
 export const BottomTabs = () => {
+  const joinedStream = useAppSelector(getIsJoined);
+  const userData = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
+
   const options: BottomTabNavigationOptions = {
-    headerShown: false,
+    header: renderHeader,
+    headerTransparent: true,
     tabBarShowLabel: false,
   };
-
-  const joinedStream = useAppSelector(getIsJoined);
 
   const screenOptions: ScreenOptionsType = ({route}) => ({
     tabBarIcon: ({color, size}) => {
       switch (route.name) {
         case TabNavigation.Main:
           return <HomeSvg color={color} size={size} />;
-        case TabNavigation.Discover:
-          return <DiscoverSvg color={color} size={size} />;
-        case TabNavigation.Plus:
-          return <PlusSvg color={color} size={size} />;
+        // TODO: hide icons for demo
+        // case TabNavigation.Discover:
+        //   return <DiscoverSvg color={color} size={size} />;
+        // case TabNavigation.Plus:
+        //   return <PlusSvg color={color} size={size} />;
         case TabNavigation.Calendar:
           return <CalendarSvg color={color} size={size} />;
-        case TabNavigation.Circle:
+        case TabNavigation.Profile:
           return <CircleSvg color={color} size={size} />;
       }
     },
@@ -52,9 +55,6 @@ export const BottomTabs = () => {
     tabBarInactiveTintColor: '#fff',
     tabBarStyle: !joinedStream ? styles.tabBar : styles.hiddenTabBar,
   });
-
-  const dispatch = useAppDispatch();
-  const userData = useAppSelector(selectUser);
 
   const webClientId =
     '1088468777432-7titji4f8tsu0oorpqfibu469sl8jvnj.apps.googleusercontent.com';
@@ -93,7 +93,7 @@ export const BottomTabs = () => {
           options={options}
         />
         <Tab.Screen
-          name={TabNavigation.Circle}
+          name={TabNavigation.Profile}
           component={ProfileScreen}
           options={options}
         />

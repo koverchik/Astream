@@ -5,7 +5,6 @@ import database from '@react-native-firebase/database';
 
 import notifee from '@notifee/react-native';
 
-import {CustomHeader} from '../../Components/Header';
 import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
 import {DateInfoType} from '../../Components/HorizontalCalendar/types';
 import {ModalCreatEvent} from '../../Components/ModalCreateStream';
@@ -74,13 +73,17 @@ export const ScreenCalendar: FC = () => {
   return (
     <View style={styles.background}>
       <View style={styles.container}>
-        <CustomHeader title={'Calendar'} />
         <TouchableOpacity
           onPress={changeModalVisible}
           style={styles.addNewEvent}>
           <FontAwesomeIcon icon={faPlus} color={'white'} size={18} />
         </TouchableOpacity>
-        <HorizontalCalendar onDayPress={selectDay} activeDayColor={'#007eff'} />
+        <View style={{marginTop: 50}}>
+          <HorizontalCalendar
+            onDayPress={selectDay}
+            activeDayColor={'#007eff'}
+          />
+        </View>
         <ModalCreatEvent
           day={chosenDay}
           changeModalVisible={changeModalVisible}

@@ -23,15 +23,12 @@ export type RootStackParamList = {
 export enum HomeStackScreens {
   Home = 'Home',
   Live = 'Live',
-  Profile = 'Profile',
 }
 
 export enum TabNavigation {
   Main = 'Main',
-  Discover = 'Discover',
-  Plus = 'Plus',
   Calendar = 'Calendar',
-  Circle = 'Circle',
+  Profile = 'Profile',
 }
 
 export type ScreenOptionsType = (props: {
@@ -41,8 +38,6 @@ export type ScreenOptionsType = (props: {
 
 export type TabParamList = {
   Main: undefined;
-  Discover: undefined;
-  Plus: undefined;
   Calendar: undefined;
-  Circle: undefined;
+  Profile: undefined;
 };

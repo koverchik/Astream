@@ -16,13 +16,8 @@ import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
 
-import {CustomHeader} from '../../Components/Header';
 import {ModalCreatEvent} from '../../Components/ModalCreateStream';
-import {
-  HomeStackScreens,
-  LiveType,
-  RootStackParamList,
-} from '../../Navigation/Tab/types';
+import {LiveType, RootStackParamList} from '../../Navigation/Tab/types';
 import {setJoinedAction} from '../../Redux/actions/LiveActions';
 import {useAppDispatch} from '../../Redux/hooks';
 import {styles} from './style';
@@ -135,9 +130,6 @@ export const Home: FC<HomeScreenProps> = () => {
   return (
     <View style={styles.background}>
       <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <CustomHeader title={HomeStackScreens.Home} />
-        </View>
         <MapView
           initialRegion={coordinates}
           provider={PROVIDER_GOOGLE}
