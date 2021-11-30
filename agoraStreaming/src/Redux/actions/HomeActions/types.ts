@@ -1,4 +1,6 @@
-import {CoordinatesType, ListChannelsType} from '../../../Screens/Home/types';
+import {Region} from 'react-native-maps';
+
+import {ListChannelsType} from '../../../Screens/Home/types';
 
 export type HomeActionsType =
   | ReturnType<SetCoordinatesActionType>
@@ -9,9 +11,9 @@ export enum HomeActions {
   SET_CHANNELS_LIST = 'SET_CHANNELS_LIST',
 }
 
-export type SetCoordinatesActionType = (payload: CoordinatesType) => {
+export type SetCoordinatesActionType = (payload: Region) => {
   type: HomeActions.SET_COORDINATES;
-  payload: CoordinatesType;
+  payload: Region;
 };
 
 export type SetChannelsListActionType = (payload: ListChannelsType[]) => {
