@@ -12,7 +12,7 @@ import {StreamPropsType} from './types';
 const START_ANIMATION = 95;
 
 export const Stream: FC<StreamPropsType> = (props) => {
-  const {time, type, name, id} = props.stream;
+  const {time, type, name} = props.stream;
   const {translationY, index} = props;
 
   const inputRange = [
@@ -36,7 +36,7 @@ export const Stream: FC<StreamPropsType> = (props) => {
 
   const dataTime = new Date(time);
   return (
-    <Animated.View style={[styles.container, reanimatedStyle]} key={id}>
+    <Animated.View style={[styles.container, reanimatedStyle]}>
       <View style={styles.avatarBox}>
         <View style={styles.avatar}>
           <DefaultAvatar size={'70%'} />

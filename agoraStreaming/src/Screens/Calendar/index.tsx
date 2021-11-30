@@ -30,7 +30,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 export const ScreenCalendar: FC = () => {
   const dataSystem = new Date();
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
-  const [streams, setStreams] = useState<StreamType[] | null>(null);
+  const [streams, setStreams] = useState<StreamType[]>([]);
   const [chosenDay, setChoseDay] = useState(
     `${dataSystem.getFullYear()}-${
       dataSystem.getMonth() + 1
@@ -105,7 +105,7 @@ export const ScreenCalendar: FC = () => {
           scrollEventThrottle={46}
           onScroll={scrollHandler}
           contentContainerStyle={styles.contentContainerStyle}>
-          {streams?.length ? (
+          {streams.length ? (
             streams.map((item, index) => {
               return (
                 <Stream
