@@ -22,26 +22,28 @@ export const ProfileScreen: FC<ProfileScreenProps> = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapperProfile}>
-        <View style={styles.profile}>
-          <View style={styles.imageUser}>
-            {!user?.photo ? (
-              <DefaultAvatar size={'100%'} />
-            ) : (
-              <Image source={{uri: user?.photo}} style={styles.imageUser} />
-            )}
-          </View>
-          <View>
-            <Text>{user?.givenName}</Text>
-            <Text>{user?.familyName}</Text>
-            <Text>{user?.email}</Text>
+    <View style={styles.background}>
+      <View style={styles.container}>
+        <View style={styles.wrapperProfile}>
+          <View style={styles.profile}>
+            <View style={styles.imageUser}>
+              {!user?.photo ? (
+                <DefaultAvatar size={'100%'} />
+              ) : (
+                <Image source={{uri: user?.photo}} style={styles.imageUser} />
+              )}
+            </View>
+            <View>
+              <Text>{user?.givenName}</Text>
+              <Text>{user?.familyName}</Text>
+              <Text>{user?.email}</Text>
+            </View>
           </View>
         </View>
+        <TouchableOpacity style={styles.button} onPress={logoutHandler}>
+          <Text>Log Out</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.button} onPress={logoutHandler}>
-        <Text>Log Out</Text>
-      </TouchableOpacity>
     </View>
   );
 };
