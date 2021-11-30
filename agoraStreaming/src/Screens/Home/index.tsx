@@ -16,8 +16,15 @@ import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
 
+import {CustomHeader} from '../../Components/Header';
 import {ModalCreatEvent} from '../../Components/ModalCreateStream';
-import {LiveType, RootStackParamList} from '../../Navigation/Tab/types';
+import {
+  HomeStackScreens,
+  LiveType,
+  RootStackParamList,
+} from '../../Navigation/Tab/types';
+import {setJoinedAction} from '../../Redux/actions/LiveActions';
+import {useAppDispatch} from '../../Redux/hooks';
 import {styles} from './style';
 import {
   HomeScreenProps,
@@ -34,6 +41,7 @@ const INITIAL_COORDS = {
 
 export const Home: FC<HomeScreenProps> = () => {
   const navigation = useNavigation<StackNavigationPropHome>();
+  const dispatch = useAppDispatch();
 
   const [coordinates, setCoordinates] = useState(INITIAL_COORDS);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -88,6 +96,7 @@ export const Home: FC<HomeScreenProps> = () => {
       channelId,
       isVideo,
     });
+    dispatch(setJoinedAction(true));
   };
 
   const allMarkers = listChannels.map((data) => {
@@ -126,6 +135,9 @@ export const Home: FC<HomeScreenProps> = () => {
   return (
     <View style={styles.background}>
       <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <CustomHeader title={HomeStackScreens.Home} />
+        </View>
         <MapView
           initialRegion={coordinates}
           provider={PROVIDER_GOOGLE}

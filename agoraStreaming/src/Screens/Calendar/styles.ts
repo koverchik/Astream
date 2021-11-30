@@ -7,6 +7,7 @@ type CalendarStylesType = {
   background: ViewStyle;
   flatList: ViewStyle;
   flatListContent: ViewStyle;
+  flatListContentCenter: ViewStyle;
   addNewEvent: ViewStyle;
   contentContainerStyle: ViewStyle;
 };
@@ -32,7 +33,7 @@ export const styles = StyleSheet.create<CalendarStylesType>({
   },
   addNewEvent: {
     position: 'absolute',
-    top: 10,
+    top: 69,
     left: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -44,5 +45,8 @@ export const styles = StyleSheet.create<CalendarStylesType>({
   contentContainerStyle: {
     flexGrow: 1,
     alignItems: 'center',
+  flatListContentCenter: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });

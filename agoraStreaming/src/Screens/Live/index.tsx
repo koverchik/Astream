@@ -12,6 +12,9 @@ import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader/Preloader';
 import {RemoteUsers} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
+import {setJoinedAction} from '../../Redux/actions/LiveActions';
+import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
+import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
 import {cameraStyle} from './helpers/CameraStyle';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
@@ -35,7 +38,8 @@ import {v4 as uuid} from 'uuid';
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords, isVideo} = props.route.params;
 
-  const [joined, setJoined] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const joined = useAppSelector(getIsJoined);
   const [error, setError] = useState<boolean>(false);
   const [peerIds, setPeerIds] = useState<UserType[]>([]);
   const [myUserData, setMyUserData] = useState<LocalUserType>({
@@ -64,7 +68,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   animationCircle(sizeUserPoint, wavesAroundUserPoint).start();
 
   const userJoined = () => {
-    setJoined(true);
+    dispatch(setJoinedAction(true));
   };
 
   const callbackFunctionUserOffline = (uid: number) => {
@@ -160,6 +164,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const userLeaveChannel = async () => {
     const keyChannel = await findKeyDataInDatabase(channelId);
+    dispatch(setJoinedAction(false));
     if (keyChannel) {
       await deleteChannel(keyChannel);
     }
