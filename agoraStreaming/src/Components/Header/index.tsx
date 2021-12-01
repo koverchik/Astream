@@ -1,10 +1,8 @@
 import React, {FC, useState} from 'react';
 import {
   Image,
-  NativeSyntheticEvent,
   Text,
   TextInput,
-  TextInputChangeEventData,
   TouchableOpacity,
   View,
   useWindowDimensions,
@@ -13,10 +11,8 @@ import {
 import {useNavigation} from '@react-navigation/native';
 
 import {TabNavigation} from '../../Navigation/Tab/types';
-import {setCoordinatesAction} from '../../Redux/actions/HomeActions';
-import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
+import {useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
-import {ListChannelsType} from '../../Screens/Home/types';
 import {TabNavigationPropsProfileType} from '../../Screens/Profile/types';
 import {SearchResultList} from '../SearchResultList/SearchResultList';
 import {HeaderStyles} from './styles';
@@ -32,13 +28,13 @@ import {
 } from '@fortawesome/react-native-fontawesome';
 
 export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
-  const {title, placeholderText, listForSearching} = props;
+  const {title, placeholderText, filter, onPressResult, searchResult, screen} =
+    props;
 
   const {width} = useWindowDimensions();
   const styles = HeaderStyles(width);
 
   const user = useAppSelector(selectUser);
-  const dispatch = useAppDispatch();
   const navigation = useNavigation<TabNavigationPropsProfileType>();
 
   // TODO: Animation is not used right now
@@ -52,37 +48,15 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   const [searchMode, setSearchMode] = useState<boolean>(false);
 
   const [searchValue, setSearchValue] = useState<string>('');
-  const [searchResult, setSearchResult] = useState<
-    CustomHeaderPropsType['listForSearching']
-  >([]);
-  const onChangeSearchValue = (
-    event: NativeSyntheticEvent<TextInputChangeEventData>,
-  ) => {
-    const result = listForSearching.filter((item) => {
-      const matchFound = item.name.includes(event.nativeEvent.text);
-      const voidString = event.nativeEvent.text === '';
-
-      if (matchFound && !voidString) {
-        return item;
-      }
-    });
-    setSearchResult(result ?? []);
-  };
 
   const activeSearchMode = () => {
     setSearchMode((searchMode) => {
       if (searchMode) {
         setSearchValue('');
-        setSearchResult([]);
       }
 
       return !searchMode;
     });
-  };
-
-  const onPressResult = (stream: ListChannelsType) => {
-    dispatch(setCoordinatesAction(stream.coords));
-    activeSearchMode();
   };
 
   const onPressAvatar = () => {
@@ -118,7 +92,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
             <TextInput
               style={styles.input}
               onChangeText={setSearchValue}
-              onChange={onChangeSearchValue}
+              onChange={filter}
               value={searchValue}
               placeholder={placeholderText}
               placeholderTextColor={'#fff'}
@@ -141,7 +115,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-      {!!searchValue && (
+      {!!searchValue && screen === TabNavigation.Main && (
         <SearchResultList
           searchResult={searchResult}
           onPressResult={onPressResult}
