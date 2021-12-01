@@ -10,7 +10,13 @@ import {
 import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
 import MapView from 'react-native-map-clustering';
-import {Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {
+  Callout,
+  MapViewProps,
+  Marker,
+  PROVIDER_GOOGLE,
+  Region,
+} from 'react-native-maps';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -53,6 +59,7 @@ export const Home: FC<HomeScreenProps> = () => {
   const dispatch = useAppDispatch();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [currentRegion, setCurrentRegion] = useState<Region>(coordinates);
 
   const changeModalVisible = () => setModalVisible(!modalVisible);
 
@@ -103,9 +110,14 @@ export const Home: FC<HomeScreenProps> = () => {
     dispatch(setJoinedAction(true));
   };
 
+  const onChangeRegion: MapViewProps['onRegionChangeComplete'] = (region) => {
+    setCurrentRegion(region);
+  };
+
   const allMarkers = channelsList.map((data) => {
     const {name, channelId, coords, isVideo} = data;
     const {latitude, longitude} = coords;
+
     return (
       <Marker
         key={channelId}
@@ -140,7 +152,8 @@ export const Home: FC<HomeScreenProps> = () => {
     <View style={styles.background}>
       <View style={styles.container}>
         <MapView
-          region={coordinates}
+          onRegionChangeComplete={onChangeRegion}
+          region={currentRegion}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
           clusterColor={'#a5c5ec'}
