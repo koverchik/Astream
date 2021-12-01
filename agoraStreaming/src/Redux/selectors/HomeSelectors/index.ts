@@ -1,7 +1,9 @@
-import {CoordinatesType, ListChannelsType} from '../../../Screens/Home/types';
+import {Region} from 'react-native-maps';
+
+import {ListChannelsType} from '../../../Screens/Home/types';
 import {RootState} from '../../store';
 
-export const selectCoordinates = (state: RootState): CoordinatesType => {
+export const selectCoordinates = (state: RootState): Region => {
   return state.home.coordinates;
 };
 
