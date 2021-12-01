@@ -17,7 +17,6 @@ import {getUserData} from '../../Screens/Auth/helpers/googleSignIn';
 import {ScreenCalendar} from '../../Screens/Calendar';
 import {ProfileScreen} from '../../Screens/Profile';
 import {MainStack} from '../Stack';
-import {renderHeader} from './Helpers/header';
 import {styles} from './styles';
 import {ScreenOptionsType, TabNavigation, TabParamList} from './types';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
@@ -30,7 +29,6 @@ export const BottomTabs = () => {
   const dispatch = useAppDispatch();
 
   const options: BottomTabNavigationOptions = {
-    header: renderHeader,
     headerTransparent: true,
     tabBarShowLabel: false,
   };

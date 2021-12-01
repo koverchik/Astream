@@ -1,28 +1,5 @@
-import {Region} from 'react-native-maps';
-
 import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
 import {RouteProp} from '@react-navigation/native';
-
-export enum LiveType {
-  CREATE = 'create',
-  JOIN = 'join',
-}
-
-export type RootStackParamList = {
-  Home: undefined;
-  Live: {
-    type: LiveType;
-    channelId: string;
-    isVideo: boolean;
-    name?: string;
-    coords?: Region;
-  };
-};
-
-export enum HomeStackScreens {
-  Home = 'Home',
-  Live = 'Live',
-}
 
 export enum TabNavigation {
   Main = 'Main',
@@ -42,3 +19,8 @@ export type TabParamList = {
   Calendar: undefined;
   Profile: undefined;
 };
+
+export enum HeaderInputPlaceholders {
+  MAIN = 'Enter stream name ...',
+  CALENDAR = 'Enter event name ...',
+}

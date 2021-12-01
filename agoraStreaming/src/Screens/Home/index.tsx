@@ -17,8 +17,6 @@ import {
   PROVIDER_GOOGLE,
 } from 'react-native-maps';
 
-import {useNavigation} from '@react-navigation/native';
-
 import database from '@react-native-firebase/database';
 
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
@@ -26,7 +24,7 @@ import {
   HomeStackScreens,
   LiveType,
   RootStackParamList,
-} from '../../Navigation/Tab/types';
+} from '../../Navigation/Stack/types';
 import {
   setChannelsListAction,
   setCoordinatesAction,
@@ -38,11 +36,7 @@ import {
   selectCoordinates,
 } from '../../Redux/selectors/HomeSelectors';
 import {styles} from './style';
-import {
-  HomeScreenProps,
-  ListChannelsType,
-  StackNavigationPropHome,
-} from './types';
+import {HomeScreenProps, ListChannelsType} from './types';
 
 const INITIAL_COORDS = {
   latitude: 53.5078788,
@@ -51,8 +45,7 @@ const INITIAL_COORDS = {
   longitudeDelta: 0.009,
 };
 
-export const Home: FC<HomeScreenProps> = () => {
-  const navigation = useNavigation<StackNavigationPropHome>();
+export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const coordinates = useAppSelector(selectCoordinates);
   const channelsList = useAppSelector(selectChannelsList);
   const dispatch = useAppDispatch();

@@ -16,7 +16,6 @@ import {TabNavigation} from '../../Navigation/Tab/types';
 import {setCoordinatesAction} from '../../Redux/actions/HomeActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
-import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {ListChannelsType} from '../../Screens/Home/types';
 import {TabNavigationPropsProfileType} from '../../Screens/Profile/types';
 import {SearchResultList} from '../SearchResultList/SearchResultList';
@@ -33,13 +32,12 @@ import {
 } from '@fortawesome/react-native-fontawesome';
 
 export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
-  const {title, placeholderText} = props;
+  const {title, placeholderText, listForSearching} = props;
 
   const {width} = useWindowDimensions();
   const styles = HeaderStyles(width);
 
   const user = useAppSelector(selectUser);
-  const channelsList = useAppSelector(selectChannelsList);
   const dispatch = useAppDispatch();
   const navigation = useNavigation<TabNavigationPropsProfileType>();
 
@@ -54,20 +52,21 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   const [searchMode, setSearchMode] = useState<boolean>(false);
 
   const [searchValue, setSearchValue] = useState<string>('');
-  const [searchResult, setSearchResult] = useState<ListChannelsType[]>([]);
-
+  const [searchResult, setSearchResult] = useState<
+    CustomHeaderPropsType['listForSearching']
+  >([]);
   const onChangeSearchValue = (
     event: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
-    const streams = channelsList.filter((channel) => {
-      const matchFound = channel.name.includes(event.nativeEvent.text);
+    const result = listForSearching.filter((item) => {
+      const matchFound = item.name.includes(event.nativeEvent.text);
       const voidString = event.nativeEvent.text === '';
 
       if (matchFound && !voidString) {
-        return channel;
+        return item;
       }
     });
-    setSearchResult(streams);
+    setSearchResult(result ?? []);
   };
 
   const activeSearchMode = () => {
@@ -114,8 +113,8 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
             {renderPhoto()}
           </TouchableOpacity>
         </View>
-        <View style={styles.titleContainer}>
-          {searchMode ? (
+        {searchMode ? (
+          <View style={styles.titleContainer}>
             <TextInput
               style={styles.input}
               onChangeText={setSearchValue}
@@ -125,11 +124,15 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
               placeholderTextColor={'#fff'}
               autoFocus
             />
-          ) : (
+          </View>
+        ) : (
+          <TouchableOpacity
+            activeOpacity={0.9}
+            style={styles.titleContainer}
+            onPress={activeSearchMode}>
             <Text style={styles.title}>{title}</Text>
-          )}
-        </View>
-
+          </TouchableOpacity>
+        )}
         <View style={styles.wrapperSectionIcons}>
           <TouchableOpacity
             style={styles.wrapperIcon}

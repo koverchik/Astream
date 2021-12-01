@@ -1,27 +1,42 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useLayoutEffect, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+
+import {getHeaderTitle} from '@react-navigation/elements';
+import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
 
 import notifee from '@notifee/react-native';
 
+import {CustomHeader} from '../../Components/Header';
 import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
 import {DateInfoType} from '../../Components/HorizontalCalendar/types';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
 import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
 import {Stream} from '../../Components/Stream';
+import {HeaderInputPlaceholders} from '../../Navigation/Tab/types';
+import {useAppSelector} from '../../Redux/hooks';
+import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {arrayListData} from './helpers/arrayListData';
 import {
   TIME_NOTIFICATION,
   onCreateTriggerNotification,
 } from './helpers/onCreateTriggerNotification';
 import {styles} from './styles';
-import {StreamType} from './types';
+import {
+  CalendarScreenProps,
+  StreamType,
+  TabNavigationPropsProfileType,
+} from './types';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
-export const ScreenCalendar: FC = () => {
+export const ScreenCalendar: FC<CalendarScreenProps> = () => {
+  const navigation = useNavigation<TabNavigationPropsProfileType>();
+  const channelsList = useAppSelector(selectChannelsList);
+
   const dataSystem = new Date();
+
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [streams, setStreams] = useState<StreamType[]>([]);
   const [chosenDay, setChoseDay] = useState(
@@ -34,6 +49,21 @@ export const ScreenCalendar: FC = () => {
   const selectDay = (date: DateInfoType) => {
     setChoseDay(`${date.year}-${date.month}-${date.day}`);
   };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      header: ({route, options}) => {
+        const title = getHeaderTitle(options, route.name);
+        return (
+          <CustomHeader
+            title={title}
+            placeholderText={HeaderInputPlaceholders.CALENDAR}
+            listForSearching={channelsList}
+          />
+        );
+      },
+    });
+  }, [navigation]);
 
   useEffect(() => {
     database()

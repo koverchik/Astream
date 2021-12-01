@@ -60,6 +60,7 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       textAlignVertical: 'center',
       paddingLeft: 20,
+      color: '#fff',
     },
   });
 };
