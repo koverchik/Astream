@@ -1,4 +1,4 @@
-import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {RouteProp} from '@react-navigation/native';
 
 import {TabNavigation, TabParamList} from '../../Navigation/Tab/types';
@@ -8,7 +8,7 @@ export type ProfileScreenProps = {
   route: RouteProp<TabParamList, TabNavigation.Profile>;
 };
 
-export type TabNavigationPropsProfileType = BottomTabScreenProps<
+export type TabNavigationPropsProfileType = BottomTabNavigationProp<
   TabParamList,
   TabNavigation.Profile
 >;
