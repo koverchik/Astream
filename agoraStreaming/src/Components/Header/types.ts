@@ -4,13 +4,14 @@ import {
   HeaderInputPlaceholders,
   TabNavigation,
 } from '../../Navigation/Tab/types';
+import {StreamType} from '../../Screens/Calendar/types';
 import {ListChannelsType} from '../../Screens/Home/types';
 
 export type CustomHeaderPropsType = {
   title: string;
   placeholderText: HeaderInputPlaceholders;
   filter: TextInputProps['onChange'];
-  searchResult: ListChannelsType[];
-  onPressResult: (stream: ListChannelsType) => void;
+  searchResult: ListChannelsType[] | StreamType[];
+  onPressResult?: (stream: ListChannelsType) => void;
   screen: TabNavigation;
 };

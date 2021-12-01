@@ -1,6 +1,7 @@
+import {StreamType} from '../../Screens/Calendar/types';
 import {ListChannelsType} from '../../Screens/Home/types';
 
 export type SearchResultListPropsType = {
-  searchResult: ListChannelsType[];
-  onPressResult: (item: ListChannelsType) => void;
+  searchResult?: ListChannelsType[] | StreamType[];
+  onPressResult?: (item: ListChannelsType) => void;
 };

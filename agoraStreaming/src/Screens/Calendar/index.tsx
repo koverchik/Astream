@@ -1,5 +1,12 @@
 import React, {FC, useEffect, useLayoutEffect, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  NativeSyntheticEvent,
+  Text,
+  TextInputChangeEventData,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import {getHeaderTitle} from '@react-navigation/elements';
 import {useNavigation} from '@react-navigation/native';
@@ -14,9 +21,10 @@ import {DateInfoType} from '../../Components/HorizontalCalendar/types';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
 import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
 import {Stream} from '../../Components/Stream';
-import {HeaderInputPlaceholders} from '../../Navigation/Tab/types';
-import {useAppSelector} from '../../Redux/hooks';
-import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
+import {
+  HeaderInputPlaceholders,
+  TabNavigation,
+} from '../../Navigation/Tab/types';
 import {arrayListData} from './helpers/arrayListData';
 import {
   TIME_NOTIFICATION,
@@ -33,10 +41,10 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 export const ScreenCalendar: FC<CalendarScreenProps> = () => {
   const navigation = useNavigation<TabNavigationPropsProfileType>();
-  const channelsList = useAppSelector(selectChannelsList);
 
   const dataSystem = new Date();
 
+  const [searchResult, setSearchResult] = useState<StreamType[]>([]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [streams, setStreams] = useState<StreamType[]>([]);
   const [chosenDay, setChoseDay] = useState(
@@ -48,6 +56,21 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
   const changeModalVisible = () => setModalVisible(!isModalVisible);
   const selectDay = (date: DateInfoType) => {
     setChoseDay(`${date.year}-${date.month}-${date.day}`);
+    setSearchResult([]);
+  };
+
+  const onChangeSearchValue = (
+    event: NativeSyntheticEvent<TextInputChangeEventData>,
+  ) => {
+    const result = streams.filter((stream) => {
+      const matchFound = stream.name.includes(event.nativeEvent.text);
+      const voidString = event.nativeEvent.text === '';
+
+      if (matchFound && !voidString) {
+        return stream;
+      }
+    });
+    setSearchResult(result);
   };
 
   useLayoutEffect(() => {
@@ -58,12 +81,14 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
           <CustomHeader
             title={title}
             placeholderText={HeaderInputPlaceholders.CALENDAR}
-            listForSearching={channelsList}
+            screen={TabNavigation.Calendar}
+            searchResult={streams}
+            filter={onChangeSearchValue}
           />
         );
       },
     });
-  }, [navigation]);
+  }, [navigation, streams]);
 
   useEffect(() => {
     database()
@@ -120,7 +145,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
           isModalVisible={isModalVisible}
         />
         <FlatList
-          data={streams}
+          data={searchResult.length > 0 ? searchResult : streams}
           style={styles.flatList}
           renderItem={({item}) => <Stream stream={item} />}
           keyExtractor={(item) => 'Stream' + item.id}
