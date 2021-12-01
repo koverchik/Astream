@@ -14,7 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
 
-import {HomeStackScreens, LiveType} from '../../Navigation/Tab/types';
+import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
 import {StackNavigationPropHome} from '../../Screens/Home/types';
 import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';

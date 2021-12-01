@@ -1,4 +1,4 @@
-import {HeaderInputPlaceholders} from '../../Navigation/Tab/Helpers/types';
+import {HeaderInputPlaceholders} from '../../Navigation/Tab/types';
 import {ListChannelsType} from '../../Screens/Home/types';
 
 export type CustomHeaderPropsType = {

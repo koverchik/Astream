@@ -8,7 +8,7 @@ import {
   UserOfflineCallback,
 } from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 
-import {RootStackParamList} from '../../../Navigation/Tab/types';
+import {RootStackParamList} from '../../../Navigation/Stack/types';
 
 const appID = 'fecf7537eab9494b9612e782053cc546';
 
