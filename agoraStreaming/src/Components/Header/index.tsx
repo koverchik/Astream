@@ -1,6 +1,5 @@
-import React, {FC, useRef, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {
-  Animated,
   Image,
   NativeSyntheticEvent,
   Text,
@@ -17,9 +16,7 @@ import {selectUser} from '../../Redux/selectors/AuthSelectors';
 import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {ListChannelsType} from '../../Screens/Home/types';
 import {FoundStreamList} from '../FoundStreamList/FoundStreamList';
-import {opacityForHeaderAnimation} from './Animations/opacityForHeader';
-import {showSearchInputAnimation} from './Animations/showSearchInput';
-import {HeaderStyles, MARGIN, SIZE_BLOCKS_ITEM} from './styles';
+import {HeaderStyles} from './styles';
 import {CustomHeaderPropsType} from './types';
 import {
   faBell,
@@ -35,14 +32,15 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
 
   const {width} = useWindowDimensions();
   const styles = HeaderStyles(width);
-  const inputWidth = width - SIZE_BLOCKS_ITEM * 2 + MARGIN;
 
   const user = useAppSelector(selectUser);
   const channelsList = useAppSelector(selectChannelsList);
   const dispatch = useAppDispatch();
 
-  const inputAnimatedRef = useRef(new Animated.Value(0)).current;
-  const opacity = useRef(new Animated.Value(1)).current;
+  // TODO: Animation is not used right now
+  // const inputAnimatedRef = useRef(new Animated.Value(0)).current;
+  // const inputWidth = width - SIZE_BLOCKS_ITEM * 2 + MARGIN;
+  // const opacity = useRef(new Animated.Value(1)).current;
 
   const [searchMode, setSearchMode] = useState<boolean>(false);
 
@@ -51,8 +49,9 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
 
   const onPressSearch = () => {
     setSearchMode(true);
-    showSearchInputAnimation(inputAnimatedRef, inputWidth).start();
-    opacityForHeaderAnimation(opacity, 0).start();
+    // TODO: Animation is not used right now
+    // showSearchInputAnimation(inputAnimatedRef, inputWidth).start();
+    // opacityForHeaderAnimation(opacity, 0).start();
   };
 
   const onChangeSearchValue = (
@@ -70,11 +69,11 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   };
 
   const resetSearchMode = () => {
-    showSearchInputAnimation(inputAnimatedRef, 0).start();
-    opacityForHeaderAnimation(opacity, 1).start();
-    setTimeout(() => {
-      setSearchMode(false);
-    }, 1720);
+    // TODO: Animation is not used right now
+    // showSearchInputAnimation(inputAnimatedRef, 0).start();
+    // opacityForHeaderAnimation(opacity, 1).start();
+
+    setSearchMode(false);
     setSearchValue('');
     setSearchResult([]);
   };
@@ -111,31 +110,30 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   return (
     <View>
       <View style={styles.container}>
-        <Animated.View style={[styles.wrapperSectionIcons, {opacity}]}>
+        <View style={styles.wrapperSectionIcons}>
           <View style={styles.wrapperIcon}>{renderPhoto()}</View>
           <View style={styles.wrapperIcon}>
             <FontAwesomeIcon icon={faUserPlus} color={'white'} size={20} />
           </View>
-        </Animated.View>
-        <Animated.View style={[styles.titleContainer, {opacity}]}>
+        </View>
+        <View style={styles.titleContainer}>
           <Text style={styles.title}>{title}</Text>
-        </Animated.View>
+        </View>
         <View style={styles.wrapperSectionIcons}>
-          <Animated.View style={[styles.wrapperIcon, {opacity}]}>
+          <View style={styles.wrapperIcon}>
             <FontAwesomeIcon icon={faBell} color={'white'} size={18} />
-          </Animated.View>
+          </View>
           {renderSearchButton()}
         </View>
         {searchMode && (
-          <Animated.View
-            style={[styles.inputContainer, {width: inputAnimatedRef}]}>
+          <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
               onChangeText={setSearchValue}
               onChange={onChangeSearchValue}
               value={searchValue}
             />
-          </Animated.View>
+          </View>
         )}
       </View>
       {!!searchValue && (

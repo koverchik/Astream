@@ -64,6 +64,7 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
     input: {
       paddingLeft: 15,
       height: SIZE_BLOCKS_ITEM,
+      width: width - SIZE_BLOCKS_ITEM * 2 + MARGIN,
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       backgroundColor: 'rgba(52, 52, 52, 1)',
       color: '#fff',
