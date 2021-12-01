@@ -27,10 +27,13 @@ import {
   faSearch,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon, Props} from '@fortawesome/react-native-fontawesome';
+import {
+  FontAwesomeIcon,
+  Props as FontAwesomeIconProps,
+} from '@fortawesome/react-native-fontawesome';
 
 export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
-  const {title} = props;
+  const {title, placeholderText} = props;
 
   const {width} = useWindowDimensions();
   const styles = HeaderStyles(width);
@@ -73,6 +76,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
         setSearchValue('');
         setSearchResult([]);
       }
+
       return !searchMode;
     });
   };
@@ -94,7 +98,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
     }
   };
 
-  const getSearchIconProps = (): Props => {
+  const getSearchIconProps = (): FontAwesomeIconProps => {
     return {
       icon: searchMode ? faCheckCircle : faSearch,
       color: searchMode ? '#7adaa8' : '#fff',
@@ -110,7 +114,6 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
             {renderPhoto()}
           </TouchableOpacity>
         </View>
-
         <View style={styles.titleContainer}>
           {searchMode ? (
             <TextInput
@@ -118,7 +121,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
               onChangeText={setSearchValue}
               onChange={onChangeSearchValue}
               value={searchValue}
-              placeholder={'Enter stream name ...'}
+              placeholder={placeholderText}
               placeholderTextColor={'#fff'}
               autoFocus
             />
