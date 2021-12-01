@@ -15,7 +15,6 @@ import {
   MapViewProps,
   Marker,
   PROVIDER_GOOGLE,
-  Region,
 } from 'react-native-maps';
 
 import {useNavigation} from '@react-navigation/native';
@@ -59,7 +58,6 @@ export const Home: FC<HomeScreenProps> = () => {
   const dispatch = useAppDispatch();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [currentRegion, setCurrentRegion] = useState<Region>(coordinates);
 
   const changeModalVisible = () => setModalVisible(!modalVisible);
 
@@ -111,7 +109,7 @@ export const Home: FC<HomeScreenProps> = () => {
   };
 
   const onChangeRegion: MapViewProps['onRegionChangeComplete'] = (region) => {
-    setCurrentRegion(region);
+    dispatch(setCoordinatesAction(region));
   };
 
   const allMarkers = channelsList.map((data) => {
@@ -153,7 +151,7 @@ export const Home: FC<HomeScreenProps> = () => {
       <View style={styles.container}>
         <MapView
           onRegionChangeComplete={onChangeRegion}
-          region={currentRegion}
+          region={coordinates}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
           clusterColor={'#a5c5ec'}
