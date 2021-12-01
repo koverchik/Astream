@@ -45,17 +45,13 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   // const inputWidth = width - SIZE_BLOCKS_ITEM * 2 + MARGIN;
   // const opacity = useRef(new Animated.Value(1)).current;
 
+  // showSearchInputAnimation(inputAnimatedRef, inputWidth).start();
+  // opacityForHeaderAnimation(opacity, 0).start();
+
   const [searchMode, setSearchMode] = useState<boolean>(false);
 
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchResult, setSearchResult] = useState<ListChannelsType[]>([]);
-
-  const onPressSearch = () => {
-    setSearchMode(true);
-    // TODO: Animation is not used right now
-    // showSearchInputAnimation(inputAnimatedRef, inputWidth).start();
-    // opacityForHeaderAnimation(opacity, 0).start();
-  };
 
   const onChangeSearchValue = (
     event: NativeSyntheticEvent<TextInputChangeEventData>,
@@ -71,19 +67,19 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
     setSearchResult(streams);
   };
 
-  const resetSearchMode = () => {
-    // TODO: Animation is not used right now
-    // showSearchInputAnimation(inputAnimatedRef, 0).start();
-    // opacityForHeaderAnimation(opacity, 1).start();
-
-    setSearchMode(false);
-    setSearchValue('');
-    setSearchResult([]);
+  const activeSearchMode = () => {
+    setSearchMode((searchMode) => {
+      if (searchMode) {
+        setSearchValue('');
+        setSearchResult([]);
+      }
+      return !searchMode;
+    });
   };
 
   const onPressResult = (stream: ListChannelsType) => {
     dispatch(setCoordinatesAction(stream.coords));
-    resetSearchMode();
+    activeSearchMode();
   };
 
   const onPressAvatar = () => {
@@ -101,13 +97,13 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   const renderSearchButton = () => {
     if (searchMode) {
       return (
-        <TouchableOpacity style={styles.wrapperIcon} onPress={resetSearchMode}>
+        <TouchableOpacity style={styles.wrapperIcon} onPress={activeSearchMode}>
           <FontAwesomeIcon icon={faCheckCircle} color={'#7adaa8'} size={42} />
         </TouchableOpacity>
       );
     } else {
       return (
-        <TouchableOpacity style={styles.wrapperIcon} onPress={onPressSearch}>
+        <TouchableOpacity style={styles.wrapperIcon} onPress={activeSearchMode}>
           <FontAwesomeIcon icon={faSearch} color={'white'} size={18} />
         </TouchableOpacity>
       );
