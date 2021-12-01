@@ -19,7 +19,7 @@ import {selectUser} from '../../Redux/selectors/AuthSelectors';
 import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {ListChannelsType} from '../../Screens/Home/types';
 import {TabNavigationPropsProfileType} from '../../Screens/Profile/types';
-import {FoundStreamList} from '../FoundStreamList/FoundStreamList';
+import {SearchResultList} from '../SearchResultList/SearchResultList';
 import {HeaderStyles} from './styles';
 import {CustomHeaderPropsType} from './types';
 import {
@@ -139,7 +139,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
         </View>
       </View>
       {!!searchValue && (
-        <FoundStreamList
+        <SearchResultList
           searchResult={searchResult}
           onPressResult={onPressResult}
         />

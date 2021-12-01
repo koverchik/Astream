@@ -1,6 +1,6 @@
 import {ListChannelsType} from '../../../Screens/Home/types';
 
-export type FoundStreamItemPropsType = {
+export type SearchResultItemPropsType = {
   onPressResult: (stream: ListChannelsType) => void;
-  stream: ListChannelsType;
+  item: ListChannelsType;
 };
