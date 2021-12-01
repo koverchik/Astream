@@ -27,7 +27,7 @@ import {
   faSearch,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {FontAwesomeIcon, Props} from '@fortawesome/react-native-fontawesome';
 
 export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   const {title} = props;
@@ -94,20 +94,12 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
     }
   };
 
-  const renderSearchButton = () => {
-    if (searchMode) {
-      return (
-        <TouchableOpacity style={styles.wrapperIcon} onPress={activeSearchMode}>
-          <FontAwesomeIcon icon={faCheckCircle} color={'#7adaa8'} size={42} />
-        </TouchableOpacity>
-      );
-    } else {
-      return (
-        <TouchableOpacity style={styles.wrapperIcon} onPress={activeSearchMode}>
-          <FontAwesomeIcon icon={faSearch} color={'white'} size={18} />
-        </TouchableOpacity>
-      );
-    }
+  const getSearchIconProps = (): Props => {
+    return {
+      icon: searchMode ? faCheckCircle : faSearch,
+      color: searchMode ? '#7adaa8' : '#fff',
+      size: searchMode ? 42 : 18,
+    };
   };
 
   return (
@@ -117,9 +109,6 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
           <TouchableOpacity onPress={onPressAvatar} style={styles.wrapperIcon}>
             {renderPhoto()}
           </TouchableOpacity>
-          {/*<View style={styles.wrapperIcon}>*/}
-          {/*  <FontAwesomeIcon icon={faUserPlus} color={'white'} size={20} />*/}
-          {/*</View>*/}
         </View>
 
         <View style={styles.titleContainer}>
@@ -139,10 +128,11 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
         </View>
 
         <View style={styles.wrapperSectionIcons}>
-          {/*<View style={styles.wrapperIcon}>*/}
-          {/*  <FontAwesomeIcon icon={faBell} color={'white'} size={18} />*/}
-          {/*</View>*/}
-          {renderSearchButton()}
+          <TouchableOpacity
+            style={styles.wrapperIcon}
+            onPress={activeSearchMode}>
+            <FontAwesomeIcon {...getSearchIconProps()} />
+          </TouchableOpacity>
         </View>
       </View>
       {!!searchValue && (
