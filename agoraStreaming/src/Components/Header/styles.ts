@@ -14,10 +14,9 @@ type HeaderStyleType = {
   wrapperIcon: ViewStyle;
   image: ImageStyle;
   input: ViewStyle;
-  inputContainer: ViewStyle;
 };
 
-export const SIZE_BLOCKS_ITEM = 35;
+export const SIZE_BLOCKS_ITEM = 40;
 export const MARGIN = 5;
 
 export const HeaderStyles = (width: ScaledSize['width']) => {
@@ -32,12 +31,12 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
       backgroundColor: 'rgba(52, 52, 52, 0.8)',
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       height: SIZE_BLOCKS_ITEM,
-      alignItems: 'center',
-      justifyContent: 'center',
       flex: 1,
+      justifyContent: 'center',
     },
     title: {
       color: 'white',
+      textAlign: 'center',
     },
     wrapperSectionIcons: {
       flexDirection: 'row',
@@ -57,18 +56,10 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
       height: SIZE_BLOCKS_ITEM,
       width: SIZE_BLOCKS_ITEM,
     },
-    inputContainer: {
-      position: 'absolute',
-      left: 10,
-    },
     input: {
-      paddingLeft: 15,
-      height: SIZE_BLOCKS_ITEM,
-      width: width - SIZE_BLOCKS_ITEM * 2 + MARGIN,
       borderRadius: SIZE_BLOCKS_ITEM / 2,
-      backgroundColor: 'rgba(52, 52, 52, 1)',
-      color: '#fff',
-      alignItems: 'center',
+      textAlignVertical: 'center',
+      paddingLeft: 20,
     },
   });
 };

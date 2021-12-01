@@ -10,20 +10,22 @@ import {
   useWindowDimensions,
 } from 'react-native';
 
+import {useNavigation} from '@react-navigation/native';
+
+import {TabNavigation} from '../../Navigation/Tab/types';
 import {setCoordinatesAction} from '../../Redux/actions/HomeActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
 import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {ListChannelsType} from '../../Screens/Home/types';
+import {TabNavigationPropsProfileType} from '../../Screens/Profile/types';
 import {FoundStreamList} from '../FoundStreamList/FoundStreamList';
 import {HeaderStyles} from './styles';
 import {CustomHeaderPropsType} from './types';
 import {
-  faBell,
   faCheckCircle,
   faSearch,
   faUser,
-  faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
@@ -36,6 +38,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   const user = useAppSelector(selectUser);
   const channelsList = useAppSelector(selectChannelsList);
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<TabNavigationPropsProfileType>();
 
   // TODO: Animation is not used right now
   // const inputAnimatedRef = useRef(new Animated.Value(0)).current;
@@ -83,6 +86,10 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
     resetSearchMode();
   };
 
+  const onPressAvatar = () => {
+    navigation.navigate(TabNavigation.Profile);
+  };
+
   const renderPhoto = () => {
     if (user?.photo) {
       return <Image source={{uri: user?.photo}} style={styles.image} />;
@@ -95,7 +102,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
     if (searchMode) {
       return (
         <TouchableOpacity style={styles.wrapperIcon} onPress={resetSearchMode}>
-          <FontAwesomeIcon icon={faCheckCircle} color={'#7adaa8'} size={37} />
+          <FontAwesomeIcon icon={faCheckCircle} color={'#7adaa8'} size={42} />
         </TouchableOpacity>
       );
     } else {
@@ -111,30 +118,36 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
     <View>
       <View style={styles.container}>
         <View style={styles.wrapperSectionIcons}>
-          <View style={styles.wrapperIcon}>{renderPhoto()}</View>
-          <View style={styles.wrapperIcon}>
-            <FontAwesomeIcon icon={faUserPlus} color={'white'} size={20} />
-          </View>
+          <TouchableOpacity onPress={onPressAvatar} style={styles.wrapperIcon}>
+            {renderPhoto()}
+          </TouchableOpacity>
+          {/*<View style={styles.wrapperIcon}>*/}
+          {/*  <FontAwesomeIcon icon={faUserPlus} color={'white'} size={20} />*/}
+          {/*</View>*/}
         </View>
+
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>{title}</Text>
-        </View>
-        <View style={styles.wrapperSectionIcons}>
-          <View style={styles.wrapperIcon}>
-            <FontAwesomeIcon icon={faBell} color={'white'} size={18} />
-          </View>
-          {renderSearchButton()}
-        </View>
-        {searchMode && (
-          <View style={styles.inputContainer}>
+          {searchMode ? (
             <TextInput
               style={styles.input}
               onChangeText={setSearchValue}
               onChange={onChangeSearchValue}
               value={searchValue}
+              placeholder={'Enter stream name ...'}
+              placeholderTextColor={'#fff'}
+              autoFocus
             />
-          </View>
-        )}
+          ) : (
+            <Text style={styles.title}>{title}</Text>
+          )}
+        </View>
+
+        <View style={styles.wrapperSectionIcons}>
+          {/*<View style={styles.wrapperIcon}>*/}
+          {/*  <FontAwesomeIcon icon={faBell} color={'white'} size={18} />*/}
+          {/*</View>*/}
+          {renderSearchButton()}
+        </View>
       </View>
       {!!searchValue && (
         <FoundStreamList
