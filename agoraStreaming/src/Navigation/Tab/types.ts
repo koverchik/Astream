@@ -17,7 +17,6 @@ export type RootStackParamList = {
     name?: string;
     coords?: Region;
   };
-  Profile: undefined;
 };
 
 export enum HomeStackScreens {
