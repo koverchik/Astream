@@ -7,6 +7,6 @@ export const showSearchInputAnimation = (
   return Animated.timing(animatedValue, {
     toValue: newValue,
     duration: 1000,
-    useNativeDriver: false,
+    useNativeDriver: true,
   });
 };
