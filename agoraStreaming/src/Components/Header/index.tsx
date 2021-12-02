@@ -38,16 +38,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
   const user = useAppSelector(selectUser);
   const navigation = useNavigation<TabNavigationPropsProfileType>();
 
-  // TODO: Animation is not used right now
-  // const inputAnimatedRef = useRef(new Animated.Value(0)).current;
-  // const inputWidth = width - SIZE_BLOCKS_ITEM * 2 + MARGIN;
-  // const opacity = useRef(new Animated.Value(1)).current;
-
-  // showSearchInputAnimation(inputAnimatedRef, inputWidth).start();
-  // opacityForHeaderAnimation(opacity, 0).start();
-
   const [searchMode, setSearchMode] = useState<boolean>(false);
-
   const [searchValue, setSearchValue] = useState<string>('');
 
   const activeSearchMode = () => {
