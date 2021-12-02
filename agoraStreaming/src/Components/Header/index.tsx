@@ -13,6 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import {TabNavigation} from '../../Navigation/Tab/types';
 import {useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
+import {ListChannelsType} from '../../Screens/Home/types';
 import {TabNavigationPropsProfileType} from '../../Screens/Profile/types';
 import {SearchResultList} from '../SearchResultList/SearchResultList';
 import {HeaderStyles} from './styles';
@@ -57,6 +58,13 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
 
       return !searchMode;
     });
+  };
+
+  const onPressResultItem = (stream: ListChannelsType) => {
+    if (onPressResult) {
+      onPressResult(stream);
+    }
+    activeSearchMode();
   };
 
   const onPressAvatar = () => {
@@ -118,7 +126,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
       {!!searchValue && screen === TabNavigation.Main && (
         <SearchResultList
           searchResult={searchResult}
-          onPressResult={onPressResult}
+          onPressResult={onPressResultItem}
         />
       )}
     </View>
