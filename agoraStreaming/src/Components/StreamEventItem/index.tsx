@@ -15,6 +15,7 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
   const {time, type, name} = props.stream;
   const {translationY, index} = props;
 
+  const dataTime = new Date(time);
   const inputRange = [
     (-index - 1) * START_ANIMATION,
     index * START_ANIMATION,
@@ -34,7 +35,6 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
     };
   });
 
-  const dataTime = new Date(time);
   return (
     <Animated.View style={[styles.container, reanimatedStyle]}>
       <View style={styles.avatarBox}>
