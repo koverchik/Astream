@@ -44,9 +44,10 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
 
   const dataSystem = new Date();
 
-  const [searchResult, setSearchResult] = useState<StreamType[]>([]);
-  const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [streams, setStreams] = useState<StreamType[]>([]);
+  const [searchResult, setSearchResult] = useState<StreamType[]>([]);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [chosenDay, setChoseDay] = useState(
     `${dataSystem.getFullYear()}-${
       dataSystem.getMonth() + 1
@@ -55,14 +56,16 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
 
   const changeModalVisible = () => setModalVisible(!isModalVisible);
   const selectDay = (date: DateInfoType) => {
-    setChoseDay(`${date.year}-${date.month}-${date.day}`);
     setSearchResult([]);
+    setSearchValue('');
+    setChoseDay(`${date.year}-${date.month}-${date.day}`);
   };
 
   const onChangeSearchValue = (
     event: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
     const result = streams.filter((stream) => {
+      setSearchValue(event.nativeEvent.text);
       const matchFound = stream.name.includes(event.nativeEvent.text);
       const voidString = event.nativeEvent.text === '';
 
@@ -71,6 +74,28 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
       }
     });
     setSearchResult(result);
+  };
+
+  const showData = () => {
+    if (searchResult.length > 0 || (!searchResult.length && searchValue)) {
+      return searchResult;
+    }
+
+    if (!searchResult.length && !searchValue) {
+      return streams;
+    }
+  };
+
+  const flatListStyle = () => {
+    if (!streams.length) {
+      return [styles.flatListContent, styles.flatListContentCenter];
+    }
+
+    if (streams.length && !searchResult.length && searchValue) {
+      return [styles.flatListContent, styles.flatListContentCenter];
+    }
+
+    return styles.flatListContent;
   };
 
   useLayoutEffect(() => {
@@ -145,14 +170,11 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
           isModalVisible={isModalVisible}
         />
         <FlatList
-          data={searchResult.length > 0 ? searchResult : streams}
+          data={showData()}
           style={styles.flatList}
           renderItem={({item}) => <Stream stream={item} />}
           keyExtractor={(item) => 'Stream' + item.id}
-          contentContainerStyle={[
-            styles.flatListContent,
-            !streams.length && styles.flatListContentCenter,
-          ]}
+          contentContainerStyle={flatListStyle()}
           ListEmptyComponent={<Text>No scheduled streams</Text>}
         />
       </View>
