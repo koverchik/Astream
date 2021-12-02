@@ -7,11 +7,11 @@ import {DefaultAvatar} from '../../Icons/DefaultAvatar';
 import {addZeroForMinutes} from '../../Screens/Calendar/helpers/addZero';
 import {getStreamTypeIcon} from './helpers/getStreamTypeIcon';
 import {styles} from './styles';
-import {StreamPropsType} from './types';
+import {StreamEventItemPropsType} from './types';
 
 const START_ANIMATION = 95;
 
-export const Stream: FC<StreamPropsType> = (props) => {
+export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
   const {time, type, name} = props.stream;
   const {translationY, index} = props;
 

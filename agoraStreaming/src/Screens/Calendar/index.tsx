@@ -16,7 +16,7 @@ import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
 import {DateInfoType} from '../../Components/HorizontalCalendar/types';
 import {ModalCreatEvent} from '../../Components/ModalCreateStream';
 import {EventInDatabases} from '../../Components/ModalCreateStream/types';
-import {Stream} from '../../Components/Stream';
+import {StreamEventItem} from '../../Components/StreamEventItem';
 import {arrayListData} from './helpers/arrayListData';
 import {
   TIME_NOTIFICATION,
@@ -108,7 +108,7 @@ export const ScreenCalendar: FC = () => {
           {streams.length ? (
             streams.map((item, index) => {
               return (
-                <Stream
+                <StreamEventItem
                   stream={item}
                   key={item.id}
                   translationY={translationY}
