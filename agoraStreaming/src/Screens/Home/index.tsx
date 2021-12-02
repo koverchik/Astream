@@ -35,6 +35,7 @@ import {
   selectChannelsList,
   selectCoordinates,
 } from '../../Redux/selectors/HomeSelectors';
+import {correctCoordinates} from './Helpers/correctCoordinates';
 import {styles} from './style';
 import {HomeScreenProps, ListChannelsType} from './types';
 
@@ -102,12 +103,16 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   };
 
   const onChangeRegion: MapViewProps['onRegionChangeComplete'] = (region) => {
+    if (correctCoordinates(region, coordinates)) {
+      return;
+    }
+
     dispatch(setCoordinatesAction(region));
   };
 
   const calloutRef = useRef<Marker | null>(null);
 
-  calloutRef.current?.showCallout();
+  //calloutRef.current?.showCallout();
 
   const allMarkers = channelsList.map((data) => {
     const {name, channelId, coords, isVideo} = data;
@@ -149,17 +154,19 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       <View style={styles.container}>
         <MapView
           onRegionChangeComplete={onChangeRegion}
+          initialRegion={INITIAL_COORDS}
           region={coordinates}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
           clusterColor={'#a5c5ec'}
+          rotateEnabled={false}
           zoomControlEnabled={true}>
           {allMarkers}
         </MapView>
         <ModalCreatEvent
           changeModalVisible={changeModalVisible}
           isModalVisible={modalVisible}
-          coordinates={coordinates}
+          coordinates={INITIAL_COORDS}
         />
         <View style={styles.createContainer}>
           <TouchableOpacity style={styles.button} onPress={changeModalVisible}>
