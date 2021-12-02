@@ -1,5 +1,11 @@
 import React, {FC, useEffect, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
+import {Calendar} from 'react-native-calendars';
+import {DateData} from 'react-native-calendars/src/types';
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 import database from '@react-native-firebase/database';
 
@@ -10,7 +16,7 @@ import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
 import {DateInfoType} from '../../Components/HorizontalCalendar/types';
 import {ModalCreatEvent} from '../../Components/ModalCreateStream';
 import {EventInDatabases} from '../../Components/ModalCreateStream/types';
-import {Stream} from '../../Components/Stream';
+import {StreamEventItem} from '../../Components/StreamEventItem';
 import {arrayListData} from './helpers/arrayListData';
 import {
   TIME_NOTIFICATION,
@@ -32,6 +38,14 @@ export const ScreenCalendar: FC = () => {
   );
 
   const changeModalVisible = () => setModalVisible(!isModalVisible);
+
+  const onPressDay = (day: DateData) => setChoseDay(day.dateString);
+  const translationY = useSharedValue(0);
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    translationY.value = event.contentOffset.y;
+  });
+
   const selectDay = (date: DateInfoType) => {
     setChoseDay(`${date.year}-${date.month}-${date.day}`);
   };
@@ -86,17 +100,26 @@ export const ScreenCalendar: FC = () => {
           changeModalVisible={changeModalVisible}
           isModalVisible={isModalVisible}
         />
-        <FlatList
-          data={streams}
+        <Animated.ScrollView
           style={styles.flatList}
-          renderItem={({item}) => <Stream stream={item} />}
-          keyExtractor={(item) => 'Stream' + item.id}
-          contentContainerStyle={[
-            styles.flatListContent,
-            !streams.length && styles.flatListContentCenter,
-          ]}
-          ListEmptyComponent={<Text>No scheduled streams</Text>}
-        />
+          scrollEventThrottle={46}
+          onScroll={scrollHandler}
+          contentContainerStyle={styles.contentContainerStyle}>
+          {streams.length ? (
+            streams.map((item, index) => {
+              return (
+                <StreamEventItem
+                  stream={item}
+                  key={item.id}
+                  translationY={translationY}
+                  index={index}
+                />
+              );
+            })
+          ) : (
+            <Text>No scheduled streams</Text>
+          )}
+        </Animated.ScrollView>
       </View>
     </View>
   );
