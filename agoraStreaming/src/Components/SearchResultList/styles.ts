@@ -13,7 +13,7 @@ export const SearchResultStyles = (width: ScaledSize['width']) => {
       position: 'absolute',
       top: 60,
       width: width - 20,
-      backgroundColor: 'rgba(52, 52, 52, 1)',
+      backgroundColor: '#343434FF',
       marginHorizontal: 10,
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       padding: 10,

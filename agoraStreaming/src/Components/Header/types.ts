@@ -12,6 +12,7 @@ export type CustomHeaderPropsType = {
   placeholderText: HeaderInputPlaceholders;
   filter: TextInputProps['onChange'];
   searchResult: ListChannelsType[] | StreamType[];
-  onPressResult?: (stream: ListChannelsType) => void;
   screen: TabNavigation;
+
+  onPressResult?: (stream: ListChannelsType) => void;
 };
