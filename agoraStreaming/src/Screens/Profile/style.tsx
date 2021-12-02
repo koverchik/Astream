@@ -1,10 +1,13 @@
 import {ImageStyle, StyleSheet, ViewStyle} from 'react-native';
 
+import {CORNERS_RADIUS} from '../Home/style';
+
 type HomeScreenStyles = {
   container: ViewStyle;
   wrapperProfile: ViewStyle;
   button: ViewStyle;
   profile: ViewStyle;
+  background: ViewStyle;
   imageUser: ImageStyle;
 };
 
@@ -15,6 +18,13 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
+    backgroundColor: '#ffffff',
+    borderBottomEndRadius: CORNERS_RADIUS,
+    borderBottomStartRadius: CORNERS_RADIUS,
+  },
+  background: {
+    flex: 1,
+    backgroundColor: '#000',
   },
   wrapperProfile: {
     flex: 1,

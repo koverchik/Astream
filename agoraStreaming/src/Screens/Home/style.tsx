@@ -18,7 +18,7 @@ type HomeScreenStyles = {
 
 const SIZE_MARKER = 30;
 const BORDER_SIZE = 4;
-const CORNERS_RADIUS = 35;
+export const CORNERS_RADIUS = 35;
 
 export const styles = StyleSheet.create<HomeScreenStyles>({
   container: {

@@ -1,4 +1,10 @@
-import {ScaledSize, StyleSheet, TextStyle, ViewStyle} from 'react-native';
+import {
+  ImageStyle,
+  ScaledSize,
+  StyleSheet,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
 
 type HeaderStyleType = {
   container: ViewStyle;
@@ -6,9 +12,12 @@ type HeaderStyleType = {
   titleContainer: ViewStyle;
   wrapperSectionIcons: ViewStyle;
   wrapperIcon: ViewStyle;
+  image: ImageStyle;
+  input: ViewStyle;
 };
 
-const SIZE_BLOCKS_ITEM = 35;
+export const SIZE_BLOCKS_ITEM = 40;
+export const MARGIN = 5;
 
 export const HeaderStyles = (width: ScaledSize['width']) => {
   return StyleSheet.create<HeaderStyleType>({
@@ -22,25 +31,36 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
       backgroundColor: 'rgba(52, 52, 52, 0.8)',
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       height: SIZE_BLOCKS_ITEM,
-      alignItems: 'center',
-      justifyContent: 'center',
       flex: 1,
+      justifyContent: 'center',
     },
     title: {
       color: 'white',
+      textAlign: 'center',
     },
     wrapperSectionIcons: {
       flexDirection: 'row',
-      margin: 5,
+      margin: MARGIN,
     },
     wrapperIcon: {
       backgroundColor: 'rgba(52, 52, 52, 0.8)',
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       height: SIZE_BLOCKS_ITEM,
       width: SIZE_BLOCKS_ITEM,
-      margin: 5,
+      margin: MARGIN,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    image: {
+      borderRadius: SIZE_BLOCKS_ITEM / 2,
+      height: SIZE_BLOCKS_ITEM,
+      width: SIZE_BLOCKS_ITEM,
+    },
+    input: {
+      borderRadius: SIZE_BLOCKS_ITEM / 2,
+      textAlignVertical: 'center',
+      paddingLeft: 20,
+      color: '#fff',
     },
   });
 };

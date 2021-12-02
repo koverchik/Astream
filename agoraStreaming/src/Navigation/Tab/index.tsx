@@ -8,9 +8,7 @@ import {NavigationContainer} from '@react-navigation/native';
 
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
-import {DiscoverSvg} from '../../Icons/DiscoverSvg';
 import {HomeSvg} from '../../Icons/HomeSvg';
-import {PlusSvg} from '../../Icons/PlusSvg';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
 import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
@@ -26,35 +24,36 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 const Tab = createBottomTabNavigator<TabParamList>();
 
 export const BottomTabs = () => {
+  const joinedStream = useAppSelector(getIsJoined);
+  const userData = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
+
   const options: BottomTabNavigationOptions = {
-    headerShown: false,
+    headerTransparent: true,
     tabBarShowLabel: false,
   };
-
-  const joinedStream = useAppSelector(getIsJoined);
 
   const screenOptions: ScreenOptionsType = ({route}) => ({
     tabBarIcon: ({color, size}) => {
       switch (route.name) {
         case TabNavigation.Main:
           return <HomeSvg color={color} size={size} />;
-        case TabNavigation.Discover:
-          return <DiscoverSvg color={color} size={size} />;
-        case TabNavigation.Plus:
-          return <PlusSvg color={color} size={size} />;
+        // TODO: hide icons for demo
+        // case TabNavigation.Discover:
+        //   return <DiscoverSvg color={color} size={size} />;
+        // case TabNavigation.Plus:
+        //   return <PlusSvg color={color} size={size} />;
         case TabNavigation.Calendar:
           return <CalendarSvg color={color} size={size} />;
-        case TabNavigation.Circle:
+        case TabNavigation.Profile:
           return <CircleSvg color={color} size={size} />;
       }
     },
     tabBarActiveTintColor: '#38a1e3',
     tabBarInactiveTintColor: '#fff',
     tabBarStyle: !joinedStream ? styles.tabBar : styles.hiddenTabBar,
+    headerShown: !joinedStream,
   });
-
-  const dispatch = useAppDispatch();
-  const userData = useAppSelector(selectUser);
 
   const webClientId =
     '1088468777432-7titji4f8tsu0oorpqfibu469sl8jvnj.apps.googleusercontent.com';
@@ -93,7 +92,7 @@ export const BottomTabs = () => {
           options={options}
         />
         <Tab.Screen
-          name={TabNavigation.Circle}
+          name={TabNavigation.Profile}
           component={ProfileScreen}
           options={options}
         />

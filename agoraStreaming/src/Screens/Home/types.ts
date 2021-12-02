@@ -3,7 +3,10 @@ import {Region} from 'react-native-maps';
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-import {HomeStackScreens, RootStackParamList} from '../../Navigation/Tab/types';
+import {
+  HomeStackScreens,
+  RootStackParamList,
+} from '../../Navigation/Stack/types';
 
 export type HomeScreenProps = {
   navigation: StackNavigationPropHome;

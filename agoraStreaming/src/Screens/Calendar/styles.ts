@@ -1,6 +1,7 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
-import {SIZE_BUTTON} from '../../Components/ModalCreateStream/style';
+import {SIZE_BUTTON} from '../../Components/ModalCreateEvent/style';
+import {CORNERS_RADIUS} from '../Home/style';
 
 type CalendarStylesType = {
   container: ViewStyle;
@@ -17,8 +18,8 @@ export const styles = StyleSheet.create<CalendarStylesType>({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomEndRadius: 35,
-    borderBottomStartRadius: 35,
+    borderBottomEndRadius: CORNERS_RADIUS,
+    borderBottomStartRadius: CORNERS_RADIUS,
     backgroundColor: '#fff',
   },
   background: {
@@ -33,7 +34,7 @@ export const styles = StyleSheet.create<CalendarStylesType>({
   },
   addNewEvent: {
     position: 'absolute',
-    top: 69,
+    top: 64,
     left: 10,
     alignItems: 'center',
     justifyContent: 'center',

@@ -1,4 +1,8 @@
-import {EventInDatabases} from '../../Components/ModalCreateStream/types';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {RouteProp} from '@react-navigation/native';
+
+import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
+import {TabNavigation, TabParamList} from '../../Navigation/Tab/types';
 
 export type StreamType = {
   id: string;
@@ -12,6 +16,16 @@ export enum CallTypes {
   Video = 'Video',
   Chat = 'Chat',
 }
+
+export type CalendarScreenProps = {
+  navigation: TabNavigationPropsProfileType;
+  route: RouteProp<TabParamList, TabNavigation.Calendar>;
+};
+
+export type TabNavigationPropsProfileType = BottomTabNavigationProp<
+  TabParamList,
+  TabNavigation.Calendar
+>;
 
 export type FunctionSortByTimeType = (arr: StreamType[]) => StreamType[];
 
