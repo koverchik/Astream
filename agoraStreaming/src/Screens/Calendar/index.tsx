@@ -1,3 +1,11 @@
+import React, {FC, useEffect, useState} from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
+import {Calendar} from 'react-native-calendars';
+import {DateData} from 'react-native-calendars/src/types';
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
 import React, {FC, useEffect, useLayoutEffect, useState} from 'react';
 import {
   FlatList,
@@ -18,6 +26,9 @@ import notifee from '@notifee/react-native';
 import {CustomHeader} from '../../Components/Header';
 import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
 import {DateInfoType} from '../../Components/HorizontalCalendar/types';
+import {ModalCreatEvent} from '../../Components/ModalCreateStream';
+import {EventInDatabases} from '../../Components/ModalCreateStream/types';
+import {StreamEventItem} from '../../Components/StreamEventItem';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
 import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
 import {Stream} from '../../Components/Stream';
@@ -55,6 +66,14 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
   );
 
   const changeModalVisible = () => setModalVisible(!isModalVisible);
+
+  const onPressDay = (day: DateData) => setChoseDay(day.dateString);
+  const translationY = useSharedValue(0);
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    translationY.value = event.contentOffset.y;
+  });
+
   const selectDay = (date: DateInfoType) => {
     setSearchResult([]);
     setSearchValue('');
@@ -177,6 +196,26 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
           contentContainerStyle={flatListStyle()}
           ListEmptyComponent={<Text>No scheduled streams</Text>}
         />
+        <Animated.ScrollView
+          style={styles.flatList}
+          scrollEventThrottle={46}
+          onScroll={scrollHandler}
+          contentContainerStyle={styles.contentContainerStyle}>
+          {streams.length ? (
+            streams.map((item, index) => {
+              return (
+                <StreamEventItem
+                  stream={item}
+                  key={item.id}
+                  translationY={translationY}
+                  index={index}
+                />
+              );
+            })
+          ) : (
+            <Text>No scheduled streams</Text>
+          )}
+        </Animated.ScrollView>
       </View>
     </View>
   );
