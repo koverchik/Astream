@@ -1,20 +1,15 @@
-import React, {FC, useEffect, useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import {Calendar} from 'react-native-calendars';
-import {DateData} from 'react-native-calendars/src/types';
-import Animated, {
-  useAnimatedScrollHandler,
-  useSharedValue,
-} from 'react-native-reanimated';
 import React, {FC, useEffect, useLayoutEffect, useState} from 'react';
 import {
-  FlatList,
   NativeSyntheticEvent,
   Text,
   TextInputChangeEventData,
   TouchableOpacity,
   View,
 } from 'react-native';
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 import {getHeaderTitle} from '@react-navigation/elements';
 import {useNavigation} from '@react-navigation/native';
@@ -26,12 +21,9 @@ import notifee from '@notifee/react-native';
 import {CustomHeader} from '../../Components/Header';
 import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
 import {DateInfoType} from '../../Components/HorizontalCalendar/types';
-import {ModalCreatEvent} from '../../Components/ModalCreateStream';
-import {EventInDatabases} from '../../Components/ModalCreateStream/types';
-import {StreamEventItem} from '../../Components/StreamEventItem';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
 import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
-import {Stream} from '../../Components/Stream';
+import {StreamEventItem} from '../../Components/StreamEventItem';
 import {
   HeaderInputPlaceholders,
   TabNavigation,
@@ -67,7 +59,6 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
 
   const changeModalVisible = () => setModalVisible(!isModalVisible);
 
-  const onPressDay = (day: DateData) => setChoseDay(day.dateString);
   const translationY = useSharedValue(0);
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
@@ -105,22 +96,11 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     }
   };
 
-  const flatListStyle = () => {
-    if (!streams.length) {
-      return [styles.flatListContent, styles.flatListContentCenter];
-    }
-
-    if (streams.length && !searchResult.length && searchValue) {
-      return [styles.flatListContent, styles.flatListContentCenter];
-    }
-
-    return styles.flatListContent;
-  };
-
   useLayoutEffect(() => {
     navigation.setOptions({
       header: ({route, options}) => {
         const title = getHeaderTitle(options, route.name);
+
         return (
           <CustomHeader
             title={title}
@@ -188,21 +168,13 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
           changeModalVisible={changeModalVisible}
           isModalVisible={isModalVisible}
         />
-        <FlatList
-          data={showData()}
-          style={styles.flatList}
-          renderItem={({item}) => <Stream stream={item} />}
-          keyExtractor={(item) => 'Stream' + item.id}
-          contentContainerStyle={flatListStyle()}
-          ListEmptyComponent={<Text>No scheduled streams</Text>}
-        />
         <Animated.ScrollView
           style={styles.flatList}
           scrollEventThrottle={46}
           onScroll={scrollHandler}
           contentContainerStyle={styles.contentContainerStyle}>
           {streams.length ? (
-            streams.map((item, index) => {
+            showData()?.map((item, index) => {
               return (
                 <StreamEventItem
                   stream={item}

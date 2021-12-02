@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   Image,
   PermissionsAndroid,
@@ -105,12 +105,17 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     dispatch(setCoordinatesAction(region));
   };
 
+  const calloutRef = useRef<Marker | null>(null);
+
+  calloutRef.current?.showCallout();
+
   const allMarkers = channelsList.map((data) => {
     const {name, channelId, coords, isVideo} = data;
     const {latitude, longitude} = coords;
 
     return (
       <Marker
+        ref={calloutRef}
         key={channelId}
         coordinate={{
           latitude,

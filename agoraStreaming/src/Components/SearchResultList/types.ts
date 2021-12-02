@@ -3,5 +3,5 @@ import {ListChannelsType} from '../../Screens/Home/types';
 
 export type SearchResultListPropsType = {
   searchResult?: ListChannelsType[] | StreamType[];
-  onPressResult?: (item: ListChannelsType) => void;
+  onPressResult?: (item: ListChannelsType | StreamType) => void;
 };
