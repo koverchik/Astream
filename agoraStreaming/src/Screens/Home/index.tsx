@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   Image,
   PermissionsAndroid,
@@ -15,6 +15,7 @@ import {
   MapViewProps,
   Marker,
   PROVIDER_GOOGLE,
+  Region,
 } from 'react-native-maps';
 
 import database from '@react-native-firebase/database';
@@ -52,6 +53,8 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const dispatch = useAppDispatch();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [currentGeolocation, setCurrentGeolocation] =
+    useState<Region>(INITIAL_COORDS);
 
   const changeModalVisible = () => setModalVisible(!modalVisible);
 
@@ -68,7 +71,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     Geolocation.getCurrentPosition(
       (position) => {
         const {latitude, longitude} = position.coords;
-        dispatch(setCoordinatesAction({...coordinates, latitude, longitude}));
+        setCurrentGeolocation({...coordinates, latitude, longitude});
       },
       () => {
         dispatch(setCoordinatesAction(INITIAL_COORDS));
@@ -106,13 +109,8 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     if (correctCoordinates(region, coordinates)) {
       return;
     }
-
     dispatch(setCoordinatesAction(region));
   };
-
-  const calloutRef = useRef<Marker | null>(null);
-
-  //calloutRef.current?.showCallout();
 
   const allMarkers = channelsList.map((data) => {
     const {name, channelId, coords, isVideo} = data;
@@ -120,7 +118,6 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
 
     return (
       <Marker
-        ref={calloutRef}
         key={channelId}
         coordinate={{
           latitude,
@@ -154,7 +151,6 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       <View style={styles.container}>
         <MapView
           onRegionChangeComplete={onChangeRegion}
-          initialRegion={INITIAL_COORDS}
           region={coordinates}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
@@ -166,7 +162,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
         <ModalCreatEvent
           changeModalVisible={changeModalVisible}
           isModalVisible={modalVisible}
-          coordinates={INITIAL_COORDS}
+          coordinates={currentGeolocation}
         />
         <View style={styles.createContainer}>
           <TouchableOpacity style={styles.button} onPress={changeModalVisible}>
