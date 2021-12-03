@@ -4,7 +4,6 @@ import {liveReducer} from './reducers/Live';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {persistReducer, persistStore} from 'redux-persist';
-import thunk from 'redux-thunk';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -19,9 +18,19 @@ const persistConfig = {
   blacklist: ['live', 'home'],
 };
 
+const middlewares = [];
+
+if (__DEV__) {
+  const createDebugger = require('redux-flipper').default;
+  middlewares.push(createDebugger());
+}
+
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const store = createStore(persistedReducer, applyMiddleware(thunk));
+export const store = createStore(
+  persistedReducer,
+  applyMiddleware(...middlewares),
+);
 
 export const persistor = persistStore(store);
 
