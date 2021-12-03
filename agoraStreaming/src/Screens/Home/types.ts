@@ -23,4 +23,5 @@ export type ListChannelsType = {
   coords: Region;
   channelId: string;
   isVideo: RootStackParamList['Live']['isVideo'];
+  calloutIsShow: boolean;
 };

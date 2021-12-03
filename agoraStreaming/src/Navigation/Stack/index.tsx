@@ -9,7 +9,10 @@ import {
 } from '@react-navigation/stack';
 
 import {CustomHeader} from '../../Components/Header';
-import {setCoordinatesAction} from '../../Redux/actions/HomeActions';
+import {
+  setCoordinatesAction,
+  setShowCalloutAction,
+} from '../../Redux/actions/HomeActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {TabNavigationPropsProfileType} from '../../Screens/Calendar/types';
@@ -46,6 +49,9 @@ export const MainStack = () => {
 
   const onPressResult = (stream: ListChannelsType) => {
     dispatch(setCoordinatesAction(stream.coords));
+    dispatch(
+      setShowCalloutAction({channelId: stream.channelId, calloutIsShow: true}),
+    );
     setSearchResult([]);
   };
 

@@ -13,13 +13,13 @@ import MapView from 'react-native-map-clustering';
 import {
   Callout,
   MapViewProps,
-  Marker,
   PROVIDER_GOOGLE,
   Region,
 } from 'react-native-maps';
 
 import database from '@react-native-firebase/database';
 
+import {GoogleMapsMarker} from '../../Components/GoogleMapsMarker/GoogleMapsMarker';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
 import {
   HomeStackScreens,
@@ -29,6 +29,7 @@ import {
 import {
   setChannelsListAction,
   setCoordinatesAction,
+  setShowCalloutAction,
 } from '../../Redux/actions/HomeActions';
 import {setJoinedAction} from '../../Redux/actions/LiveActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
@@ -112,18 +113,28 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     dispatch(setCoordinatesAction(region));
   };
 
+  const onCalloutPress = (channelId: string, isVideo: boolean) => {
+    choseChannelAndJoinLive(channelId, isVideo);
+    channelsList.forEach((channel) => {
+      if (channel.channelId === channelId && channel.calloutIsShow) {
+        dispatch(setShowCalloutAction({channelId, calloutIsShow: false}));
+      }
+    });
+  };
+
   const allMarkers = channelsList.map((data) => {
-    const {name, channelId, coords, isVideo} = data;
+    const {name, channelId, coords, isVideo, calloutIsShow} = data;
     const {latitude, longitude} = coords;
 
     return (
-      <Marker
+      <GoogleMapsMarker
         key={channelId}
+        calloutIsShow={calloutIsShow}
         coordinate={{
           latitude,
           longitude,
         }}
-        onCalloutPress={() => choseChannelAndJoinLive(channelId, isVideo)}
+        onCalloutPress={() => onCalloutPress(channelId, isVideo)}
         title={name}>
         <View style={styles.marker}>
           <Image
@@ -142,7 +153,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
             <Text>{isVideo ? 'Video' : 'Audio'}</Text>
           </TouchableOpacity>
         </Callout>
-      </Marker>
+      </GoogleMapsMarker>
     );
   });
 
