@@ -1,12 +1,5 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {
-  Image,
-  PermissionsAndroid,
-  Platform,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
 import MapView, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
@@ -15,11 +8,7 @@ import database from '@react-native-firebase/database';
 
 import {GoogleMapsMarker} from '../../Components/GoogleMapsMarker/GoogleMapsMarker';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
-import {
-  HomeStackScreens,
-  LiveType,
-  RootStackParamList,
-} from '../../Navigation/Stack/types';
+import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
 import {
   setChannelsListAction,
   setCoordinatesAction,
@@ -31,7 +20,10 @@ import {
   selectChannelsList,
   selectCoordinates,
 } from '../../Redux/selectors/HomeSelectors';
+import {CallTypes} from '../Calendar/types';
 import {addCallouts} from './Helpers/addCallouts';
+import {getImage} from './Helpers/getImage';
+import {requestPermissions} from './Helpers/requestPermissions';
 import {styles} from './style';
 import {
   ChannelsListFromFirebase,
@@ -49,6 +41,7 @@ const INITIAL_COORDS = {
 export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const coordinates = useAppSelector(selectCoordinates);
   const channelsList = useAppSelector(selectChannelsList);
+  const mapRef = useRef<MapView | null>(null);
   const dispatch = useAppDispatch();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -57,24 +50,12 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     ChannelsListFromFirebase[]
   >([]);
 
-  const mapRef = useRef<MapView | null>(null);
-
   const cameraProperties = {
     heading: 0,
     altitude: 0,
     pitch: 0,
     zoom: 10,
     center: coordinates,
-  };
-
-  const changeModalVisible = () => setModalVisible(!modalVisible);
-
-  const requestPermissions = async () => {
-    if (Platform.OS === 'android') {
-      await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      );
-    }
   };
 
   useEffect(() => {
@@ -102,7 +83,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     database()
       .ref('/channels')
       .on('value', (snapshot) => {
-        if (snapshot.val() !== null) {
+        if (snapshot.val()) {
           const channelListFirebase: ChannelsListFromFirebase[] = Object.values(
             snapshot.val(),
           );
@@ -115,19 +96,28 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   }, []);
 
   const choseChannelAndJoinLive = (
-    channelId: string,
-    isVideo: RootStackParamList[HomeStackScreens.Live]['isVideo'],
+    channelId: ListChannelsType['channelId'],
+    isVideo: ListChannelsType['isVideo'],
   ) => {
     navigation.navigate(HomeStackScreens.Live, {
       type: LiveType.JOIN,
       channelId,
       isVideo,
     });
+
     dispatch(setJoinedAction(true));
   };
 
-  const onCalloutPress = (channelId: string, isVideo: boolean) => {
+  const changeModalVisible = () => {
+    setModalVisible(!modalVisible);
+  };
+
+  const onCalloutPress = (
+    channelId: ListChannelsType['channelId'],
+    isVideo: ListChannelsType['isVideo'],
+  ) => {
     choseChannelAndJoinLive(channelId, isVideo);
+
     channelsList.forEach((channel) => {
       if (channel.channelId === channelId && channel.calloutIsShow) {
         dispatch(setShowCalloutAction({channelId, calloutIsShow: false}));
@@ -137,6 +127,19 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
 
   const onPressMarker = (channelId: ListChannelsType['channelId']) => {
     dispatch(setShowCalloutAction({channelId, calloutIsShow: true}));
+  };
+
+  const onPressMap = () => {
+    const calloutIsShowId = channelsList.some((channel) => {
+      return channel.calloutIsShow;
+    });
+
+    if (calloutIsShowId) {
+      const newChannelList = channelsList.map((channel) => {
+        return {...channel, calloutIsShow: false};
+      });
+      dispatch(setChannelsListAction(newChannelList));
+    }
   };
 
   const allMarkers = channelsList.map((data) => {
@@ -153,11 +156,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
         title={name}>
         <View style={styles.marker}>
           <Image
-            source={
-              isVideo
-                ? require('../../../assets/images/video-camera.png')
-                : require('../../../assets/images/sound-bars.png')
-            }
+            source={getImage(isVideo)}
             style={styles.markerImage}
             resizeMode="contain"
           />
@@ -165,25 +164,12 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
         <Callout style={styles.calloutStyle}>
           <TouchableOpacity key={channelId} style={styles.itemChannel}>
             <Text style={styles.markerText}>{name}</Text>
-            <Text>{isVideo ? 'Video' : 'Audio'}</Text>
+            <Text>{isVideo ? CallTypes.Video : CallTypes.Audio}</Text>
           </TouchableOpacity>
         </Callout>
       </GoogleMapsMarker>
     );
   });
-
-  const onPressMap = () => {
-    const calloutIsShowId = channelsList.some((channel) => {
-      return channel.calloutIsShow;
-    });
-
-    if (calloutIsShowId) {
-      const newChannelList = channelsList.map((channel) => {
-        return {...channel, calloutIsShow: false};
-      });
-      dispatch(setChannelsListAction(newChannelList));
-    }
-  };
 
   return (
     <View style={styles.background}>
