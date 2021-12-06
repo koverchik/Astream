@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {
   Image,
   PermissionsAndroid,
@@ -9,13 +9,7 @@ import {
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
-import MapView from 'react-native-map-clustering';
-import {
-  Callout,
-  MapViewProps,
-  PROVIDER_GOOGLE,
-  Region,
-} from 'react-native-maps';
+import MapView, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
 
 import database from '@react-native-firebase/database';
 
@@ -37,7 +31,6 @@ import {
   selectChannelsList,
   selectCoordinates,
 } from '../../Redux/selectors/HomeSelectors';
-import {correctCoordinates} from './Helpers/correctCoordinates';
 import {styles} from './style';
 import {HomeScreenProps, ListChannelsType} from './types';
 
@@ -57,6 +50,8 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const [currentGeolocation, setCurrentGeolocation] =
     useState<Region>(INITIAL_COORDS);
 
+  const mapRef = useRef<MapView | null>(null);
+
   const changeModalVisible = () => setModalVisible(!modalVisible);
 
   const requestPermissions = async () => {
@@ -66,6 +61,10 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       );
     }
   };
+
+  useEffect(() => {
+    mapRef.current?.animateToRegion(coordinates);
+  }, [coordinates]);
 
   useEffect(() => {
     requestPermissions();
@@ -84,9 +83,16 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       .ref('/channels')
       .on('value', (snapshot) => {
         if (snapshot.val() !== null) {
-          const newChannelList: ListChannelsType[] = Object.values(
+          const channelListFirebase: ListChannelsType[] = Object.values(
             snapshot.val(),
           );
+
+          const newChannelList = channelListFirebase.map((channel) => {
+            return {
+              ...channel,
+              calloutIsShow: false,
+            };
+          });
           dispatch(setChannelsListAction(newChannelList));
         } else {
           dispatch(setChannelsListAction([]));
@@ -104,13 +110,6 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       isVideo,
     });
     dispatch(setJoinedAction(true));
-  };
-
-  const onChangeRegion: MapViewProps['onRegionChangeComplete'] = (region) => {
-    if (correctCoordinates(region, coordinates)) {
-      return;
-    }
-    dispatch(setCoordinatesAction(region));
   };
 
   const onCalloutPress = (channelId: string, isVideo: boolean) => {
@@ -161,12 +160,16 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     <View style={styles.background}>
       <View style={styles.container}>
         <MapView
-          onRegionChangeComplete={onChangeRegion}
-          region={coordinates}
+          ref={mapRef}
+          camera={{
+            heading: 0,
+            altitude: 0,
+            pitch: 0,
+            zoom: 10,
+            center: coordinates,
+          }}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
-          clusterColor={'#a5c5ec'}
-          rotateEnabled={false}
           zoomControlEnabled={true}>
           {allMarkers}
         </MapView>
