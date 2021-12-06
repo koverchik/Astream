@@ -44,6 +44,7 @@ test('New channel should be added', () => {
     },
     isVideo: true,
     name: 'Test',
+    calloutIsShow: false,
   };
 
   const endState = homeReducer(state, setChannelsListAction([newChannel]));

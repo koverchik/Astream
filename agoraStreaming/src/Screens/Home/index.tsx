@@ -9,16 +9,11 @@ import {
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
-import MapView from 'react-native-map-clustering';
-import {
-  Callout,
-  MapViewProps,
-  Marker,
-  PROVIDER_GOOGLE,
-} from 'react-native-maps';
+import MapView, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
 
 import database from '@react-native-firebase/database';
 
+import {GoogleMapsMarker} from '../../Components/GoogleMapsMarker/GoogleMapsMarker';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
 import {
   HomeStackScreens,
@@ -28,6 +23,7 @@ import {
 import {
   setChannelsListAction,
   setCoordinatesAction,
+  setShowCalloutAction,
 } from '../../Redux/actions/HomeActions';
 import {setJoinedAction} from '../../Redux/actions/LiveActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
@@ -51,6 +47,18 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const dispatch = useAppDispatch();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [currentGeolocation, setCurrentGeolocation] =
+    useState<Region>(INITIAL_COORDS);
+
+  const mapRef = useRef<MapView | null>(null);
+
+  const cameraProperties = {
+    heading: 0,
+    altitude: 0,
+    pitch: 0,
+    zoom: 10,
+    center: coordinates,
+  };
 
   const changeModalVisible = () => setModalVisible(!modalVisible);
 
@@ -63,11 +71,15 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   };
 
   useEffect(() => {
+    mapRef.current?.animateToRegion(coordinates);
+  }, [coordinates]);
+
+  useEffect(() => {
     requestPermissions();
     Geolocation.getCurrentPosition(
       (position) => {
         const {latitude, longitude} = position.coords;
-        dispatch(setCoordinatesAction({...coordinates, latitude, longitude}));
+        setCurrentGeolocation({...coordinates, latitude, longitude});
       },
       () => {
         dispatch(setCoordinatesAction(INITIAL_COORDS));
@@ -79,9 +91,16 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       .ref('/channels')
       .on('value', (snapshot) => {
         if (snapshot.val() !== null) {
-          const newChannelList: ListChannelsType[] = Object.values(
+          const channelListFirebase: ListChannelsType[] = Object.values(
             snapshot.val(),
           );
+
+          const newChannelList = channelListFirebase.map((channel) => {
+            return {
+              ...channel,
+              calloutIsShow: false,
+            };
+          });
           dispatch(setChannelsListAction(newChannelList));
         } else {
           dispatch(setChannelsListAction([]));
@@ -101,27 +120,25 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     dispatch(setJoinedAction(true));
   };
 
-  const onChangeRegion: MapViewProps['onRegionChangeComplete'] = (region) => {
-    dispatch(setCoordinatesAction(region));
+  const onCalloutPress = (channelId: string, isVideo: boolean) => {
+    choseChannelAndJoinLive(channelId, isVideo);
+    channelsList.forEach((channel) => {
+      if (channel.channelId === channelId && channel.calloutIsShow) {
+        dispatch(setShowCalloutAction({channelId, calloutIsShow: false}));
+      }
+    });
   };
 
-  const calloutRef = useRef<Marker | null>(null);
-
-  calloutRef.current?.showCallout();
-
   const allMarkers = channelsList.map((data) => {
-    const {name, channelId, coords, isVideo} = data;
+    const {name, channelId, coords, isVideo, calloutIsShow} = data;
     const {latitude, longitude} = coords;
 
     return (
-      <Marker
-        ref={calloutRef}
+      <GoogleMapsMarker
         key={channelId}
-        coordinate={{
-          latitude,
-          longitude,
-        }}
-        onCalloutPress={() => choseChannelAndJoinLive(channelId, isVideo)}
+        calloutIsShow={calloutIsShow}
+        coordinate={{latitude, longitude}}
+        onCalloutPress={() => onCalloutPress(channelId, isVideo)}
         title={name}>
         <View style={styles.marker}>
           <Image
@@ -140,26 +157,39 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
             <Text>{isVideo ? 'Video' : 'Audio'}</Text>
           </TouchableOpacity>
         </Callout>
-      </Marker>
+      </GoogleMapsMarker>
     );
   });
+
+  const onPressMap = () => {
+    const calloutIsShowId = channelsList.some((channel) => {
+      return channel.calloutIsShow;
+    });
+
+    if (calloutIsShowId) {
+      const newChannelList = channelsList.map((channel) => {
+        return {...channel, calloutIsShow: false};
+      });
+      dispatch(setChannelsListAction(newChannelList));
+    }
+  };
 
   return (
     <View style={styles.background}>
       <View style={styles.container}>
         <MapView
-          onRegionChangeComplete={onChangeRegion}
-          region={coordinates}
+          ref={mapRef}
+          camera={cameraProperties}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
-          clusterColor={'#a5c5ec'}
+          onPress={onPressMap}
           zoomControlEnabled={true}>
           {allMarkers}
         </MapView>
         <ModalCreatEvent
           changeModalVisible={changeModalVisible}
           isModalVisible={modalVisible}
-          coordinates={coordinates}
+          coordinates={currentGeolocation}
         />
         <View style={styles.createContainer}>
           <TouchableOpacity style={styles.button} onPress={changeModalVisible}>

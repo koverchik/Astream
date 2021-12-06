@@ -22,6 +22,17 @@ export const homeReducer = (
     case HomeActions.SET_CHANNELS_LIST: {
       return {...state, listChannels: action.payload};
     }
+    case HomeActions.SET_SHOW_CALLOUT: {
+      const newListChannels = state.listChannels.map((channel) => {
+        if (channel.channelId === action.payload.channelId) {
+          return {...channel, calloutIsShow: action.payload.calloutIsShow};
+        } else {
+          return channel;
+        }
+      });
+
+      return {...state, listChannels: newListChannels};
+    }
     default:
       return state;
   }
