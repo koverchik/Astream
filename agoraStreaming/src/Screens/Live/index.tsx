@@ -159,7 +159,6 @@ export const Live: FC<LiveScreenProps> = (props) => {
       channelId,
       coords,
       isVideo,
-      calloutIsShow: false,
     });
   };
 
