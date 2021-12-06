@@ -1,5 +1,5 @@
 import {authReducer} from './reducers/Auth';
-import {AuthReduserType} from './reducers/Auth/types';
+import {AuthReducerType} from './reducers/Auth/types';
 import {homeReducer} from './reducers/Home';
 import {HomeReduserType} from './reducers/Home/types';
 import {liveReducer} from './reducers/Live';
@@ -9,7 +9,7 @@ import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {persistReducer, persistStore} from 'redux-persist';
 
 const rootReducer = combineReducers<
-  AuthReduserType | HomeReduserType | LiveReduserType
+  AuthReducerType | HomeReduserType | LiveReduserType
 >({
   auth: authReducer,
   live: liveReducer,

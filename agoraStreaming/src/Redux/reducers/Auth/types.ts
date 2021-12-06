@@ -13,7 +13,7 @@ export type AuthDataType = {
   photo: string | null;
 };
 
-export type AuthReduserType = (
+export type AuthReducerType = (
   state: AuthStateType,
   action: AuthActionsType,
 ) => AuthStateType;
