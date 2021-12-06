@@ -96,10 +96,21 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
           );
 
           const newChannelList = channelListFirebase.map((channel) => {
-            return {
-              ...channel,
-              calloutIsShow: false,
-            };
+            const selectChannel = channelsList.find((selectChannel) => {
+              return selectChannel.name === channel.name;
+            });
+
+            if (selectChannel && selectChannel.calloutIsShow) {
+              return {
+                ...channel,
+                calloutIsShow: true,
+              };
+            } else {
+              return {
+                ...channel,
+                calloutIsShow: false,
+              };
+            }
           });
           dispatch(setChannelsListAction(newChannelList));
         } else {
@@ -129,6 +140,10 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     });
   };
 
+  const onPressMarker = (channelId: ListChannelsType['channelId']) => {
+    dispatch(setShowCalloutAction({channelId, calloutIsShow: true}));
+  };
+
   const allMarkers = channelsList.map((data) => {
     const {name, channelId, coords, isVideo, calloutIsShow} = data;
     const {latitude, longitude} = coords;
@@ -137,6 +152,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       <GoogleMapsMarker
         key={channelId}
         calloutIsShow={calloutIsShow}
+        onPress={() => onPressMarker(channelId)}
         coordinate={{latitude, longitude}}
         onCalloutPress={() => onCalloutPress(channelId, isVideo)}
         title={name}>
