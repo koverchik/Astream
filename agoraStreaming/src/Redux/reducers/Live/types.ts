@@ -4,7 +4,7 @@ export type LiveInitialStateType = {
   isJoined: boolean;
 };
 
-export type LiveReduserType = (
+export type LiveReducerType = (
   state: LiveInitialStateType,
   action: LiveActionsType,
 ) => LiveInitialStateType;
