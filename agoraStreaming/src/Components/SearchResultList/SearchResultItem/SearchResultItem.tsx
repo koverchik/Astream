@@ -8,7 +8,7 @@ export const SearchResultItem: FC<SearchResultItemPropsType> = (props) => {
   const {onPressResult, item} = props;
 
   const onPressItem = () => {
-    if (onPressResult && typeof item) {
+    if (onPressResult) {
       onPressResult(item);
     }
   };
