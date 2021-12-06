@@ -1,7 +1,7 @@
 import {authReducer} from './reducers/Auth';
 import {AuthReducerType} from './reducers/Auth/types';
 import {homeReducer} from './reducers/Home';
-import {HomeReduserType} from './reducers/Home/types';
+import {HomeReducerType} from './reducers/Home/types';
 import {liveReducer} from './reducers/Live';
 import {LiveReducerType} from './reducers/Live/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,7 +9,7 @@ import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {persistReducer, persistStore} from 'redux-persist';
 
 const rootReducer = combineReducers<
-  AuthReducerType | HomeReduserType | LiveReducerType
+  AuthReducerType | HomeReducerType | LiveReducerType
 >({
   auth: authReducer,
   live: liveReducer,

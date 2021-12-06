@@ -8,7 +8,7 @@ export type HomeInitialStateType = {
   listChannels: ListChannelsType[];
 };
 
-export type HomeReduserType = (
+export type HomeReducerType = (
   state: HomeInitialStateType,
   action: HomeActionsType,
 ) => HomeInitialStateType;
