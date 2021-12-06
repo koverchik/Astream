@@ -179,7 +179,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       <View style={styles.container}>
         <MapView
           ref={mapRef}
-          camera={{...cameraProperties}}
+          camera={cameraProperties}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
           onPress={onPressMap}

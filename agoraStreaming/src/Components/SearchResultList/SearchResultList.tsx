@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 import {
   FlatList,
-  FlatListProps,
   ListRenderItem,
   Text,
   useWindowDimensions,
@@ -26,12 +25,10 @@ export const SearchResultList: FC<SearchResultListPropsType> = (props) => {
     return <Text style={styles.emptyListTitle}>Nothing found!</Text>;
   };
 
-  const data: FlatListProps<ListChannelsType>['data'] = searchResult;
-
   return (
     <FlatList
       style={styles.flatList}
-      data={data}
+      data={searchResult}
       renderItem={renderItem}
       ListEmptyComponent={listEmptyComponent}
     />

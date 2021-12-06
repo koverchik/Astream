@@ -10,8 +10,8 @@ export type CustomHeaderPropsType = {
   title: string;
   placeholderText: HeaderInputPlaceholders;
   filter: TextInputProps['onChange'];
-  searchResult?: ListChannelsType[];
   screen: TabNavigation;
 
+  searchResult?: ListChannelsType[];
   onPressResult?: (stream: ListChannelsType) => void;
 };
