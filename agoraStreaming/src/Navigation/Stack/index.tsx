@@ -59,6 +59,7 @@ export const MainStack = () => {
     tabNavigation.setOptions({
       header: ({route, options}) => {
         const title = getHeaderTitle(options, route.name);
+
         return (
           <CustomHeader
             title={title}
