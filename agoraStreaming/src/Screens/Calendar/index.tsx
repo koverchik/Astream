@@ -106,7 +106,6 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
             title={title}
             placeholderText={HeaderInputPlaceholders.CALENDAR}
             screen={TabNavigation.Calendar}
-            searchResult={streams}
             filter={onChangeSearchValue}
           />
         );
