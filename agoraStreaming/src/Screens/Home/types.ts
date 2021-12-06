@@ -30,3 +30,8 @@ export type ChannelsListFromFirebase = Pick<
   ListChannelsType,
   'channelId' | 'isVideo' | 'coords' | 'name'
 >;
+
+export enum ImagePaths {
+  VIDEO = '../../../assets/images/video-camera.png',
+  SOUND = '../../../assets/images/sound-bars.png',
+}
