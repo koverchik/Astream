@@ -31,8 +31,13 @@ import {
   selectChannelsList,
   selectCoordinates,
 } from '../../Redux/selectors/HomeSelectors';
+import {addCallouts} from './Helpers/addCallouts';
 import {styles} from './style';
-import {HomeScreenProps, ListChannelsType} from './types';
+import {
+  ChannelsListFromFirebase,
+  HomeScreenProps,
+  ListChannelsType,
+} from './types';
 
 const INITIAL_COORDS = {
   latitude: 53.5078788,
@@ -47,8 +52,10 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const dispatch = useAppDispatch();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [currentGeolocation, setCurrentGeolocation] =
-    useState<Region>(INITIAL_COORDS);
+  const [geolocation, setGeolocation] = useState<Region>(INITIAL_COORDS);
+  const [channelListFirebase, setChannelListFirebase] = useState<
+    ChannelsListFromFirebase[]
+  >([]);
 
   const mapRef = useRef<MapView | null>(null);
 
@@ -75,11 +82,16 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   }, [coordinates]);
 
   useEffect(() => {
+    const newChannelList = addCallouts(channelListFirebase, channelsList);
+    dispatch(setChannelsListAction(newChannelList));
+  }, [channelListFirebase]);
+
+  useEffect(() => {
     requestPermissions();
     Geolocation.getCurrentPosition(
       (position) => {
         const {latitude, longitude} = position.coords;
-        setCurrentGeolocation({...coordinates, latitude, longitude});
+        setGeolocation({...coordinates, latitude, longitude});
       },
       () => {
         dispatch(setCoordinatesAction(INITIAL_COORDS));
@@ -91,28 +103,11 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       .ref('/channels')
       .on('value', (snapshot) => {
         if (snapshot.val() !== null) {
-          const channelListFirebase: ListChannelsType[] = Object.values(
+          const channelListFirebase: ChannelsListFromFirebase[] = Object.values(
             snapshot.val(),
           );
 
-          const newChannelList = channelListFirebase.map((channel) => {
-            const selectChannel = channelsList.find((selectChannel) => {
-              return selectChannel.name === channel.name;
-            });
-
-            if (selectChannel && selectChannel.calloutIsShow) {
-              return {
-                ...channel,
-                calloutIsShow: true,
-              };
-            } else {
-              return {
-                ...channel,
-                calloutIsShow: false,
-              };
-            }
-          });
-          dispatch(setChannelsListAction(newChannelList));
+          setChannelListFirebase(channelListFirebase);
         } else {
           dispatch(setChannelsListAction([]));
         }
@@ -205,7 +200,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
         <ModalCreatEvent
           changeModalVisible={changeModalVisible}
           isModalVisible={modalVisible}
-          coordinates={currentGeolocation}
+          coordinates={geolocation}
         />
         <View style={styles.createContainer}>
           <TouchableOpacity style={styles.button} onPress={changeModalVisible}>
