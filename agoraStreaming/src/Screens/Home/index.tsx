@@ -52,6 +52,14 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
 
   const mapRef = useRef<MapView | null>(null);
 
+  const cameraProperties = {
+    heading: 0,
+    altitude: 0,
+    pitch: 0,
+    zoom: 10,
+    center: coordinates,
+  };
+
   const changeModalVisible = () => setModalVisible(!modalVisible);
 
   const requestPermissions = async () => {
@@ -129,10 +137,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       <GoogleMapsMarker
         key={channelId}
         calloutIsShow={calloutIsShow}
-        coordinate={{
-          latitude,
-          longitude,
-        }}
+        coordinate={{latitude, longitude}}
         onCalloutPress={() => onCalloutPress(channelId, isVideo)}
         title={name}>
         <View style={styles.marker}>
@@ -156,20 +161,28 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     );
   });
 
+  const onPressMap = () => {
+    const calloutIsShowId = channelsList.some((channel) => {
+      return channel.calloutIsShow;
+    });
+
+    if (calloutIsShowId) {
+      const newChannelList = channelsList.map((channel) => {
+        return {...channel, calloutIsShow: false};
+      });
+      dispatch(setChannelsListAction(newChannelList));
+    }
+  };
+
   return (
     <View style={styles.background}>
       <View style={styles.container}>
         <MapView
           ref={mapRef}
-          camera={{
-            heading: 0,
-            altitude: 0,
-            pitch: 0,
-            zoom: 10,
-            center: coordinates,
-          }}
+          camera={{...cameraProperties}}
           provider={PROVIDER_GOOGLE}
           style={styles.map}
+          onPress={onPressMap}
           zoomControlEnabled={true}>
           {allMarkers}
         </MapView>
