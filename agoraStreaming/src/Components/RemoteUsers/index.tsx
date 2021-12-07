@@ -6,7 +6,7 @@ import {CameraMutedSvg} from '../../Icons/CameraMutedSvg';
 import {MicroMutedSvg} from '../../Icons/MicroMutedSvg';
 import {animationCircle} from '../../Screens/Live/helpers/animationCircle';
 import {IconUserName} from '../IconUserName';
-import {MuteIcon} from '../MuteIcon/MuteIcon';
+import {MuteIcon} from '../MuteIcon';
 import {UserNameLabel} from '../UserNameLabel/UserNameLabel';
 import {styles} from './styles';
 import {RemoteUsersType} from './types';
