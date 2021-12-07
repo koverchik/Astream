@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 
 import {ListChannelsType} from '../../Screens/Home/types';
-import {SearchResultItem} from './SearchResultItem/SearchResultItem';
+import {SearchResultItem} from './SearchResultItem';
 import {SearchResultStyles} from './styles';
 import {SearchResultListPropsType} from './types';
 

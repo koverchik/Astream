@@ -9,7 +9,7 @@ import database from '@react-native-firebase/database';
 import {GoogleMapsMarker} from '../../Components/GoogleMapsMarker';
 import {CustomHeader} from '../../Components/Header';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
-import {SearchResultList} from '../../Components/SearchResultList/SearchResultList';
+import {SearchResultList} from '../../Components/SearchResultList';
 import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
 import {
   HeaderInputPlaceholders,
