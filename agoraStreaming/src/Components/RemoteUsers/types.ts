@@ -12,4 +12,5 @@ export type LocalUserType = {
   voice: boolean;
   camera: boolean;
   activeVoice: boolean;
+  isVideo: boolean;
 };

@@ -48,6 +48,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
     camera: false,
     voice: false,
     activeVoice: false,
+    isVideo,
   });
 
   const [stash, setStash] = useState<UserType[]>([]);
@@ -228,6 +229,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
                   voice={user.voice}
                   camera={user.camera}
                   activeVoice={user.activeVoice}
+                  isVideo={isVideo}
                 />
               );
             } else if (joined) {
@@ -241,6 +243,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
                   countUsers={countUsers}
                   sizeUserPoint={sizeUserPoint}
                   wavesAroundUserPoint={wavesAroundUserPoint}
+                  isVideo={isVideo}
                 />
               );
             }

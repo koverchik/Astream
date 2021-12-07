@@ -16,6 +16,7 @@ export const LocalUser: FC<LocalUserPropsType> = (props) => {
     activeVoice,
     channelId,
     cameraSize,
+    isVideo,
   } = props;
 
   return (
@@ -32,10 +33,20 @@ export const LocalUser: FC<LocalUserPropsType> = (props) => {
           )}
         </View>
       ) : (
-        <RtcLocalView.SurfaceView
-          style={styles.rtcLocal}
-          channelId={channelId}
-        />
+        <>
+          <RtcLocalView.SurfaceView
+            style={styles.rtcLocal}
+            channelId={channelId}
+          />
+          {!isVideo && activeVoice && (
+            <IconUserName
+              userName={myUserData.userAccount}
+              countUser={countUsers}
+              sizeUserPoint={sizeUserPoint}
+              wavesAroundUserPoint={wavesAroundUserPoint}
+            />
+          )}
+        </>
       )}
       <View style={styles.userNameContainer}>
         <UserNameLabel userName={myUserData.userAccount} />

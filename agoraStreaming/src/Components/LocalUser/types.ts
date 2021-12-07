@@ -10,4 +10,5 @@ export type LocalUserPropsType = {
   sizeUserPoint: Animated.Value;
   wavesAroundUserPoint: Animated.Value;
   cameraSize: ViewStyle;
+  isVideo: boolean;
 };
