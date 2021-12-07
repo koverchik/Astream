@@ -66,6 +66,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
   const selectDay = (date: DateInfoType) => {
     setSearchResult([]);
     setSearchValue('');
+    setHeaderTitle(TabNavigation.Calendar);
     setChoseDay(`${date.year}-${date.month}-${date.day}`);
   };
 
