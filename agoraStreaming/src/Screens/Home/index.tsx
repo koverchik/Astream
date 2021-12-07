@@ -1,12 +1,5 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {
-  Image,
-  NativeSyntheticEvent,
-  Text,
-  TextInputChangeEventData,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
 import MapView, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
@@ -33,6 +26,7 @@ import {
   selectChannelsList,
   selectCoordinates,
 } from '../../Redux/selectors/HomeSelectors';
+import {InputEventType} from '../../Types/universalTypes';
 import {CallTypes} from '../Calendar/types';
 import {addCallouts} from './Helpers/addCallouts';
 import {getImage} from './Helpers/getImage';
@@ -67,9 +61,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchMode, setSearchMode] = useState<boolean>(false);
 
-  const onChangeSearchValue = (
-    event: NativeSyntheticEvent<TextInputChangeEventData>,
-  ) => {
+  const onChangeSearchValue = (event: InputEventType) => {
     const result = channelsList.filter((channel) => {
       const matchFound = channel.name.includes(event.nativeEvent.text);
       const voidString = event.nativeEvent.text === '';
@@ -103,7 +95,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     });
   };
 
-  const renderFlatList = () => {
+  const renderSearchResultList = () => {
     return (
       !!searchValue &&
       searchMode && (
@@ -249,7 +241,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
             searchMode={searchMode}
             onChangeSearchMode={activeSearchMode}
           />
-          {renderFlatList()}
+          {renderSearchResultList()}
         </View>
         <MapView
           ref={mapRef}
