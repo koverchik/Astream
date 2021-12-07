@@ -31,6 +31,7 @@ export const BottomTabs = () => {
   const options: BottomTabNavigationOptions = {
     headerTransparent: true,
     tabBarShowLabel: false,
+    headerShown: false,
   };
 
   const screenOptions: ScreenOptionsType = ({route}) => ({

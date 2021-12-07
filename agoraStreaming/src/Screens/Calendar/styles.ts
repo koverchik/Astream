@@ -11,6 +11,8 @@ type CalendarStylesType = {
   flatListContentCenter: ViewStyle;
   addNewEvent: ViewStyle;
   contentContainerStyle: ViewStyle;
+  titleForEmptyListContainer: ViewStyle;
+  clearButton: ViewStyle;
 };
 
 export const styles = StyleSheet.create<CalendarStylesType>({
@@ -34,7 +36,7 @@ export const styles = StyleSheet.create<CalendarStylesType>({
   },
   addNewEvent: {
     position: 'absolute',
-    top: 64,
+    top: 14,
     left: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -50,5 +52,21 @@ export const styles = StyleSheet.create<CalendarStylesType>({
   flatListContentCenter: {
     flex: 1,
     justifyContent: 'center',
+  },
+  titleForEmptyListContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  clearButton: {
+    height: SIZE_BUTTON,
+    width: SIZE_BUTTON,
+    borderRadius: SIZE_BUTTON / 2,
+    backgroundColor: '#262626',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 15,
+    right: 70,
   },
 });

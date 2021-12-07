@@ -12,6 +12,7 @@ import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader/Preloader';
 import {RemoteUsers} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
+import {HomeStackScreens} from '../../Navigation/Stack/types';
 import {setJoinedAction} from '../../Redux/actions/LiveActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
@@ -28,6 +29,7 @@ import {requestCameraAndAudioPermission} from './helpers/permission';
 import {switchCamera} from './helpers/switchCamera';
 import {styles} from './style';
 import {
+  Devices,
   LiveScreenProps,
   MuteSettingsType,
   StackNavigationPropLive,
@@ -35,20 +37,22 @@ import {
 } from './types';
 import {v4 as uuid} from 'uuid';
 
+const INITIAL_DATA: LocalUserType = {
+  uid: 0,
+  userAccount: '',
+  camera: false,
+  voice: false,
+  activeVoice: false,
+};
+
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords, isVideo} = props.route.params;
 
   const dispatch = useAppDispatch();
-  const joined = useAppSelector(getIsJoined);
+  const isJoined = useAppSelector(getIsJoined);
   const [error, setError] = useState<boolean>(false);
   const [peerIds, setPeerIds] = useState<UserType[]>([]);
-  const [myUserData, setMyUserData] = useState<LocalUserType>({
-    uid: 0,
-    userAccount: '',
-    camera: false,
-    voice: false,
-    activeVoice: false,
-  });
+  const [myUserData, setMyUserData] = useState<LocalUserType>(INITIAL_DATA);
 
   const [stash, setStash] = useState<UserType[]>([]);
 
@@ -60,7 +64,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const navigation = useNavigation<StackNavigationPropLive>();
 
-  const goHome = () => navigation.navigate('Home');
+  const goHome = () => navigation.navigate(HomeStackScreens.Home);
 
   const sizeUserPoint = useRef(new Animated.Value(5)).current;
   const wavesAroundUserPoint = useRef(new Animated.Value(3)).current;
@@ -78,7 +82,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const callbackUserMuteAudio = (uid: number, muted: boolean) => {
     setPeerIds((prevState) => {
-      return mute({uid, muted, device: 'voice'}, prevState);
+      return mute({uid, muted, device: Devices.VOICE}, prevState);
     });
   };
 
@@ -129,7 +133,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const callbackFunctionUserMuteVideo = (uid: number, muted: boolean) => {
     setPeerIds((prevState) => {
-      return mute({uid, muted, device: 'camera'}, prevState);
+      return mute({uid, muted, device: Devices.CAMERA}, prevState);
     });
   };
 
@@ -204,7 +208,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
     };
   }, []);
 
-  if (!error && !joined) {
+  if (!error && !isJoined) {
     return <Preloader text={'Joining Stream, Please Wait'} />;
   }
   const countUsers = () => {
@@ -230,7 +234,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
                   activeVoice={user.activeVoice}
                 />
               );
-            } else if (joined) {
+            } else if (isJoined) {
               return (
                 <LocalUser
                   key={user.uid}
