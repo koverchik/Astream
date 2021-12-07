@@ -7,7 +7,7 @@ import {ExitSvg} from '../../Icons/ExitSvg';
 import {MicroMutedSvg} from '../../Icons/MicroMutedSvg';
 import {MicroSvg} from '../../Icons/MicroSvg';
 import {SwitchCameraSvg} from '../../Icons/SwitchCameraSvg';
-import {RoundButton} from './RoundButton/RoundButton';
+import {RoundButton} from './RoundButton';
 import {styles} from './styles';
 import {ButtonBarPropsType} from './types';
 

@@ -1,12 +1,12 @@
 import {StyleSheet} from 'react-native';
 
-const ButtonSize = 50;
+const BUTTON_SIZE = 50;
 
 export const styles = StyleSheet.create({
   wrapper: {
-    width: ButtonSize,
-    height: ButtonSize,
-    borderRadius: ButtonSize / 2,
+    width: BUTTON_SIZE,
+    height: BUTTON_SIZE,
+    borderRadius: BUTTON_SIZE / 2,
     marginHorizontal: 5,
     alignItems: 'center',
     justifyContent: 'center',
