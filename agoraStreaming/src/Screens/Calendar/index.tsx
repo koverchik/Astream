@@ -11,7 +11,6 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 
-import {getHeaderTitle} from '@react-navigation/elements';
 import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
@@ -39,22 +38,26 @@ import {
   StreamType,
   TabNavigationPropsProfileType,
 } from './types';
-import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faTimes} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 export const ScreenCalendar: FC<CalendarScreenProps> = () => {
   const navigation = useNavigation<TabNavigationPropsProfileType>();
 
   const dataSystem = new Date();
+  const initDate = `${dataSystem.getFullYear()}-${
+    dataSystem.getMonth() + 1
+  }-${dataSystem.getDate()}`;
 
   const [streams, setStreams] = useState<StreamType[]>([]);
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [chosenDay, setChoseDay] = useState(initDate);
+
   const [searchResult, setSearchResult] = useState<StreamType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [isModalVisible, setModalVisible] = useState<boolean>(false);
-  const [chosenDay, setChoseDay] = useState(
-    `${dataSystem.getFullYear()}-${
-      dataSystem.getMonth() + 1
-    }-${dataSystem.getDate()}`,
+  const [searchMode, setSearchMode] = useState<boolean>(false);
+  const [headerTitle, setHeaderTitle] = useState<string>(
+    TabNavigation.Calendar,
   );
 
   const changeModalVisible = () => setModalVisible(!isModalVisible);
@@ -75,9 +78,10 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     event: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
     const result = streams.filter((stream) => {
-      setSearchValue(event.nativeEvent.text);
-      const matchFound = stream.name.includes(event.nativeEvent.text);
-      const voidString = event.nativeEvent.text === '';
+      const textFromInput = event.nativeEvent.text;
+      const matchFound = stream.name.includes(textFromInput);
+      const voidString = !textFromInput;
+      setSearchValue(textFromInput);
 
       if (matchFound && !voidString) {
         return stream;
@@ -96,22 +100,52 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     }
   };
 
+  const activeSearchMode = () => {
+    setSearchMode((searchMode) => {
+      if (searchValue) {
+        setHeaderTitle(searchValue);
+      }
+
+      return !searchMode;
+    });
+  };
+
+  const onPressClearButton = () => {
+    setSearchValue('');
+    setHeaderTitle(TabNavigation.Calendar);
+    setSearchResult([]);
+  };
+
+  const renderClearButton = () => {
+    return (
+      !!searchValue && (
+        <TouchableOpacity
+          style={styles.clearButton}
+          onPress={onPressClearButton}>
+          <FontAwesomeIcon icon={faTimes} color={'white'} size={18} />
+        </TouchableOpacity>
+      )
+    );
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      header: ({route, options}) => {
-        const title = getHeaderTitle(options, route.name);
-
+      header: () => {
         return (
-          <CustomHeader
-            title={title}
-            placeholderText={HeaderInputPlaceholders.CALENDAR}
-            screen={TabNavigation.Calendar}
-            filter={onChangeSearchValue}
-          />
+          <View>
+            <CustomHeader
+              title={headerTitle}
+              placeholderText={HeaderInputPlaceholders.CALENDAR}
+              filter={onChangeSearchValue}
+              searchMode={searchMode}
+              onChangeSearchMode={activeSearchMode}
+            />
+            {renderClearButton()}
+          </View>
         );
       },
     });
-  }, [navigation, streams]);
+  }, [navigation, streams, searchValue, searchMode, headerTitle]);
 
   useEffect(() => {
     database()
