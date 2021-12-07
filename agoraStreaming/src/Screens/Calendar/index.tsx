@@ -122,22 +122,9 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => {
-        return (
-          <View>
-            <CustomHeader
-              title={headerTitle}
-              placeholderText={HeaderInputPlaceholders.CALENDAR}
-              filter={onChangeSearchValue}
-              searchMode={searchMode}
-              onChangeSearchMode={activeSearchMode}
-            />
-            {renderClearButton()}
-          </View>
-        );
-      },
+      headerShown: false,
     });
-  }, [navigation, streams, searchValue, searchMode, headerTitle]);
+  }, [navigation]);
 
   useEffect(() => {
     database()
@@ -177,7 +164,15 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
   return (
     <View style={styles.background}>
       <View style={styles.container}>
-        <View style={styles.calendarContainer}>
+        <CustomHeader
+          title={headerTitle}
+          placeholderText={HeaderInputPlaceholders.CALENDAR}
+          filter={onChangeSearchValue}
+          searchMode={searchMode}
+          onChangeSearchMode={activeSearchMode}
+        />
+        {renderClearButton()}
+        <View>
           <TouchableOpacity
             onPress={changeModalVisible}
             style={styles.addNewEvent}>

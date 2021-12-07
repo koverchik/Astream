@@ -1,5 +1,12 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  NativeSyntheticEvent,
+  Text,
+  TextInputChangeEventData,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
 import MapView, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
@@ -7,8 +14,14 @@ import MapView, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
 import database from '@react-native-firebase/database';
 
 import {GoogleMapsMarker} from '../../Components/GoogleMapsMarker/GoogleMapsMarker';
+import {CustomHeader} from '../../Components/Header';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
+import {SearchResultList} from '../../Components/SearchResultList/SearchResultList';
 import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
+import {
+  HeaderInputPlaceholders,
+  TabNavigation,
+} from '../../Navigation/Tab/types';
 import {
   setChannelsListAction,
   setCoordinatesAction,
@@ -49,6 +62,58 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const [channelListFirebase, setChannelListFirebase] = useState<
     ChannelsListFromFirebase[]
   >([]);
+
+  const [searchResult, setSearchResult] = useState<ListChannelsType[]>([]);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [searchMode, setSearchMode] = useState<boolean>(false);
+
+  const onChangeSearchValue = (
+    event: NativeSyntheticEvent<TextInputChangeEventData>,
+  ) => {
+    const result = channelsList.filter((channel) => {
+      const matchFound = channel.name.includes(event.nativeEvent.text);
+      const voidString = event.nativeEvent.text === '';
+
+      if (matchFound && !voidString) {
+        return channel;
+      }
+    });
+    setSearchResult(result);
+  };
+
+  const onPressResult = (stream: ListChannelsType) => {
+    const propertiesForShowCallout = {
+      channelId: stream.channelId,
+      calloutIsShow: true,
+    };
+
+    dispatch(setCoordinatesAction(stream.coords));
+    dispatch(setShowCalloutAction(propertiesForShowCallout));
+    activeSearchMode();
+    setSearchResult([]);
+  };
+
+  const activeSearchMode = () => {
+    setSearchMode((searchMode) => {
+      if (searchMode) {
+        setSearchValue('');
+      }
+
+      return !searchMode;
+    });
+  };
+
+  const renderFlatList = () => {
+    return (
+      !!searchValue &&
+      searchMode && (
+        <SearchResultList
+          searchResult={searchResult}
+          onPressResult={onPressResult}
+        />
+      )
+    );
+  };
 
   const cameraProperties = {
     heading: 0,
@@ -174,6 +239,18 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   return (
     <View style={styles.background}>
       <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <CustomHeader
+            title={TabNavigation.Main}
+            placeholderText={HeaderInputPlaceholders.MAIN}
+            filter={onChangeSearchValue}
+            inputValue={searchValue}
+            onChangeInputText={setSearchValue}
+            searchMode={searchMode}
+            onChangeSearchMode={activeSearchMode}
+          />
+          {renderFlatList()}
+        </View>
         <MapView
           ref={mapRef}
           camera={cameraProperties}

@@ -1,7 +1,5 @@
-import React, {FC, useLayoutEffect} from 'react';
+import React, {FC} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-
-import {useNavigation} from '@react-navigation/native';
 
 import auth from '@react-native-firebase/auth';
 
@@ -9,14 +7,11 @@ import {DefaultAvatar} from '../../Icons/DefaultAvatar';
 import {setUser} from '../../Redux/actions/AuthActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
-import {TabNavigationPropsProfileType} from '../Calendar/types';
 import {styles} from './style';
 import {ProfileScreenProps} from './types';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 export const ProfileScreen: FC<ProfileScreenProps> = () => {
-  const navigation = useNavigation<TabNavigationPropsProfileType>();
-
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
@@ -25,12 +20,6 @@ export const ProfileScreen: FC<ProfileScreenProps> = () => {
     await GoogleSignin.signOut();
     dispatch(setUser(null));
   };
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, [navigation]);
 
   return (
     <View style={styles.background}>
