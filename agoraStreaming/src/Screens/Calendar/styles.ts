@@ -13,6 +13,7 @@ type CalendarStylesType = {
   contentContainerStyle: ViewStyle;
   calendarContainer: ViewStyle;
   titleForEmptyListContainer: ViewStyle;
+  clearButton: ViewStyle;
 };
 
 export const styles = StyleSheet.create<CalendarStylesType>({
@@ -60,5 +61,16 @@ export const styles = StyleSheet.create<CalendarStylesType>({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  clearButton: {
+    height: SIZE_BUTTON,
+    width: SIZE_BUTTON,
+    borderRadius: SIZE_BUTTON / 2,
+    backgroundColor: '#262626',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 15,
+    right: 70,
   },
 });
