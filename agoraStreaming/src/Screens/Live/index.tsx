@@ -9,7 +9,7 @@ import database from '@react-native-firebase/database';
 
 import {ButtonBar} from '../../Components/ButtonBar';
 import {LocalUser} from '../../Components/LocalUser';
-import {Preloader} from '../../Components/Preloader/Preloader';
+import {Preloader} from '../../Components/Preloader';
 import {RemoteUsers} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
 import {HomeStackScreens} from '../../Navigation/Stack/types';
