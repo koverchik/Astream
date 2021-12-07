@@ -9,6 +9,7 @@ import {LocalUserPropsType} from './types';
 
 export const LocalUser: FC<LocalUserPropsType> = (props) => {
   const {
+    index,
     myUserData,
     sizeUserPoint,
     wavesAroundUserPoint,
@@ -25,6 +26,7 @@ export const LocalUser: FC<LocalUserPropsType> = (props) => {
         <View style={[styles.muteCamera, styles.rtcLocal]}>
           {activeVoice && (
             <IconUserName
+              index={index}
               userName={myUserData.userAccount}
               countUser={countUsers}
               sizeUserPoint={sizeUserPoint}
@@ -40,6 +42,7 @@ export const LocalUser: FC<LocalUserPropsType> = (props) => {
           />
           {!isVideo && activeVoice && (
             <IconUserName
+              index={index}
               userName={myUserData.userAccount}
               countUser={countUsers}
               sizeUserPoint={sizeUserPoint}

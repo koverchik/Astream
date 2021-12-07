@@ -1,24 +1,22 @@
 import {Dimensions, StyleSheet, ViewStyle} from 'react-native';
 
+import {SIZE_USER_POINT} from '.';
+
 type UserNameLabelType = {
   pointUserName: ViewStyle;
   wavesAroundUserPoint: ViewStyle;
 };
 
-const dimensions = {
-  height: Dimensions.get('window').height,
-};
-
-const SIZE_USER_POINT = 40;
+const {height, width} = Dimensions.get('window');
 
 const roundStyles: ViewStyle = {
   height: SIZE_USER_POINT,
   width: SIZE_USER_POINT,
-  marginLeft: 20,
+  top: height / 2 - SIZE_USER_POINT / 2,
+  left: width / 2 - SIZE_USER_POINT / 2,
   alignItems: 'center',
   justifyContent: 'center',
   position: 'absolute',
-  left: dimensions.height / 4 - 20,
   borderRadius: 20,
 };
 

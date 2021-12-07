@@ -1,6 +1,7 @@
 import {ViewStyle} from 'react-native';
 
 export type RemoteUsersType = LocalUserType & {
+  index: number;
   channelId: string;
   countUsers: () => number;
   cameraStyle: ViewStyle;

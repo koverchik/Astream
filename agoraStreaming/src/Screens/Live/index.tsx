@@ -208,9 +208,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   if (!error && !joined) {
     return <Preloader text={'Joining Stream, Please Wait'} />;
   }
-  const countUsers = () => {
-    return peerIds.length + 1;
-  };
+  const countUsers = () => peerIds.length;
 
   return (
     <View style={styles.container}>
@@ -220,6 +218,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
             if (user.uid !== myUserData.uid) {
               return (
                 <RemoteUsers
+                  index={index}
                   cameraStyle={cameraStyle(index, ids, styles)}
                   key={'RemoteUsers' + user.uid}
                   uid={user.uid}
@@ -236,6 +235,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
               return (
                 <LocalUser
                   key={user.uid}
+                  index={index}
                   cameraSize={cameraStyle(index, ids, styles)}
                   myUserData={myUserData}
                   channelId={channelId}

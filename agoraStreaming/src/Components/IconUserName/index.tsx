@@ -1,17 +1,18 @@
 import React, {FC} from 'react';
-import {Animated, Dimensions, Text} from 'react-native';
+import {Animated, Text} from 'react-native';
 
+import {valueForPosition} from './helper';
 import {styles} from './styles';
 import {IconUserNameType} from './types';
 
-const dimensions = {
-  width: Dimensions.get('window').width,
-  height: Dimensions.get('window').height,
-};
+export const SIZE_USER_POINT = 30;
 
 export const IconUserName: FC<IconUserNameType> = (props) => {
-  const {userName, countUser, sizeUserPoint, wavesAroundUserPoint} = props;
-  const valueTop = dimensions.height / 2 / countUser() - 20;
+  const {userName, countUser, sizeUserPoint, wavesAroundUserPoint, index} =
+    props;
+
+  const position = valueForPosition(countUser(), index);
+
   const transformCircleAround = [
     {
       scale: wavesAroundUserPoint.interpolate({
@@ -20,6 +21,7 @@ export const IconUserName: FC<IconUserNameType> = (props) => {
       }),
     },
   ];
+
   const transformAround = [
     {
       scale: sizeUserPoint.interpolate({
@@ -28,13 +30,14 @@ export const IconUserName: FC<IconUserNameType> = (props) => {
       }),
     },
   ];
+
   return (
     <>
       <Animated.View
         style={[
           styles.wavesAroundUserPoint,
+          position,
           {
-            top: valueTop,
             transform: transformCircleAround,
           },
         ]}
@@ -42,12 +45,12 @@ export const IconUserName: FC<IconUserNameType> = (props) => {
       <Animated.View
         style={[
           styles.pointUserName,
+          position,
           {
-            top: valueTop,
             transform: transformAround,
           },
         ]}>
-        <Text>{userName.slice(0, 1)}</Text>
+        <Text>{userName.slice(0, 1).toUpperCase()}</Text>
       </Animated.View>
     </>
   );

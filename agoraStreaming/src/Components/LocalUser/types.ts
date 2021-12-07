@@ -3,6 +3,7 @@ import {Animated, ViewStyle} from 'react-native';
 import {LocalUserType} from '../RemoteUsers/types';
 
 export type LocalUserPropsType = {
+  index: number;
   myUserData: LocalUserType;
   channelId: string;
   activeVoice: boolean;

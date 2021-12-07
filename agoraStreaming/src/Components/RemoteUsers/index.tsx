@@ -13,6 +13,7 @@ import {RemoteUsersType} from './types';
 
 export const RemoteUsers: FC<RemoteUsersType> = (props) => {
   const {
+    index,
     uid,
     channelId,
     userAccount,
@@ -34,6 +35,7 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
         <View style={[styles.muteCamera, styles.rtcRemote]}>
           {activeVoice && (
             <IconUserName
+              index={index}
               userName={userAccount}
               countUser={countUsers}
               sizeUserPoint={sizeUserPoint}
@@ -56,6 +58,7 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
               countUser={countUsers}
               sizeUserPoint={sizeUserPoint}
               wavesAroundUserPoint={wavesAroundUserPoint}
+              index={index}
             />
           )}
         </>
