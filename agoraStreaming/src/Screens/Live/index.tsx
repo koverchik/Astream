@@ -28,6 +28,7 @@ import {requestCameraAndAudioPermission} from './helpers/permission';
 import {switchCamera} from './helpers/switchCamera';
 import {styles} from './style';
 import {
+  Devices,
   LiveScreenProps,
   MuteSettingsType,
   StackNavigationPropLive,
@@ -78,7 +79,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const callbackUserMuteAudio = (uid: number, muted: boolean) => {
     setPeerIds((prevState) => {
-      return mute({uid, muted, device: 'voice'}, prevState);
+      return mute({uid, muted, device: Devices.VOICE}, prevState);
     });
   };
 
@@ -129,7 +130,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const callbackFunctionUserMuteVideo = (uid: number, muted: boolean) => {
     setPeerIds((prevState) => {
-      return mute({uid, muted, device: 'camera'}, prevState);
+      return mute({uid, muted, device: Devices.CAMERA}, prevState);
     });
   };
 
