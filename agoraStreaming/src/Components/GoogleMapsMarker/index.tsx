@@ -1,9 +1,7 @@
 import React, {FC, useEffect, useRef} from 'react';
-import {Marker, MarkerProps} from 'react-native-maps';
+import {Marker} from 'react-native-maps';
 
-type GoogleMapsMarkerPropsType = MarkerProps & {
-  calloutIsShow: boolean;
-};
+import {GoogleMapsMarkerPropsType} from './types';
 
 export const GoogleMapsMarker: FC<GoogleMapsMarkerPropsType> = (props) => {
   const {calloutIsShow, children, ...restProps} = props;

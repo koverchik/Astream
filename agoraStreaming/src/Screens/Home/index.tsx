@@ -6,7 +6,7 @@ import MapView, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
 
 import database from '@react-native-firebase/database';
 
-import {GoogleMapsMarker} from '../../Components/GoogleMapsMarker/GoogleMapsMarker';
+import {GoogleMapsMarker} from '../../Components/GoogleMapsMarker';
 import {CustomHeader} from '../../Components/Header';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
 import {SearchResultList} from '../../Components/SearchResultList/SearchResultList';
