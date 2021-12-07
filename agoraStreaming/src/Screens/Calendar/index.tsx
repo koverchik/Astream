@@ -1,11 +1,5 @@
 import React, {FC, useEffect, useLayoutEffect, useState} from 'react';
-import {
-  NativeSyntheticEvent,
-  Text,
-  TextInputChangeEventData,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -27,6 +21,7 @@ import {
   HeaderInputPlaceholders,
   TabNavigation,
 } from '../../Navigation/Tab/types';
+import {InputEventType} from '../../Types/universalTypes';
 import {arrayListData} from './helpers/arrayListData';
 import {
   TIME_NOTIFICATION,
@@ -74,18 +69,14 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     setChoseDay(`${date.year}-${date.month}-${date.day}`);
   };
 
-  const onChangeSearchValue = (
-    event: NativeSyntheticEvent<TextInputChangeEventData>,
-  ) => {
+  const onChangeSearchValue = (event: InputEventType) => {
     const result = streams.filter((stream) => {
       const textFromInput = event.nativeEvent.text;
       const matchFound = stream.name.includes(textFromInput);
       const voidString = !textFromInput;
       setSearchValue(textFromInput);
 
-      if (matchFound && !voidString) {
-        return stream;
-      }
+      return matchFound && !voidString && stream;
     });
     setSearchResult(result);
   };
