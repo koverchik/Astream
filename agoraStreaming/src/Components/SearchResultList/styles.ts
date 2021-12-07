@@ -10,8 +10,6 @@ type SearchResultListStylesType = {
 export const SearchResultStyles = (width: ScaledSize['width']) => {
   return StyleSheet.create<SearchResultListStylesType>({
     flatList: {
-      position: 'absolute',
-      top: 60,
       width: width - 20,
       backgroundColor: '#343434FF',
       marginHorizontal: 10,

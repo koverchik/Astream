@@ -25,3 +25,8 @@ export type ListChannelsType = {
   isVideo: RootStackParamList['Live']['isVideo'];
   calloutIsShow: boolean;
 };
+
+export type ChannelsListFromFirebase = Pick<
+  ListChannelsType,
+  'channelId' | 'isVideo' | 'coords' | 'name'
+>;
