@@ -184,7 +184,9 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
               );
             })
           ) : (
-            <Text>No scheduled streams</Text>
+            <View style={styles.titleForEmptyListContainer}>
+              <Text>No scheduled streams</Text>
+            </View>
           )}
         </Animated.ScrollView>
       </View>

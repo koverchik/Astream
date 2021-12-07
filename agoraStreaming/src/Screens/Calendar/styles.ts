@@ -12,6 +12,7 @@ type CalendarStylesType = {
   addNewEvent: ViewStyle;
   contentContainerStyle: ViewStyle;
   calendarContainer: ViewStyle;
+  titleForEmptyListContainer: ViewStyle;
 };
 
 export const styles = StyleSheet.create<CalendarStylesType>({
@@ -54,5 +55,10 @@ export const styles = StyleSheet.create<CalendarStylesType>({
   },
   calendarContainer: {
     marginTop: 50,
+  },
+  titleForEmptyListContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
