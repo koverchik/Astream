@@ -36,6 +36,7 @@ export const getUserData = async (dispatch: AppDispatch) => {
       const user = await GoogleSignin.getCurrentUser();
       user && dispatch(setUser(user?.user));
     }
+
     return isAuth;
   } catch (error: any) {
     Alert.alert('Error: ', error);
