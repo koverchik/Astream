@@ -151,12 +151,12 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
   return (
     <View style={styles.background}>
       <View style={styles.container}>
-        <TouchableOpacity
-          onPress={changeModalVisible}
-          style={styles.addNewEvent}>
-          <FontAwesomeIcon icon={faPlus} color={'white'} size={18} />
-        </TouchableOpacity>
-        <View style={{marginTop: 50}}>
+        <View style={styles.calendarContainer}>
+          <TouchableOpacity
+            onPress={changeModalVisible}
+            style={styles.addNewEvent}>
+            <FontAwesomeIcon icon={faPlus} color={'white'} size={18} />
+          </TouchableOpacity>
           <HorizontalCalendar
             onDayPress={selectDay}
             activeDayColor={'#007eff'}
