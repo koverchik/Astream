@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/stack';
 
 import {CustomHeader} from '../../Components/Header';
+import {SearchResultList} from '../../Components/SearchResultList/SearchResultList';
 import {
   setCoordinatesAction,
   setShowCalloutAction,
@@ -19,7 +20,7 @@ import {TabNavigationPropsProfileType} from '../../Screens/Calendar/types';
 import {Home} from '../../Screens/Home';
 import {ListChannelsType} from '../../Screens/Home/types';
 import {Live} from '../../Screens/Live';
-import {HeaderInputPlaceholders, TabNavigation} from '../Tab/types';
+import {HeaderInputPlaceholders} from '../Tab/types';
 import {HomeStackScreens, RootStackParamList} from './types';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -32,6 +33,8 @@ export const MainStack = () => {
   const dispatch = useAppDispatch();
 
   const [searchResult, setSearchResult] = useState<ListChannelsType[]>([]);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [searchMode, setSearchMode] = useState<boolean>(false);
 
   const onChangeSearchValue = (
     event: NativeSyntheticEvent<TextInputChangeEventData>,
@@ -48,11 +51,37 @@ export const MainStack = () => {
   };
 
   const onPressResult = (stream: ListChannelsType) => {
+    const propertiesForShowCallout = {
+      channelId: stream.channelId,
+      calloutIsShow: true,
+    };
+
     dispatch(setCoordinatesAction(stream.coords));
-    dispatch(
-      setShowCalloutAction({channelId: stream.channelId, calloutIsShow: true}),
-    );
+    dispatch(setShowCalloutAction(propertiesForShowCallout));
+    activeSearchMode();
     setSearchResult([]);
+  };
+
+  const activeSearchMode = () => {
+    setSearchMode((searchMode) => {
+      if (searchMode) {
+        setSearchValue('');
+      }
+
+      return !searchMode;
+    });
+  };
+
+  const renderFlatList = () => {
+    return (
+      !!searchValue &&
+      searchMode && (
+        <SearchResultList
+          searchResult={searchResult}
+          onPressResult={onPressResult}
+        />
+      )
+    );
   };
 
   useLayoutEffect(() => {
@@ -61,18 +90,22 @@ export const MainStack = () => {
         const title = getHeaderTitle(options, route.name);
 
         return (
-          <CustomHeader
-            title={title}
-            placeholderText={HeaderInputPlaceholders.MAIN}
-            filter={onChangeSearchValue}
-            onPressResult={onPressResult}
-            searchResult={searchResult}
-            screen={TabNavigation.Main}
-          />
+          <>
+            <CustomHeader
+              title={title}
+              placeholderText={HeaderInputPlaceholders.MAIN}
+              filter={onChangeSearchValue}
+              inputValue={searchValue}
+              onChangeInputText={setSearchValue}
+              searchMode={searchMode}
+              onChangeSearchMode={activeSearchMode}
+            />
+            {renderFlatList()}
+          </>
         );
       },
     });
-  }, [tabNavigation, searchResult]);
+  }, [tabNavigation, searchResult, searchValue, searchMode]);
 
   return (
     <Stack.Navigator>

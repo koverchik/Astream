@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {
   Image,
   Text,
@@ -13,9 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import {TabNavigation} from '../../Navigation/Tab/types';
 import {useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
-import {ListChannelsType} from '../../Screens/Home/types';
 import {TabNavigationPropsProfileType} from '../../Screens/Profile/types';
-import {SearchResultList} from '../SearchResultList/SearchResultList';
 import {HeaderStyles} from './styles';
 import {CustomHeaderPropsType} from './types';
 import {
@@ -29,34 +27,21 @@ import {
 } from '@fortawesome/react-native-fontawesome';
 
 export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
-  const {title, placeholderText, filter, onPressResult, searchResult, screen} =
-    props;
+  const {
+    title,
+    placeholderText,
+    filter,
+    onChangeInputText,
+    inputValue,
+    searchMode,
+    onChangeSearchMode,
+  } = props;
 
   const {width} = useWindowDimensions();
   const styles = HeaderStyles(width);
 
   const user = useAppSelector(selectUser);
   const navigation = useNavigation<TabNavigationPropsProfileType>();
-
-  const [searchMode, setSearchMode] = useState<boolean>(false);
-  const [searchValue, setSearchValue] = useState<string>('');
-
-  const activeSearchMode = () => {
-    setSearchMode((searchMode) => {
-      if (searchMode) {
-        setSearchValue('');
-      }
-
-      return !searchMode;
-    });
-  };
-
-  const onPressResultItem = (stream: ListChannelsType) => {
-    if (onPressResult) {
-      onPressResult(stream);
-    }
-    activeSearchMode();
-  };
 
   const onPressAvatar = () => {
     navigation.navigate(TabNavigation.Profile);
@@ -90,9 +75,9 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
           <View style={styles.titleContainer}>
             <TextInput
               style={styles.input}
-              onChangeText={setSearchValue}
+              onChangeText={onChangeInputText}
               onChange={filter}
-              value={searchValue}
+              value={inputValue}
               placeholder={placeholderText}
               placeholderTextColor={'#fff'}
               autoFocus
@@ -102,24 +87,18 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
           <TouchableOpacity
             activeOpacity={0.9}
             style={styles.titleContainer}
-            onPress={activeSearchMode}>
+            onPress={onChangeSearchMode}>
             <Text style={styles.title}>{title}</Text>
           </TouchableOpacity>
         )}
         <View style={styles.wrapperSectionIcons}>
           <TouchableOpacity
             style={styles.wrapperIcon}
-            onPress={activeSearchMode}>
+            onPress={onChangeSearchMode}>
             <FontAwesomeIcon {...getSearchIconProps()} />
           </TouchableOpacity>
         </View>
       </View>
-      {!!searchValue && screen === TabNavigation.Main && (
-        <SearchResultList
-          searchResult={searchResult}
-          onPressResult={onPressResultItem}
-        />
-      )}
     </View>
   );
 };
