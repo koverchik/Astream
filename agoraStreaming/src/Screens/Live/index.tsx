@@ -37,16 +37,17 @@ import {
 } from './types';
 import {v4 as uuid} from 'uuid';
 
-const INITIAL_DATA: LocalUserType = {
-  uid: 0,
-  userAccount: '',
-  camera: false,
-  voice: false,
-  activeVoice: false,
-};
-
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords, isVideo} = props.route.params;
+
+  const INITIAL_DATA: LocalUserType = {
+    uid: 0,
+    userAccount: '',
+    camera: false,
+    voice: false,
+    activeVoice: false,
+    isVideo,
+  };
 
   const dispatch = useAppDispatch();
   const isJoined = useAppSelector(getIsJoined);
@@ -211,9 +212,6 @@ export const Live: FC<LiveScreenProps> = (props) => {
   if (!error && !isJoined) {
     return <Preloader text={'Joining Stream, Please Wait'} />;
   }
-  const countUsers = () => {
-    return peerIds.length + 1;
-  };
 
   return (
     <View style={styles.container}>
@@ -223,28 +221,32 @@ export const Live: FC<LiveScreenProps> = (props) => {
             if (user.uid !== myUserData.uid) {
               return (
                 <RemoteUsers
+                  index={index}
                   cameraStyle={cameraStyle(index, ids, styles)}
                   key={'RemoteUsers' + user.uid}
                   uid={user.uid}
                   channelId={channelId}
-                  countUsers={countUsers}
+                  countUsers={peerIds.length}
                   userAccount={user.userAccount}
                   voice={user.voice}
                   camera={user.camera}
                   activeVoice={user.activeVoice}
+                  isVideo={isVideo}
                 />
               );
             } else if (isJoined) {
               return (
                 <LocalUser
                   key={user.uid}
+                  index={index}
                   cameraSize={cameraStyle(index, ids, styles)}
                   myUserData={myUserData}
                   channelId={channelId}
                   activeVoice={myUserData.activeVoice}
-                  countUsers={countUsers}
+                  countUsers={peerIds.length}
                   sizeUserPoint={sizeUserPoint}
                   wavesAroundUserPoint={wavesAroundUserPoint}
+                  isVideo={isVideo}
                 />
               );
             }

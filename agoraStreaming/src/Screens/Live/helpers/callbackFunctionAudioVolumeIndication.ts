@@ -13,7 +13,7 @@ export const callbackFunctionAudioVolumeIndication =
     for (let i = 0; i < speakers.length; i++) {
       const speaker = speakers[i];
       if (speaker.volume) {
-        if (speaker.vad === 1 && speaker.uid === 0) {
+        if ((speaker.vad === 1 || speaker.volume > 1) && speaker.uid === 0) {
           setMyUserData((prev) => ({...prev, activeVoice: true}));
         } else {
           setMyUserData((prev) => ({...prev, activeVoice: false}));

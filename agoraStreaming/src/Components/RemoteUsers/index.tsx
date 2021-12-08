@@ -13,6 +13,7 @@ import {RemoteUsersType} from './types';
 
 export const RemoteUsers: FC<RemoteUsersType> = (props) => {
   const {
+    index,
     uid,
     channelId,
     userAccount,
@@ -21,6 +22,7 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
     activeVoice,
     cameraStyle,
     voice,
+    isVideo,
   } = props;
 
   const sizeUserPoint = useRef(new Animated.Value(5)).current;
@@ -33,6 +35,7 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
         <View style={[styles.muteCamera, styles.rtcRemote]}>
           {activeVoice && (
             <IconUserName
+              index={index}
               userName={userAccount}
               countUser={countUsers}
               sizeUserPoint={sizeUserPoint}
@@ -41,13 +44,24 @@ export const RemoteUsers: FC<RemoteUsersType> = (props) => {
           )}
         </View>
       ) : (
-        <RtcRemoteView.SurfaceView
-          style={styles.rtcRemote}
-          uid={uid}
-          channelId={channelId}
-          renderMode={VideoRenderMode.Hidden}
-          zOrderMediaOverlay={true}
-        />
+        <>
+          <RtcRemoteView.SurfaceView
+            style={styles.rtcRemote}
+            uid={uid}
+            channelId={channelId}
+            renderMode={VideoRenderMode.Hidden}
+            zOrderMediaOverlay={true}
+          />
+          {!isVideo && activeVoice && (
+            <IconUserName
+              userName={userAccount}
+              countUser={countUsers}
+              sizeUserPoint={sizeUserPoint}
+              wavesAroundUserPoint={wavesAroundUserPoint}
+              index={index}
+            />
+          )}
+        </>
       )}
       <View style={styles.userNameContainer}>
         <UserNameLabel userName={userAccount} />
