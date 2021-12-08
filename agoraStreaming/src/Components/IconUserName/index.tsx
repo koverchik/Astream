@@ -50,7 +50,7 @@ export const IconUserName: FC<IconUserNameType> = (props) => {
             transform: transformAround,
           },
         ]}>
-        <Text>{userName.slice(0, 1).toUpperCase()}</Text>
+        <Text>{userName[0].toUpperCase()}</Text>
       </Animated.View>
     </>
   );
