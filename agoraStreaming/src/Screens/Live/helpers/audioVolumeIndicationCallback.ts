@@ -4,7 +4,7 @@ import {LocalUserType} from '../../../Components/RemoteUsers/types';
 import {SetStateType} from '../../../Types/universalTypes';
 import {UserType} from '../types';
 
-export const audioVolumeIndicationHandler =
+export const audioVolumeIndicationCallback =
   (
     setMyUserData: SetStateType<LocalUserType>,
     setPeerIds: SetStateType<UserType[]>,

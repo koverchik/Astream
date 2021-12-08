@@ -14,14 +14,14 @@ const appID = 'fecf7537eab9494b9612e782053cc546';
 
 export const initChannel = async (
   AgoraEngine: MutableRefObject<RtcEngine | undefined>,
-  userJoinedHandler: () => void,
+  userJoinedCallback: () => void,
   userLeaveChannel: () => Promise<void>,
-  userOfflineHandler: UserOfflineCallback,
-  userInfoUpdatedHandler: UserInfoCallback,
-  userMuteVideoHandler: UidWithMutedCallback,
-  userMuteAudioHandler: UidWithMutedCallback,
-  localUserRegisteredHandler: UserAccountCallback,
-  audioVolumeIndicationHandler: AudioVolumeCallback,
+  userOfflineCallback: UserOfflineCallback,
+  userInfoUpdatedCallback: UserInfoCallback,
+  userMuteVideoCallback: UidWithMutedCallback,
+  userMuteAudioCallback: UidWithMutedCallback,
+  localUserRegisteredCallback: UserAccountCallback,
+  audioVolumeIndicationCallback: AudioVolumeCallback,
   isVideo: RootStackParamList['Live']['isVideo'],
 ): Promise<void> => {
   AgoraEngine.current = await RtcEngine.create(appID);
@@ -36,27 +36,27 @@ export const initChannel = async (
 
   AgoraEngine.current?.setClientRole(ClientRole.Broadcaster);
 
-  AgoraEngine.current?.addListener('JoinChannelSuccess', userJoinedHandler);
+  AgoraEngine.current?.addListener('JoinChannelSuccess', userJoinedCallback);
 
   AgoraEngine.current?.addListener(
     'LocalUserRegistered',
-    localUserRegisteredHandler,
+    localUserRegisteredCallback,
   );
 
-  AgoraEngine.current?.addListener('UserInfoUpdated', userInfoUpdatedHandler);
+  AgoraEngine.current?.addListener('UserInfoUpdated', userInfoUpdatedCallback);
 
-  AgoraEngine.current?.addListener('UserOffline', userOfflineHandler);
+  AgoraEngine.current?.addListener('UserOffline', userOfflineCallback);
 
   AgoraEngine.current?.addListener('LeaveChannel', (StatsCallback) => {
     StatsCallback.userCount === 1 ? userLeaveChannel() : null;
     AgoraEngine.current?.destroy();
   });
 
-  AgoraEngine.current?.addListener('UserMuteVideo', userMuteVideoHandler);
+  AgoraEngine.current?.addListener('UserMuteVideo', userMuteVideoCallback);
 
   AgoraEngine.current.addListener(
     'AudioVolumeIndication',
-    audioVolumeIndicationHandler,
+    audioVolumeIndicationCallback,
   );
-  AgoraEngine.current?.addListener('UserMuteAudio', userMuteAudioHandler);
+  AgoraEngine.current?.addListener('UserMuteAudio', userMuteAudioCallback);
 };

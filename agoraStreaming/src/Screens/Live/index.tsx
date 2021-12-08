@@ -24,7 +24,7 @@ import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
 import {cameraStyle} from './helpers/CameraStyle';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
-import {audioVolumeIndicationHandler} from './helpers/audioVolumeIndicationHandler';
+import {audioVolumeIndicationCallback} from './helpers/audioVolumeIndicationCallback';
 import {initChannel} from './helpers/channel';
 import {deleteChannel} from './helpers/deleteChannel';
 import {exitChannelHandler} from './helpers/exitChannelHandler';
@@ -81,22 +81,22 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   animationCircle(sizeUserPoint, wavesAroundUserPoint).start();
 
-  const userJoinedHandler = () => {
+  const userJoinedCallback = () => {
     dispatch(setJoinedAction(true));
   };
 
-  const userOfflineHandler: UserOfflineCallback = (uid) => {
+  const userOfflineCallback: UserOfflineCallback = (uid) => {
     setPeerIds((prev) => userOfflineFilter(prev, uid));
     setStash((prev) => userOfflineFilter(prev, uid));
   };
 
-  const userMuteAudioHandler: UidWithMutedCallback = (uid, muted) => {
+  const userMuteAudioCallback: UidWithMutedCallback = (uid, muted) => {
     setPeerIds((prevState) => {
       return mute({uid, muted, device: Devices.VOICE}, prevState);
     });
   };
 
-  const localUserRegisteredHandler: UserAccountCallback = (uid, userInfo) => {
+  const localUserRegisteredCallback: UserAccountCallback = (uid, userInfo) => {
     setMyUserData((prev) => ({
       ...prev,
       uid: uid,
@@ -119,7 +119,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
     });
   };
 
-  const userInfoUpdatedHandler: UserInfoCallback = (uid, userInfo) => {
+  const userInfoUpdatedCallback: UserInfoCallback = (uid, userInfo) => {
     const userNotFound = !peerIds.find((userData) => userData.uid === uid);
 
     if (userNotFound) {
@@ -140,7 +140,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
     }
   };
 
-  const userMuteVideoHandler: UidWithMutedCallback = (uid, muted) => {
+  const userMuteVideoCallback: UidWithMutedCallback = (uid, muted) => {
     setPeerIds((prevState) => {
       return mute({uid, muted, device: Devices.CAMERA}, prevState);
     });
@@ -190,14 +190,14 @@ export const Live: FC<LiveScreenProps> = (props) => {
     }
     initChannel(
       AgoraEngine,
-      userJoinedHandler,
+      userJoinedCallback,
       userLeaveChannel,
-      userOfflineHandler,
-      userInfoUpdatedHandler,
-      userMuteVideoHandler,
-      userMuteAudioHandler,
-      localUserRegisteredHandler,
-      audioVolumeIndicationHandler(setMyUserData, setPeerIds),
+      userOfflineCallback,
+      userInfoUpdatedCallback,
+      userMuteVideoCallback,
+      userMuteAudioCallback,
+      localUserRegisteredCallback,
+      audioVolumeIndicationCallback(setMyUserData, setPeerIds),
       isVideo,
     )
       .then(() => {
