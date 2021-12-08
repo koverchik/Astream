@@ -9,12 +9,12 @@ import {
 
 import {ChangeMonthButton} from './ChangeMonthButton';
 import {Dates} from './Days';
-import {buttonsHandler} from './Helpers/calendarButtonHandler';
-import {getCurrentDate} from './Helpers/getCurrentDate';
-import {getDateIndex} from './Helpers/getDateIndex';
-import {getDateTitle} from './Helpers/getDateTitle';
-import {getDates} from './Helpers/getDates';
-import {scrollToSelectedDate} from './Helpers/scrollToSelectedDate';
+import {buttonsHandler} from './helpers/calendarButtonHandler';
+import {getCurrentDate} from './helpers/getCurrentDate';
+import {getDateIndex} from './helpers/getDateIndex';
+import {getDateTitle} from './helpers/getDateTitle';
+import {getDates} from './helpers/getDates';
+import {scrollToSelectedDate} from './helpers/scrollToSelectedDate';
 import {CalendarStyles} from './styles';
 import {
   CalendarActions,
