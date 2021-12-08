@@ -21,18 +21,20 @@ export const ProfileScreen: FC<ProfileScreenProps> = () => {
     dispatch(setUser(null));
   };
 
+  const renderPhoto = () => {
+    if (!user?.photo) {
+      return <DefaultAvatar size={'100%'} />;
+    } else {
+      return <Image source={{uri: user?.photo}} style={styles.imageUser} />;
+    }
+  };
+
   return (
     <View style={styles.background}>
       <View style={styles.container}>
         <View style={styles.wrapperProfile}>
           <View style={styles.profile}>
-            <View style={styles.imageUser}>
-              {!user?.photo ? (
-                <DefaultAvatar size={'100%'} />
-              ) : (
-                <Image source={{uri: user?.photo}} style={styles.imageUser} />
-              )}
-            </View>
+            <View style={styles.imageUser}>{renderPhoto()}</View>
             <View>
               <Text>{user?.givenName}</Text>
               <Text>{user?.familyName}</Text>
