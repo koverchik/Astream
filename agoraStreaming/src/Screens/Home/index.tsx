@@ -6,10 +6,10 @@ import MapView, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
 
 import database from '@react-native-firebase/database';
 
-import {GoogleMapsMarker} from '../../Components/GoogleMapsMarker/GoogleMapsMarker';
+import {GoogleMapsMarker} from '../../Components/GoogleMapsMarker';
 import {CustomHeader} from '../../Components/Header';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
-import {SearchResultList} from '../../Components/SearchResultList/SearchResultList';
+import {SearchResultList} from '../../Components/SearchResultList';
 import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
 import {
   HeaderInputPlaceholders,
@@ -28,12 +28,13 @@ import {
 } from '../../Redux/selectors/HomeSelectors';
 import {InputEventType} from '../../Types/universalTypes';
 import {CallTypes} from '../Calendar/types';
-import {addCallouts} from './Helpers/addCallouts';
-import {getImage} from './Helpers/getImage';
-import {requestPermissions} from './Helpers/requestPermissions';
+import {addCallouts} from './helpers/addCallouts';
+import {getImage} from './helpers/getImage';
+import {requestPermissions} from './helpers/requestPermissions';
 import {styles} from './style';
 import {
   ChannelsListFromFirebase,
+  DataForCloseChannelType,
   HomeScreenProps,
   ListChannelsType,
 } from './types';
@@ -61,12 +62,21 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchMode, setSearchMode] = useState<boolean>(false);
 
+  const cameraProperties = {
+    heading: 0,
+    altitude: 0,
+    pitch: 0,
+    zoom: 10,
+    center: coordinates,
+  };
+
   const onChangeSearchValue = (event: InputEventType) => {
     const result = channelsList.filter((channel) => {
-      const matchFound = channel.name.includes(event.nativeEvent.text);
-      const voidString = event.nativeEvent.text === '';
+      const textFromInput = event.nativeEvent.text;
+      const matchFound = channel.name.includes(textFromInput);
+      const stringIsNotEmpty = !!textFromInput;
 
-      if (matchFound && !voidString) {
+      if (matchFound && stringIsNotEmpty) {
         return channel;
       }
     });
@@ -107,16 +117,8 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     );
   };
 
-  const cameraProperties = {
-    heading: 0,
-    altitude: 0,
-    pitch: 0,
-    zoom: 10,
-    center: coordinates,
-  };
-
   useEffect(() => {
-    mapRef.current?.animateToRegion(coordinates);
+    mapRef.current?.animateToRegion(coordinates, 1000);
   }, [coordinates]);
 
   useEffect(() => {
@@ -152,10 +154,9 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       });
   }, []);
 
-  const choseChannelAndJoinLive = (
-    channelId: ListChannelsType['channelId'],
-    isVideo: ListChannelsType['isVideo'],
-  ) => {
+  const choseChannelAndJoinLive = (data: DataForCloseChannelType) => {
+    const {channelId, isVideo} = data;
+
     navigation.navigate(HomeStackScreens.Live, {
       type: LiveType.JOIN,
       channelId,
@@ -169,11 +170,9 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     setModalVisible(!modalVisible);
   };
 
-  const onCalloutPress = (
-    channelId: ListChannelsType['channelId'],
-    isVideo: ListChannelsType['isVideo'],
-  ) => {
-    choseChannelAndJoinLive(channelId, isVideo);
+  const onCalloutPress = (data: DataForCloseChannelType) => {
+    const {channelId} = data;
+    choseChannelAndJoinLive(data);
 
     channelsList.forEach((channel) => {
       if (channel.channelId === channelId && channel.calloutIsShow) {
@@ -209,7 +208,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
         calloutIsShow={calloutIsShow}
         onPress={() => onPressMarker(channelId)}
         coordinate={{latitude, longitude}}
-        onCalloutPress={() => onCalloutPress(channelId, isVideo)}
+        onCalloutPress={() => onCalloutPress({channelId, isVideo})}
         title={name}>
         <View style={styles.marker}>
           <Image
@@ -219,7 +218,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
           />
         </View>
         <Callout style={styles.calloutStyle}>
-          <TouchableOpacity key={channelId} style={styles.itemChannel}>
+          <TouchableOpacity style={styles.itemChannel}>
             <Text style={styles.markerText}>{name}</Text>
             <Text>{isVideo ? CallTypes.Video : CallTypes.Audio}</Text>
           </TouchableOpacity>

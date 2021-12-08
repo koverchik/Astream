@@ -1,5 +1,3 @@
-import {AuthActionsType} from '../../actions/AuthActions/types';
-
 export type AuthStateType = {
   user: AuthDataType | null;
 };
@@ -12,8 +10,3 @@ export type AuthDataType = {
   name: string | null;
   photo: string | null;
 };
-
-export type AuthReducerType = (
-  state: AuthStateType,
-  action: AuthActionsType,
-) => AuthStateType;

@@ -2,7 +2,7 @@ import {ImageStyle, StyleSheet, ViewStyle} from 'react-native';
 
 import {CORNERS_RADIUS} from '../Home/style';
 
-type HomeScreenStyles = {
+type HomeScreenStylesType = {
   container: ViewStyle;
   wrapperProfile: ViewStyle;
   button: ViewStyle;
@@ -13,7 +13,7 @@ type HomeScreenStyles = {
 
 const SIZE_ICON_USER = 60;
 
-export const styles = StyleSheet.create<HomeScreenStyles>({
+export const styles = StyleSheet.create<HomeScreenStylesType>({
   container: {
     flex: 1,
     flexDirection: 'column',

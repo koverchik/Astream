@@ -1,10 +1,10 @@
-import {LifeScreenStyles} from '../style';
+import {LifeScreenStylesType} from '../style';
 import {UserType} from '../types';
 
 export const cameraStyle = (
   index: number,
   ids: UserType[],
-  styles: LifeScreenStyles,
+  styles: LifeScreenStylesType,
 ) => {
   switch (ids.length) {
     case 1: {

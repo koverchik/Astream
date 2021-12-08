@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {RtcLocalView} from 'react-native-agora';
 
 import {IconUserName} from '../IconUserName';
-import {UserNameLabel} from '../UserNameLabel/UserNameLabel';
+import {UserNameLabel} from '../UserNameLabel';
 import {styles} from './styles';
 import {LocalUserPropsType} from './types';
 

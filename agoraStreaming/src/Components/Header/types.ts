@@ -1,7 +1,7 @@
-import {Dispatch, SetStateAction} from 'react';
 import {TextInputProps} from 'react-native';
 
 import {HeaderInputPlaceholders} from '../../Navigation/Tab/types';
+import {SetStateType} from '../../Types/universalTypes';
 
 export type CustomHeaderPropsType = {
   title: string;
@@ -10,6 +10,6 @@ export type CustomHeaderPropsType = {
 
   inputValue?: string;
   searchMode?: boolean;
-  onChangeInputText?: Dispatch<SetStateAction<string>>;
+  onChangeInputText?: SetStateType<string>;
   onChangeSearchMode?: () => void;
 };

@@ -45,9 +45,9 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
       </View>
       <View style={styles.middleBox}>
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.time}>{`${dataTime.getHours()}:${addZeroForMinutes(
-          dataTime.getMinutes(),
-        )}`}</Text>
+        <Text style={styles.time}>
+          {`${dataTime.getHours()}:${addZeroForMinutes(dataTime.getMinutes())}`}
+        </Text>
       </View>
       <TouchableOpacity activeOpacity={0.5}>
         <View style={styles.button}>

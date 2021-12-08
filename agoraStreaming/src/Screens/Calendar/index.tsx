@@ -1,15 +1,11 @@
-import React, {FC, useEffect, useLayoutEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
 } from 'react-native-reanimated';
 
-import {useNavigation} from '@react-navigation/native';
-
 import database from '@react-native-firebase/database';
-
-import notifee from '@notifee/react-native';
 
 import {CustomHeader} from '../../Components/Header';
 import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
@@ -23,22 +19,13 @@ import {
 } from '../../Navigation/Tab/types';
 import {InputEventType} from '../../Types/universalTypes';
 import {arrayListData} from './helpers/arrayListData';
-import {
-  TIME_NOTIFICATION,
-  onCreateTriggerNotification,
-} from './helpers/onCreateTriggerNotification';
+import {getTriggerNotificationIds} from './helpers/getTriggerNotificationIds';
 import {styles} from './styles';
-import {
-  CalendarScreenProps,
-  StreamType,
-  TabNavigationPropsProfileType,
-} from './types';
+import {CalendarScreenProps, StreamType} from './types';
 import {faPlus, faTimes} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 export const ScreenCalendar: FC<CalendarScreenProps> = () => {
-  const navigation = useNavigation<TabNavigationPropsProfileType>();
-
   const dataSystem = new Date();
   const initDate = `${dataSystem.getFullYear()}-${
     dataSystem.getMonth() + 1
@@ -46,7 +33,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
 
   const [streams, setStreams] = useState<StreamType[]>([]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
-  const [chosenDay, setChoseDay] = useState(initDate);
+  const [chosenDay, setChoseDay] = useState<string>(initDate);
 
   const [searchResult, setSearchResult] = useState<StreamType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
@@ -74,10 +61,10 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     const result = streams.filter((stream) => {
       const textFromInput = event.nativeEvent.text;
       const matchFound = stream.name.includes(textFromInput);
-      const voidString = !textFromInput;
+      const stringIsNotEmpty = !!textFromInput;
       setSearchValue(textFromInput);
 
-      return matchFound && !voidString && stream;
+      return matchFound && stringIsNotEmpty && stream;
     });
     setSearchResult(result);
   };
@@ -120,18 +107,35 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     );
   };
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, [navigation]);
+  const renderStreamEventItems = () => {
+    const streamsArrayIsNotEmpty = streams.length;
+
+    if (streamsArrayIsNotEmpty) {
+      return showData()?.map((item, index) => {
+        return (
+          <StreamEventItem
+            stream={item}
+            key={item.id}
+            translationY={translationY}
+            index={index}
+          />
+        );
+      });
+    } else {
+      return (
+        <View style={styles.titleForEmptyListContainer}>
+          <Text>No scheduled streams</Text>
+        </View>
+      );
+    }
+  };
 
   useEffect(() => {
     database()
       .ref(`/events/${chosenDay}`)
       .on('value', (snapshot) => {
         const data: EventInDatabases[] = snapshot.val();
-        data !== null ? setStreams(arrayListData(data)) : setStreams([]);
+        data ? setStreams(arrayListData(data)) : setStreams([]);
       });
   }, [chosenDay]);
 
@@ -140,24 +144,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
       .ref(`/events/${chosenDay}`)
       .on('value', (snapshot) => {
         const data: EventInDatabases[] = snapshot.val();
-        notifee.getTriggerNotificationIds().then((ids) => {
-          if (data !== null) {
-            for (const key in data) {
-              const dateTimeNotification =
-                Date.parse(data[key].dateTime) - TIME_NOTIFICATION;
-              if (
-                Date.now() < dateTimeNotification &&
-                ids.indexOf(key) === -1
-              ) {
-                onCreateTriggerNotification(
-                  data[key].dateTime,
-                  data[key].name,
-                  key,
-                );
-              }
-            }
-          }
-        });
+        getTriggerNotificationIds(data);
       });
   }, []);
 
@@ -193,22 +180,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
           scrollEventThrottle={46}
           onScroll={scrollHandler}
           contentContainerStyle={styles.contentContainerStyle}>
-          {streams.length ? (
-            showData()?.map((item, index) => {
-              return (
-                <StreamEventItem
-                  stream={item}
-                  key={item.id}
-                  translationY={translationY}
-                  index={index}
-                />
-              );
-            })
-          ) : (
-            <View style={styles.titleForEmptyListContainer}>
-              <Text>No scheduled streams</Text>
-            </View>
-          )}
+          {renderStreamEventItems()}
         </Animated.ScrollView>
       </View>
     </View>

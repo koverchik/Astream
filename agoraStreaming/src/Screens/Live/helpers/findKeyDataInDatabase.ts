@@ -6,7 +6,7 @@ export const findKeyDataInDatabase = async (channelId: string) => {
     .once('value')
     .then((snapshot) => {
       const allDataChannels = snapshot.val();
-      for (let channel in allDataChannels) {
+      for (const channel in allDataChannels) {
         if (allDataChannels[channel].channelId === channelId) {
           return channel;
         }

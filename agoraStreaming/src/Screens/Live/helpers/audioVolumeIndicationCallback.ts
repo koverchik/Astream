@@ -1,13 +1,13 @@
-import {Dispatch, SetStateAction} from 'react';
 import {AudioVolumeCallback} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 
 import {LocalUserType} from '../../../Components/RemoteUsers/types';
+import {SetStateType} from '../../../Types/universalTypes';
 import {UserType} from '../types';
 
-export const callbackFunctionAudioVolumeIndication =
+export const audioVolumeIndicationCallback =
   (
-    setMyUserData: Dispatch<SetStateAction<LocalUserType>>,
-    setPeerIds: Dispatch<SetStateAction<UserType[]>>,
+    setMyUserData: SetStateType<LocalUserType>,
+    setPeerIds: SetStateType<UserType[]>,
   ): AudioVolumeCallback =>
   (speakers) => {
     for (let i = 0; i < speakers.length; i++) {
