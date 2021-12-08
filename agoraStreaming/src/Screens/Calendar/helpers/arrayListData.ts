@@ -22,5 +22,6 @@ export const arrayListData: ArrayListDataType = (data) => {
     });
   }
   sortByTime(dataForList);
+
   return dataForList;
 };
