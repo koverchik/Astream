@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Animated, Text} from 'react-native';
 
-import {valueForPosition} from './helper';
+import {useValueForPosition} from './helper';
 import {styles} from './styles';
 import {IconUserNameType} from './types';
 
@@ -11,7 +11,7 @@ export const IconUserName: FC<IconUserNameType> = (props) => {
   const {userName, countUser, sizeUserPoint, wavesAroundUserPoint, index} =
     props;
 
-  const position = valueForPosition(countUser(), index);
+  const position = useValueForPosition(countUser, index);
 
   const transformCircleAround = [
     {

@@ -7,7 +7,7 @@ export type LocalUserPropsType = {
   myUserData: LocalUserType;
   channelId: string;
   activeVoice: boolean;
-  countUsers: () => number;
+  countUsers: number;
   sizeUserPoint: Animated.Value;
   wavesAroundUserPoint: Animated.Value;
   cameraSize: ViewStyle;

@@ -4,7 +4,7 @@ import {SIZE_USER_POINT} from '.';
 
 const {height, width} = Dimensions.get('window');
 
-export const valueForPosition = (countUser: number, index: number) => {
+export const useValueForPosition = (countUser: number, index: number) => {
   if (countUser === 2) {
     return {
       top: height / 4 - SIZE_USER_POINT / 2,
