@@ -30,3 +30,8 @@ export type ChannelsListFromFirebase = Pick<
   ListChannelsType,
   'channelId' | 'isVideo' | 'coords' | 'name'
 >;
+
+export type DataForCloseChannelType = Pick<
+  ListChannelsType,
+  'channelId' | 'isVideo'
+>;

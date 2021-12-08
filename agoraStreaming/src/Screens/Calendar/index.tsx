@@ -61,10 +61,10 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     const result = streams.filter((stream) => {
       const textFromInput = event.nativeEvent.text;
       const matchFound = stream.name.includes(textFromInput);
-      const voidString = !textFromInput;
+      const stringIsNotEmpty = !!textFromInput;
       setSearchValue(textFromInput);
 
-      return matchFound && !voidString && stream;
+      return matchFound && stringIsNotEmpty && stream;
     });
     setSearchResult(result);
   };
