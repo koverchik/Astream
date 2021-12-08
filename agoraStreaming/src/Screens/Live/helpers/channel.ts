@@ -30,7 +30,7 @@ export const initChannel = async (
     ? AgoraEngine.current?.enableVideo()
     : AgoraEngine.current?.disableVideo();
 
-  AgoraEngine.current?.enableAudioVolumeIndication(3000, 6, true);
+  AgoraEngine.current?.enableAudioVolumeIndication(3000, 10, true);
 
   AgoraEngine.current?.setChannelProfile(ChannelProfile.LiveBroadcasting);
 
@@ -52,7 +52,13 @@ export const initChannel = async (
     AgoraEngine.current?.destroy();
   });
 
-  AgoraEngine.current?.addListener('UserMuteVideo', userMuteVideoHandler);
-
+  AgoraEngine.current?.addListener(
+    'UserMuteVideo',
+    userMuteVideoHandler,
+  );
+  AgoraEngine.current.addListener(
+    'AudioVolumeIndication',
+    callbackFunctionAudioVolumeIndication,
+  );
   AgoraEngine.current?.addListener('UserMuteAudio', userMuteAudioHandler);
 };
