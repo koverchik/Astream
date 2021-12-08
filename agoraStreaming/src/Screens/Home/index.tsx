@@ -130,7 +130,8 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     requestPermissions();
     Geolocation.getCurrentPosition(
       (position) => {
-        setGeolocation({...coordinates, ...position.coords});
+        const {latitude, longitude} = position.coords;
+        setGeolocation({...coordinates, latitude, longitude});
       },
       () => {
         dispatch(setCoordinatesAction(INITIAL_COORDS));
