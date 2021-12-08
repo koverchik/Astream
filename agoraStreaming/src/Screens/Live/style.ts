@@ -1,8 +1,6 @@
-import {Dimensions, StyleSheet, ViewStyle} from 'react-native';
+import {ScaledSize, StyleSheet, ViewStyle} from 'react-native';
 
-const {width} = Dimensions.get('window');
-
-export type LifeScreenStyles = {
+export type LifeScreenStylesType = {
   container: ViewStyle;
   cameraFullScreen: ViewStyle;
   cameraTwoUsers: ViewStyle;
@@ -17,48 +15,50 @@ export type LifeScreenStyles = {
 
 const POSITION_OFFSET = 20;
 
-export const styles = StyleSheet.create<LifeScreenStyles>({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  videoContainer: {
-    flex: 1,
-    width,
-  },
-  cameraFullScreen: {
-    flex: 1,
-  },
-  cameraTwoUsers: {
-    width,
-    height: '50%',
-  },
-  defaultCamera: {
-    width: '50%',
-    height: '50%',
-  },
-  row: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  column: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  muteCamera: {
-    backgroundColor: '#000',
-    justifyContent: 'center',
-  },
-  userNameContainer: {
-    position: 'absolute',
-    top: POSITION_OFFSET,
-    left: POSITION_OFFSET,
-  },
-  iconContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: -POSITION_OFFSET / 2,
-    left: -POSITION_OFFSET / 2,
-  },
-});
+export const LiveStyles = (width: ScaledSize['width']) => {
+  return StyleSheet.create<LifeScreenStylesType>({
+    container: {
+      flex: 1,
+      alignItems: 'center',
+    },
+    videoContainer: {
+      flex: 1,
+      width,
+    },
+    cameraFullScreen: {
+      flex: 1,
+    },
+    cameraTwoUsers: {
+      width,
+      height: '50%',
+    },
+    defaultCamera: {
+      width: '50%',
+      height: '50%',
+    },
+    row: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    column: {
+      flex: 1,
+      flexDirection: 'column',
+    },
+    muteCamera: {
+      backgroundColor: '#000',
+      justifyContent: 'center',
+    },
+    userNameContainer: {
+      position: 'absolute',
+      top: POSITION_OFFSET,
+      left: POSITION_OFFSET,
+    },
+    iconContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      position: 'absolute',
+      bottom: -POSITION_OFFSET / 2,
+      left: -POSITION_OFFSET / 2,
+    },
+  });
+};

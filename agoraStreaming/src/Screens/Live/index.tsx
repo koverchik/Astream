@@ -1,7 +1,12 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {Animated, Platform, View} from 'react-native';
+import {Animated, Platform, View, useWindowDimensions} from 'react-native';
 import RtcEngine from 'react-native-agora';
-import {UserInfoCallback} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
+import {
+  UidWithMutedCallback,
+  UserAccountCallback,
+  UserInfoCallback,
+  UserOfflineCallback,
+} from 'react-native-agora/lib/typescript/src/common/RtcEvents';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -19,7 +24,7 @@ import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
 import {cameraStyle} from './helpers/CameraStyle';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
-import {callbackFunctionAudioVolumeIndication} from './helpers/callbackFunctionAudioVolumeIndication';
+import {audioVolumeIndicationHandler} from './helpers/audioVolumeIndicationHandler';
 import {initChannel} from './helpers/channel';
 import {deleteChannel} from './helpers/deleteChannel';
 import {exitChannelHandler} from './helpers/exitChannelHandler';
@@ -27,7 +32,8 @@ import {findKeyDataInDatabase} from './helpers/findKeyDataInDatabase';
 import {isBroadcasterFunction} from './helpers/isBroadcaster';
 import {requestCameraAndAudioPermission} from './helpers/permission';
 import {switchCamera} from './helpers/switchCamera';
-import {styles} from './style';
+import {userOfflineFilter} from './helpers/userOfflineFilter';
+import {LiveStyles} from './style';
 import {
   Devices,
   LiveScreenProps,
@@ -47,6 +53,9 @@ const INITIAL_DATA: LocalUserType = {
 
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords, isVideo} = props.route.params;
+
+  const {width} = useWindowDimensions();
+  const styles = LiveStyles(width);
 
   const dispatch = useAppDispatch();
   const isJoined = useAppSelector(getIsJoined);
@@ -71,25 +80,22 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   animationCircle(sizeUserPoint, wavesAroundUserPoint).start();
 
-  const userJoined = () => {
+  const userJoinedHandler = () => {
     dispatch(setJoinedAction(true));
   };
 
-  const callbackFunctionUserOffline = (uid: number) => {
-    setPeerIds((prev) => prev.filter((userData) => userData.uid !== uid));
-    setStash((prev) => prev.filter((userData) => userData.uid !== uid));
+  const userOfflineHandler: UserOfflineCallback = (uid) => {
+    setPeerIds((prev) => userOfflineFilter(prev, uid));
+    setStash((prev) => userOfflineFilter(prev, uid));
   };
 
-  const callbackUserMuteAudio = (uid: number, muted: boolean) => {
+  const userMuteAudioHandler: UidWithMutedCallback = (uid, muted) => {
     setPeerIds((prevState) => {
       return mute({uid, muted, device: Devices.VOICE}, prevState);
     });
   };
 
-  const callbackFunctionLocalUserRegistered = (
-    uid: number,
-    userInfo: string,
-  ) => {
+  const localUserRegisteredHandler: UserAccountCallback = (uid, userInfo) => {
     setMyUserData((prev) => ({
       ...prev,
       uid: uid,
@@ -112,8 +118,10 @@ export const Live: FC<LiveScreenProps> = (props) => {
     });
   };
 
-  const callbackFunctionUserInfoUpdated: UserInfoCallback = (uid, userInfo) => {
-    if (!peerIds.find((userData) => userData.uid === uid)) {
+  const userInfoUpdatedHandler: UserInfoCallback = (uid, userInfo) => {
+    const userNotFound = !peerIds.find((userData) => userData.uid === uid);
+
+    if (userNotFound) {
       const user: UserType = {
         ...userInfo,
         camera: false,
@@ -131,7 +139,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
     }
   };
 
-  const callbackFunctionUserMuteVideo = (uid: number, muted: boolean) => {
+  const userMuteVideoHandler: UidWithMutedCallback = (uid, muted) => {
     setPeerIds((prevState) => {
       return mute({uid, muted, device: Devices.CAMERA}, prevState);
     });
@@ -169,6 +177,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const userLeaveChannel = async () => {
     const keyChannel = await findKeyDataInDatabase(channelId);
     dispatch(setJoinedAction(false));
+
     if (keyChannel) {
       await deleteChannel(keyChannel);
     }
@@ -180,14 +189,14 @@ export const Live: FC<LiveScreenProps> = (props) => {
     }
     initChannel(
       AgoraEngine,
-      userJoined,
+      userJoinedHandler,
       userLeaveChannel,
-      callbackFunctionUserOffline,
-      callbackFunctionUserInfoUpdated,
-      callbackFunctionUserMuteVideo,
-      callbackUserMuteAudio,
-      callbackFunctionLocalUserRegistered,
-      callbackFunctionAudioVolumeIndication(setMyUserData, setPeerIds),
+      userOfflineHandler,
+      userInfoUpdatedHandler,
+      userMuteVideoHandler,
+      userMuteAudioHandler,
+      localUserRegisteredHandler,
+      audioVolumeIndicationHandler(setMyUserData, setPeerIds),
       isVideo,
     )
       .then(() => {
