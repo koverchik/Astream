@@ -118,7 +118,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   };
 
   useEffect(() => {
-    mapRef.current?.animateToRegion(coordinates);
+    mapRef.current?.animateToRegion(coordinates, 1000);
   }, [coordinates]);
 
   useEffect(() => {
