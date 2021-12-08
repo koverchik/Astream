@@ -1,6 +1,6 @@
-import {Dispatch, SetStateAction} from 'react';
+import {SetStateType} from '../../Types/universalTypes';
 
 export type SwitchVideoType = {
   isEnabled: boolean;
-  setIsEnabled: Dispatch<SetStateAction<boolean>>;
+  setIsEnabled: SetStateType<boolean>;
 };
