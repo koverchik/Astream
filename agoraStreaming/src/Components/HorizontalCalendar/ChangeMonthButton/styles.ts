@@ -1,5 +1,7 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
+import {Colors} from '../../../Colors/colors';
+
 type ChangeMonthButtonStylesType = {
   button: ViewStyle;
   text: TextStyle;
@@ -8,17 +10,19 @@ type ChangeMonthButtonStylesType = {
 export const ChangeMonthButtonStyles = (
   buttonColor?: ViewStyle['backgroundColor'],
 ) => {
+  const {white, azureRadiance} = Colors;
+
   return StyleSheet.create<ChangeMonthButtonStylesType>({
     button: {
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: buttonColor ?? '#007eff',
+      backgroundColor: buttonColor ?? azureRadiance,
       width: 45,
       height: 30,
       borderRadius: 10,
     },
     text: {
-      color: '#fff',
+      color: white,
     },
   });
 };

@@ -1,6 +1,7 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
 import {SIZE_USER_POINT} from '.';
+import {Colors} from '../../Colors/colors';
 
 type UserNameLabelType = {
   pointUserName: ViewStyle;
@@ -17,16 +18,18 @@ const roundStyles: ViewStyle = {
   borderRadius: 20,
 };
 
+const {bermuda, babyBlueEyes} = Colors;
+
 export const styles = StyleSheet.create<UserNameLabelType>({
   pointUserName: {
     ...roundStyles,
-    backgroundColor: '#5ebf9d',
+    backgroundColor: bermuda,
   },
   wavesAroundUserPoint: {
     ...roundStyles,
     borderWidth: 2,
     opacity: 0.8,
-    borderColor: '#6390BB',
+    borderColor: babyBlueEyes,
   },
   text: {
     textTransform: 'capitalize',

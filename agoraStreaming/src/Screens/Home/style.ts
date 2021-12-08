@@ -1,5 +1,7 @@
 import {ImageStyle, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
+import {Colors} from '../../Colors/colors';
+
 type HomeScreenStyles = {
   container: ViewStyle;
   button: TextStyle;
@@ -20,6 +22,8 @@ const SIZE_MARKER = 30;
 const BORDER_SIZE = 4;
 export const CORNERS_RADIUS = 35;
 
+const {white, black, bittersweet, babyBlueEyes} = Colors;
+
 export const styles = StyleSheet.create<HomeScreenStyles>({
   container: {
     position: 'absolute',
@@ -27,7 +31,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: '#000',
+    backgroundColor: black,
     borderBottomEndRadius: CORNERS_RADIUS,
     borderBottomStartRadius: CORNERS_RADIUS,
     overflow: 'hidden',
@@ -45,10 +49,10 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     width: SIZE_MARKER,
     height: SIZE_MARKER,
     overflow: 'hidden',
-    backgroundColor: '#a5c5ec',
+    backgroundColor: babyBlueEyes,
     flex: 1,
     borderWidth: BORDER_SIZE,
-    borderColor: 'rgba(165, 197, 236, .5)',
+    borderColor: babyBlueEyes,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -58,7 +62,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
   },
   background: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: black,
   },
   logout: {
     width: 80,
@@ -66,17 +70,17 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FF7070',
+    backgroundColor: bittersweet,
     position: 'absolute',
     top: 10,
     right: 10,
   },
   markerText: {
-    color: '#000000',
+    color: black,
     fontSize: 16,
   },
   buttonText: {
-    color: '#fff',
+    color: white,
     fontSize: 16,
   },
   itemChannel: {
@@ -110,6 +114,6 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     borderRadius: 8,
     paddingVertical: 10,
     alignItems: 'center',
-    backgroundColor: '#FF7070',
+    backgroundColor: bittersweet,
   },
 });
