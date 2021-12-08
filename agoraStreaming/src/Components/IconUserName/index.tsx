@@ -11,7 +11,7 @@ export const IconUserName: FC<IconUserNameType> = (props) => {
   const {userName, countUser, sizeUserPoint, wavesAroundUserPoint, index} =
     props;
 
-  const position = useValueForPosition(countUser, index);
+  const position = useValueForPosition(countUser, index, SIZE_USER_POINT);
 
   const transformCircleAround = [
     {

@@ -1,10 +1,12 @@
 import {Dimensions} from 'react-native';
 
-import {SIZE_USER_POINT} from '.';
+export const useValueForPosition = (
+  countUser: number,
+  index: number,
+  SIZE_USER_POINT: number,
+) => {
+  const {height, width} = Dimensions.get('window');
 
-const {height, width} = Dimensions.get('window');
-
-export const useValueForPosition = (countUser: number, index: number) => {
   if (countUser === 2) {
     return {
       top: height / 4 - SIZE_USER_POINT / 2,
