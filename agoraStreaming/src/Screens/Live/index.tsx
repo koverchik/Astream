@@ -37,29 +37,23 @@ import {
 } from './types';
 import {v4 as uuid} from 'uuid';
 
-const INITIAL_DATA: LocalUserType = {
-  uid: 0,
-  userAccount: '',
-  camera: false,
-  voice: false,
-  activeVoice: false,
-};
-
 export const Live: FC<LiveScreenProps> = (props) => {
   const {channelId, name, coords, isVideo} = props.route.params;
 
-  const dispatch = useAppDispatch();
-  const isJoined = useAppSelector(getIsJoined);
-  const [error, setError] = useState<boolean>(false);
-  const [peerIds, setPeerIds] = useState<UserType[]>([]);
-  const [myUserData, setMyUserData] = useState<LocalUserType>({
+  const INITIAL_DATA: LocalUserType = {
     uid: 0,
     userAccount: '',
     camera: false,
     voice: false,
     activeVoice: false,
     isVideo,
-  });
+  };
+
+  const dispatch = useAppDispatch();
+  const isJoined = useAppSelector(getIsJoined);
+  const [error, setError] = useState<boolean>(false);
+  const [peerIds, setPeerIds] = useState<UserType[]>([]);
+  const [myUserData, setMyUserData] = useState<LocalUserType>(INITIAL_DATA);
 
   const [stash, setStash] = useState<UserType[]>([]);
 
