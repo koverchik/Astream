@@ -52,13 +52,11 @@ export const initChannel = async (
     AgoraEngine.current?.destroy();
   });
 
-  AgoraEngine.current?.addListener(
-    'UserMuteVideo',
-    userMuteVideoHandler,
-  );
+  AgoraEngine.current?.addListener('UserMuteVideo', userMuteVideoHandler);
+
   AgoraEngine.current.addListener(
     'AudioVolumeIndication',
-    callbackFunctionAudioVolumeIndication,
+    audioVolumeIndicationHandler,
   );
   AgoraEngine.current?.addListener('UserMuteAudio', userMuteAudioHandler);
 };
