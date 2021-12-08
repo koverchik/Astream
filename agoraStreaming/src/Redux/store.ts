@@ -1,16 +1,20 @@
 import {authReducer} from './reducers/Auth';
-import {AuthReducerType} from './reducers/Auth/types';
+import {AuthStateType} from './reducers/Auth/types';
 import {homeReducer} from './reducers/Home';
-import {HomeReducerType} from './reducers/Home/types';
+import {HomeInitialStateType} from './reducers/Home/types';
 import {liveReducer} from './reducers/Live';
-import {LiveReducerType} from './reducers/Live/types';
+import {LiveInitialStateType} from './reducers/Live/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {persistReducer, persistStore} from 'redux-persist';
 
-const rootReducer = combineReducers<
-  AuthReducerType | HomeReducerType | LiveReducerType
->({
+export type RootState = {
+  auth: AuthStateType;
+  live: LiveInitialStateType;
+  home: HomeInitialStateType;
+};
+
+const rootReducer = combineReducers<RootState>({
   auth: authReducer,
   live: liveReducer,
   home: homeReducer,
@@ -26,6 +30,7 @@ const persistConfig = {
 const middlewares = [];
 
 if (__DEV__) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const createDebugger = require('redux-flipper').default;
   middlewares.push(createDebugger());
 }
@@ -38,7 +43,5 @@ export const store = createStore(
 );
 
 export const persistor = persistStore(store);
-
-export type RootState = ReturnType<typeof rootReducer>;
 
 export type AppDispatch = typeof store.dispatch;

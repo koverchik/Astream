@@ -32,5 +32,10 @@ export type UserType = {
 export type MuteSettingsType = {
   uid: number;
   muted: boolean;
-  device: 'voice' | 'camera';
+  device: Devices;
 };
+
+export enum Devices {
+  VOICE = 'voice',
+  CAMERA = 'camera',
+}
