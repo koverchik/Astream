@@ -17,10 +17,11 @@ export const onGoogleButtonPress = async (dispatch: AppDispatch) => {
 export const onAuth = async (dispatch: AppDispatch) => {
   try {
     const isAuth = await getUserData(dispatch);
+
     if (!isAuth) {
       const {idToken} = await GoogleSignin.signIn();
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      await auth().signInWithCredential(googleCredential);
+      const googleCredentials = auth.GoogleAuthProvider.credential(idToken);
+      await auth().signInWithCredential(googleCredentials);
       const user = await GoogleSignin.getCurrentUser();
       user && dispatch(setUser(user?.user));
     }
@@ -32,6 +33,7 @@ export const onAuth = async (dispatch: AppDispatch) => {
 export const getUserData = async (dispatch: AppDispatch) => {
   try {
     const isAuth = await GoogleSignin.isSignedIn();
+
     if (isAuth) {
       const user = await GoogleSignin.getCurrentUser();
       user && dispatch(setUser(user?.user));

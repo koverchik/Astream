@@ -8,6 +8,7 @@ import {GoogleSigninButton} from '@react-native-google-signin/google-signin';
 
 export const AuthScreen: FC = () => {
   const dispatch = useAppDispatch();
+
   return (
     <View style={styles.container}>
       <GoogleSigninButton
