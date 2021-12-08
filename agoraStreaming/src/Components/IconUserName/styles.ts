@@ -1,9 +1,10 @@
-import {StyleSheet, ViewStyle} from 'react-native';
+import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
 import {SIZE_USER_POINT} from '.';
 
 type UserNameLabelType = {
   pointUserName: ViewStyle;
+  text: TextStyle;
   wavesAroundUserPoint: ViewStyle;
 };
 
@@ -26,5 +27,8 @@ export const styles = StyleSheet.create<UserNameLabelType>({
     borderWidth: 2,
     opacity: 0.8,
     borderColor: '#6390BB',
+  },
+  text: {
+    textTransform: 'capitalize',
   },
 });
