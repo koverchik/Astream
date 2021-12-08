@@ -6,9 +6,11 @@ export const useValueForPosition = (
   SIZE_USER_POINT: number,
 ) => {
   const {height, width} = useWindowDimensions();
+
   if (countUser === 2) {
     return {
       top: height / 4 - SIZE_USER_POINT / 2,
+      left: width / 2 - SIZE_USER_POINT / 2,
     };
   }
 
@@ -31,4 +33,8 @@ export const useValueForPosition = (
       left: width / 4 - SIZE_USER_POINT,
     };
   }
+  return {
+    top: height / 2 - SIZE_USER_POINT / 2,
+    left: width / 2 - SIZE_USER_POINT / 2,
+  };
 };
