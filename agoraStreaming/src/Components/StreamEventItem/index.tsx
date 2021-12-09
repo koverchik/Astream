@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Animated, {interpolate, useAnimatedStyle} from 'react-native-reanimated';
 
-import {Colors} from '../../Colors/colors';
+import {COLORS} from '../../Colors/colors';
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {DefaultAvatar} from '../../Icons/DefaultAvatar';
 import {addZeroForMinutes} from '../../Screens/Calendar/helpers/addZero';
@@ -51,7 +51,7 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
         </Text>
       </View>
       <TouchableOpacity activeOpacity={0.5} style={styles.button}>
-        <CalendarSvg color={Colors.azureRadiance} size={11} />
+        <CalendarSvg color={COLORS.AZURE_RADIANCE} size={11} />
         <Text style={styles.buttonText}>Add to Call</Text>
       </TouchableOpacity>
     </Animated.View>

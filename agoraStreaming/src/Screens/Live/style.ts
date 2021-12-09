@@ -1,6 +1,6 @@
 import {ScaledSize, StyleSheet, ViewStyle} from 'react-native';
 
-import {Colors} from '../../Colors/colors';
+import {COLORS} from '../../Colors/colors';
 
 export type LifeScreenStylesType = {
   container: ViewStyle;
@@ -18,7 +18,7 @@ export type LifeScreenStylesType = {
 const POSITION_OFFSET = 20;
 
 export const LiveStyles = (width: ScaledSize['width']) => {
-  const {black} = Colors;
+  const {BLACK} = COLORS;
 
   return StyleSheet.create<LifeScreenStylesType>({
     container: {
@@ -49,7 +49,7 @@ export const LiveStyles = (width: ScaledSize['width']) => {
       flexDirection: 'column',
     },
     muteCamera: {
-      backgroundColor: black,
+      backgroundColor: BLACK,
       justifyContent: 'center',
     },
     userNameContainer: {

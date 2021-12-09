@@ -1,6 +1,6 @@
 import {Dimensions, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
-import {Colors} from '../../Colors/colors';
+import {COLORS} from '../../Colors/colors';
 
 const {width} = Dimensions.get('window');
 
@@ -19,13 +19,13 @@ type StreamStylesType = {
   name: TextStyle;
 };
 
-const {babyBlueEyes, white, silverChalice, porcelain, wildSand} = Colors;
+const {BABY_BLUE_EYES, WHITE, SILVER_CHALICE, PORCELAIN, WILD_SAND} = COLORS;
 
 export const styles = StyleSheet.create<StreamStylesType>({
   container: {
-    backgroundColor: wildSand,
+    backgroundColor: WILD_SAND,
     margin: 10,
-    borderColor: porcelain,
+    borderColor: PORCELAIN,
     borderWidth: 1,
     flexDirection: 'row',
     width: width * 0.8,
@@ -37,7 +37,7 @@ export const styles = StyleSheet.create<StreamStylesType>({
   avatarBox: {
     width: AVATAR_SIZE,
     height: AVATAR_SIZE + 5,
-    backgroundColor: white,
+    backgroundColor: WHITE,
     borderRadius: AVATAR_SIZE / 2,
   },
   avatar: {
@@ -46,7 +46,7 @@ export const styles = StyleSheet.create<StreamStylesType>({
     borderRadius: AVATAR_SIZE / 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: white,
+    backgroundColor: WHITE,
   },
   type: {
     position: 'absolute',
@@ -55,7 +55,7 @@ export const styles = StyleSheet.create<StreamStylesType>({
     height: STREAM_TYPE_SIZE,
     width: STREAM_TYPE_SIZE,
     borderRadius: STREAM_TYPE_SIZE / 2,
-    backgroundColor: babyBlueEyes,
+    backgroundColor: BABY_BLUE_EYES,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -71,15 +71,15 @@ export const styles = StyleSheet.create<StreamStylesType>({
     height: '70%',
     paddingHorizontal: 10,
     borderRadius: 20,
-    backgroundColor: babyBlueEyes,
+    backgroundColor: BABY_BLUE_EYES,
   },
   buttonText: {
-    color: Colors.azureRadiance,
+    color: COLORS.AZURE_RADIANCE,
     fontSize: 10,
     fontWeight: 'bold',
   },
   time: {
-    color: silverChalice,
+    color: SILVER_CHALICE,
   },
   name: {
     fontWeight: 'bold',

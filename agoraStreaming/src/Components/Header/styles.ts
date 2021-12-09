@@ -6,7 +6,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import {Colors} from '../../Colors/colors';
+import {COLORS} from '../../Colors/colors';
 
 type HeaderStyleType = {
   container: ViewStyle;
@@ -22,7 +22,7 @@ export const SIZE_BLOCKS_ITEM = 40;
 export const MARGIN = 5;
 
 export const HeaderStyles = (width: ScaledSize['width']) => {
-  const {mineShaftOpacity, white} = Colors;
+  const {MINE_SHAFT_OPACITY, WHITE} = COLORS;
 
   return StyleSheet.create<HeaderStyleType>({
     container: {
@@ -32,7 +32,7 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
       justifyContent: 'space-between',
     },
     titleContainer: {
-      backgroundColor: mineShaftOpacity,
+      backgroundColor: MINE_SHAFT_OPACITY,
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       height: SIZE_BLOCKS_ITEM,
       flex: 1,
@@ -47,7 +47,7 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
       margin: MARGIN,
     },
     wrapperIcon: {
-      backgroundColor: mineShaftOpacity,
+      backgroundColor: MINE_SHAFT_OPACITY,
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       height: SIZE_BLOCKS_ITEM,
       width: SIZE_BLOCKS_ITEM,
@@ -64,7 +64,7 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       textAlignVertical: 'center',
       paddingLeft: 20,
-      color: white,
+      color: WHITE,
     },
   });
 };

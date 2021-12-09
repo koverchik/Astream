@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
 
-import {Colors} from '../../Colors/colors';
+import {COLORS} from '../../Colors/colors';
 import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
 import {StackNavigationPropHome} from '../../Screens/Home/types';
 import {InputEventType} from '../../Types/universalTypes';
@@ -81,7 +81,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
           <TouchableOpacity
             style={styles.closeButton}
             onPress={changeModalVisible}>
-            <FontAwesomeIcon icon={faPlus} color={Colors.white} size={20} />
+            <FontAwesomeIcon icon={faPlus} color={COLORS.WHITE} size={20} />
           </TouchableOpacity>
           <Text style={styles.title}>Create new event</Text>
           <View style={styles.inputContainer}>

@@ -10,7 +10,7 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 
-import {Colors} from '../../Colors/colors';
+import {COLORS} from '../../Colors/colors';
 import {TabNavigation} from '../../Navigation/Tab/types';
 import {useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
@@ -52,14 +52,14 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
     if (user?.photo) {
       return <Image source={{uri: user?.photo}} style={styles.image} />;
     } else {
-      return <FontAwesomeIcon icon={faUser} color={Colors.white} size={17} />;
+      return <FontAwesomeIcon icon={faUser} color={COLORS.WHITE} size={17} />;
     }
   };
 
   const getSearchIconProps = (): FontAwesomeIconProps => {
     return {
       icon: searchMode ? faCheckCircle : faSearch,
-      color: searchMode ? Colors.bermuda : Colors.white,
+      color: searchMode ? COLORS.BERMUDA : COLORS.WHITE,
       size: searchMode ? 42 : 18,
     };
   };
@@ -80,7 +80,7 @@ export const CustomHeader: FC<CustomHeaderPropsType> = (props) => {
               onChange={filter}
               value={inputValue}
               placeholder={placeholderText}
-              placeholderTextColor={Colors.white}
+              placeholderTextColor={COLORS.WHITE}
               autoFocus
             />
           </View>

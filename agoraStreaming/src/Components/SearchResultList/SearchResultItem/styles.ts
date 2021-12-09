@@ -1,24 +1,24 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
-import {Colors} from '../../../Colors/colors';
+import {COLORS} from '../../../Colors/colors';
 
 type FoundStreamItemStylesType = {
   container: ViewStyle;
   text: TextStyle;
 };
 
-const {white, mineShaft} = Colors;
+const {WHITE, MINE_SHAFT} = COLORS;
 
 export const styles = StyleSheet.create<FoundStreamItemStylesType>({
   container: {
     height: 40,
-    backgroundColor: mineShaft,
+    backgroundColor: MINE_SHAFT,
     marginBottom: 5,
     justifyContent: 'center',
     paddingHorizontal: 15,
     borderRadius: 15,
   },
   text: {
-    color: white,
+    color: WHITE,
   },
 });

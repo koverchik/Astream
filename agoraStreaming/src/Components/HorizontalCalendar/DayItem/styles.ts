@@ -1,6 +1,6 @@
 import {ScaledSize, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
-import {Colors} from '../../../Colors/colors';
+import {COLORS} from '../../../Colors/colors';
 import {ActiveDayColorType} from '../types';
 
 type DayStylesType = {
@@ -19,7 +19,7 @@ export const DayStyles = (
   activeDayColor?: ActiveDayColorType,
   textDayColor?: TextStyle['color'],
 ) => {
-  const {azureRadiance, black} = Colors;
+  const {AZURE_RADIANCE, BLACK} = COLORS;
 
   return StyleSheet.create<DayStylesType>({
     container: {
@@ -31,7 +31,7 @@ export const DayStyles = (
       width: width / VISIBLE_COUNT_DAYS,
     },
     containerActive: {
-      borderBottomColor: activeDayColor ?? azureRadiance,
+      borderBottomColor: activeDayColor ?? AZURE_RADIANCE,
     },
     day: {
       fontSize: 12,
@@ -40,11 +40,11 @@ export const DayStyles = (
       fontSize: 20,
     },
     text: {
-      color: textDayColor ?? black,
+      color: textDayColor ?? BLACK,
       textAlign: 'center',
     },
     textActive: {
-      color: activeDayColor ?? azureRadiance,
+      color: activeDayColor ?? AZURE_RADIANCE,
     },
   });
 };

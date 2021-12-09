@@ -1,6 +1,6 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
-import {Colors} from '../../Colors/colors';
+import {COLORS} from '../../Colors/colors';
 
 type LifeScreenStyles = {
   wrapperAllModalView: ViewStyle;
@@ -19,7 +19,7 @@ type LifeScreenStyles = {
 };
 export const SIZE_BUTTON = 30;
 
-const {black, white, bittersweet} = Colors;
+const {BLACK, WHITE, BITTERSWEET} = COLORS;
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
   wrapperAllModalView: {
@@ -38,7 +38,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: black,
+    shadowColor: BLACK,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -48,7 +48,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     elevation: 5,
   },
   title: {
-    color: bittersweet,
+    color: BITTERSWEET,
     fontSize: 20,
     marginBottom: 25,
   },
@@ -66,7 +66,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     paddingVertical: 7,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: bittersweet,
+    backgroundColor: BITTERSWEET,
   },
   closeButton: {
     borderRadius: SIZE_BUTTON / 2,
@@ -76,13 +76,13 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     alignSelf: 'flex-end',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: bittersweet,
+    backgroundColor: BITTERSWEET,
   },
   buttonDisabled: {
-    backgroundColor: bittersweet,
+    backgroundColor: BITTERSWEET,
   },
   buttonText: {
-    color: white,
+    color: WHITE,
     fontSize: 20,
   },
   inputContainer: {
@@ -90,7 +90,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
   },
   error: {
     margin: 5,
-    color: bittersweet,
+    color: BITTERSWEET,
   },
   input: {
     width: '100%',
@@ -100,6 +100,6 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     marginBottom: 10,
   },
   errorInput: {
-    borderColor: bittersweet,
+    borderColor: BITTERSWEET,
   },
 });

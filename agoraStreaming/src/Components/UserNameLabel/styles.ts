@@ -1,17 +1,17 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
-import {Colors} from '../../Colors/colors';
+import {COLORS} from '../../Colors/colors';
 
 type UserNameLabelType = {
   userName: TextStyle;
   userNameContainer: ViewStyle;
 };
 
-const {bermuda, white} = Colors;
+const {BERMUDA, WHITE} = COLORS;
 
 export const styles = StyleSheet.create<UserNameLabelType>({
   userNameContainer: {
-    backgroundColor: bermuda,
+    backgroundColor: BERMUDA,
     height: 40,
     minWidth: 100,
     alignItems: 'center',
@@ -20,6 +20,6 @@ export const styles = StyleSheet.create<UserNameLabelType>({
   },
   userName: {
     fontSize: 16,
-    color: white,
+    color: WHITE,
   },
 });

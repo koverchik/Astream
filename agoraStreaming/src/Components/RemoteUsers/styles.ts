@@ -1,6 +1,6 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
-import {Colors} from '../../Colors/colors';
+import {COLORS} from '../../Colors/colors';
 
 const MICRO_SIZE = 20;
 
@@ -13,7 +13,7 @@ type LifeScreenStyles = {
   rtcRemote: ViewStyle;
 };
 
-const {black, ceriseRed} = Colors;
+const {BLACK, CERISE_RED} = COLORS;
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
   camera: {
@@ -24,7 +24,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     height: '100%',
   },
   muteCamera: {
-    backgroundColor: black,
+    backgroundColor: BLACK,
     justifyContent: 'center',
   },
   userNameContainer: {
@@ -46,6 +46,6 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     borderRadius: MICRO_SIZE / 2,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: ceriseRed,
+    backgroundColor: CERISE_RED,
   },
 });

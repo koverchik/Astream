@@ -7,7 +7,7 @@ import Animated, {
 
 import database from '@react-native-firebase/database';
 
-import {Colors} from '../../Colors/colors';
+import {COLORS} from '../../Colors/colors';
 import {CustomHeader} from '../../Components/Header';
 import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
 import {DateInfoType} from '../../Components/HorizontalCalendar/types';
@@ -102,7 +102,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
         <TouchableOpacity
           style={styles.clearButton}
           onPress={onPressClearButton}>
-          <FontAwesomeIcon icon={faTimes} color={Colors.white} size={18} />
+          <FontAwesomeIcon icon={faTimes} color={COLORS.WHITE} size={18} />
         </TouchableOpacity>
       )
     );
@@ -164,11 +164,11 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
           <TouchableOpacity
             onPress={changeModalVisible}
             style={styles.addNewEvent}>
-            <FontAwesomeIcon icon={faPlus} color={Colors.white} size={18} />
+            <FontAwesomeIcon icon={faPlus} color={COLORS.WHITE} size={18} />
           </TouchableOpacity>
           <HorizontalCalendar
             onDayPress={selectDay}
-            activeDayColor={Colors.azureRadiance}
+            activeDayColor={COLORS.AZURE_RADIANCE}
           />
         </View>
         <ModalCreatEvent

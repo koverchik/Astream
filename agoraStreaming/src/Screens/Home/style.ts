@@ -1,6 +1,6 @@
 import {ImageStyle, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
-import {Colors} from '../../Colors/colors';
+import {COLORS} from '../../Colors/colors';
 
 type HomeScreenStyles = {
   container: ViewStyle;
@@ -21,7 +21,7 @@ const SIZE_MARKER = 30;
 const BORDER_SIZE = 4;
 export const CORNERS_RADIUS = 35;
 
-const {white, black, bittersweet, babyBlueEyes} = Colors;
+const {WHITE, BLACK, BITTERSWEET, BABY_BLUE_EYES} = COLORS;
 
 export const styles = StyleSheet.create<HomeScreenStyles>({
   container: {
@@ -30,7 +30,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: black,
+    backgroundColor: BLACK,
     borderBottomEndRadius: CORNERS_RADIUS,
     borderBottomStartRadius: CORNERS_RADIUS,
     overflow: 'hidden',
@@ -48,10 +48,10 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     width: SIZE_MARKER,
     height: SIZE_MARKER,
     overflow: 'hidden',
-    backgroundColor: babyBlueEyes,
+    backgroundColor: BABY_BLUE_EYES,
     flex: 1,
     borderWidth: BORDER_SIZE,
-    borderColor: babyBlueEyes,
+    borderColor: BABY_BLUE_EYES,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -61,7 +61,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
   },
   background: {
     flex: 1,
-    backgroundColor: black,
+    backgroundColor: BLACK,
   },
   logout: {
     width: 80,
@@ -69,17 +69,17 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: bittersweet,
+    backgroundColor: BITTERSWEET,
     position: 'absolute',
     top: 10,
     right: 10,
   },
   markerText: {
-    color: black,
+    color: BLACK,
     fontSize: 16,
   },
   buttonText: {
-    color: white,
+    color: WHITE,
     fontSize: 16,
   },
   itemChannel: {
@@ -109,6 +109,6 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     borderRadius: 8,
     paddingVertical: 10,
     alignItems: 'center',
-    backgroundColor: bittersweet,
+    backgroundColor: BITTERSWEET,
   },
 });
