@@ -13,7 +13,6 @@ type HomeScreenStyles = {
   background: ViewStyle;
   logout: ViewStyle;
   marker: ViewStyle;
-  createContainer: ViewStyle;
   headerContainer: ViewStyle;
   markerImage: ImageStyle;
 };
@@ -102,13 +101,9 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     right: 0,
     bottom: 0,
   },
-  createContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    marginBottom: 15,
-    width: 250,
-  },
   button: {
+    position: 'absolute',
+    bottom: 15,
     width: 250,
     marginTop: 15,
     borderRadius: 8,

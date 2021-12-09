@@ -1,6 +1,6 @@
 import {ViewStyle} from 'react-native';
 
-export type RemoteUsersType = LocalUserType & {
+export type RemoteUserType = LocalUserType & {
   index: number;
   channelId: string;
   countUsers: number;

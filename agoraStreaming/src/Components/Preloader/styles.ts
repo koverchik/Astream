@@ -1,5 +1,7 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
+import {Colors} from '../../Colors/colors';
+
 type PreloaderStylesType = {
   loadingText: TextStyle;
   container: ViewStyle;
@@ -13,6 +15,6 @@ export const styles = StyleSheet.create<PreloaderStylesType>({
   },
   loadingText: {
     fontSize: 18,
-    color: '#222',
+    color: Colors.mineShaft,
   },
 });

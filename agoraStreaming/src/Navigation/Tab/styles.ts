@@ -1,5 +1,7 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
+import {Colors} from '../../Colors/colors';
+
 type TabStylesType = {
   tabBar: ViewStyle;
   hiddenTabBar: ViewStyle;
@@ -7,8 +9,8 @@ type TabStylesType = {
 
 export const styles = StyleSheet.create<TabStylesType>({
   tabBar: {
-    borderTopColor: '#000',
-    backgroundColor: '#000',
+    borderTopColor: Colors.black,
+    backgroundColor: Colors.black,
     display: 'flex',
   },
   hiddenTabBar: {

@@ -1,5 +1,7 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
+import {Colors} from '../../Colors/colors';
+
 type LifeScreenStyles = {
   camera: ViewStyle;
   muteCamera: ViewStyle;
@@ -18,7 +20,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     height: '100%',
   },
   muteCamera: {
-    backgroundColor: '#000',
+    backgroundColor: Colors.black,
     justifyContent: 'center',
   },
   userNameContainer: {

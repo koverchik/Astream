@@ -1,21 +1,15 @@
 import React, {FC, useState} from 'react';
-import {
-  Modal,
-  NativeSyntheticEvent,
-  Text,
-  TextInput,
-  TextInputChangeEventData,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Modal, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
 import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
 
+import {Colors} from '../../Colors/colors';
 import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
 import {StackNavigationPropHome} from '../../Screens/Home/types';
+import {InputEventType} from '../../Types/universalTypes';
 import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
 import {ModalCreatEventType} from './types';
@@ -64,8 +58,8 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
     }
   };
 
-  const onChangeTitle = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    setName(e.nativeEvent.text);
+  const onChangeTitle = (event: InputEventType) => {
+    setName(event.nativeEvent.text);
     setError('');
   };
 
@@ -87,7 +81,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
           <TouchableOpacity
             style={styles.closeButton}
             onPress={changeModalVisible}>
-            <FontAwesomeIcon icon={faPlus} color={'white'} size={20} />
+            <FontAwesomeIcon icon={faPlus} color={Colors.white} size={20} />
           </TouchableOpacity>
           <Text style={styles.title}>Create new event</Text>
           <View style={styles.inputContainer}>

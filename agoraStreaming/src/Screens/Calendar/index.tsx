@@ -12,7 +12,7 @@ import {CustomHeader} from '../../Components/Header';
 import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
 import {DateInfoType} from '../../Components/HorizontalCalendar/types';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
-import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
+import {EventInDatabasesType} from '../../Components/ModalCreateEvent/types';
 import {StreamEventItem} from '../../Components/StreamEventItem';
 import {
   HeaderInputPlaceholders,
@@ -135,7 +135,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     database()
       .ref(`/events/${chosenDay}`)
       .on('value', (snapshot) => {
-        const data: EventInDatabases[] = snapshot.val();
+        const data: EventInDatabasesType[] = snapshot.val();
         data ? setStreams(arrayListData(data)) : setStreams([]);
       });
   }, [chosenDay]);
@@ -144,7 +144,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     database()
       .ref(`/events/${chosenDay}`)
       .on('value', (snapshot) => {
-        const data: EventInDatabases[] = snapshot.val();
+        const data: EventInDatabasesType[] = snapshot.val();
         getTriggerNotificationIds(data);
       });
   }, []);

@@ -15,7 +15,7 @@ import database from '@react-native-firebase/database';
 import {ButtonBar} from '../../Components/ButtonBar';
 import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader';
-import {RemoteUsers} from '../../Components/RemoteUsers';
+import {RemoteUser} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
 import {HomeStackScreens} from '../../Navigation/Stack/types';
 import {setJoinedAction} from '../../Redux/actions/LiveActions';
@@ -92,7 +92,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const userMuteAudioCallback: UidWithMutedCallback = (uid, muted) => {
     setPeerIds((prevState) => {
-      return mute({uid, muted, device: Devices.VOICE}, prevState);
+      return muteDevice({uid, muted, device: Devices.VOICE}, prevState);
     });
   };
 
@@ -142,7 +142,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const userMuteVideoCallback: UidWithMutedCallback = (uid, muted) => {
     setPeerIds((prevState) => {
-      return mute({uid, muted, device: Devices.CAMERA}, prevState);
+      return muteDevice({uid, muted, device: Devices.CAMERA}, prevState);
     });
   };
 
@@ -156,7 +156,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
     AgoraEngine.current?.muteLocalAudioStream(!myUserData.voice);
   };
 
-  const mute = (settings: MuteSettingsType, data: UserType[]) => {
+  const muteDevice = (settings: MuteSettingsType, data: UserType[]) => {
     return data.map((userData) => {
       if (userData.uid === settings.uid) {
         return {...userData, [settings.device]: settings.muted};
@@ -218,49 +218,67 @@ export const Live: FC<LiveScreenProps> = (props) => {
     };
   }, []);
 
+  const renderUsers = () => {
+    return peerIds.map((user, index, ids) => {
+      const remoteUserId = user.uid !== myUserData.uid;
+
+      if (remoteUserId) {
+        return (
+          <RemoteUser
+            index={index}
+            cameraStyle={cameraStyle(index, ids, styles)}
+            key={'RemoteUser' + user.uid}
+            uid={user.uid}
+            channelId={channelId}
+            countUsers={peerIds.length}
+            userAccount={user.userAccount}
+            voice={user.voice}
+            camera={user.camera}
+            activeVoice={user.activeVoice}
+            isVideo={isVideo}
+          />
+        );
+      } else if (!remoteUserId && isJoined) {
+        return (
+          <LocalUser
+            key={user.uid}
+            index={index}
+            cameraSize={cameraStyle(index, ids, styles)}
+            myUserData={myUserData}
+            channelId={channelId}
+            activeVoice={myUserData.activeVoice}
+            countUsers={peerIds.length}
+            sizeUserPoint={sizeUserPoint}
+            wavesAroundUserPoint={wavesAroundUserPoint}
+            isVideo={isVideo}
+          />
+        );
+      }
+    });
+  };
+
   if (!error && !isJoined) {
     return <Preloader text={'Joining Stream, Please Wait'} />;
   }
 
+  const getViewStyle = (usersCount: number) => {
+    switch (usersCount) {
+      case 1:
+      case 2: {
+        return styles.column;
+      }
+      case 3: {
+        return styles.row;
+      }
+      default:
+        return styles.column;
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <View style={[styles.videoContainer, peerIds.length === 3 && styles.row]}>
-        <View style={peerIds.length === 2 ? styles.column : styles.row}>
-          {peerIds.map((user, index, ids) => {
-            if (user.uid !== myUserData.uid) {
-              return (
-                <RemoteUsers
-                  index={index}
-                  cameraStyle={cameraStyle(index, ids, styles)}
-                  key={'RemoteUsers' + user.uid}
-                  uid={user.uid}
-                  channelId={channelId}
-                  countUsers={peerIds.length}
-                  userAccount={user.userAccount}
-                  voice={user.voice}
-                  camera={user.camera}
-                  activeVoice={user.activeVoice}
-                  isVideo={isVideo}
-                />
-              );
-            } else if (isJoined) {
-              return (
-                <LocalUser
-                  key={user.uid}
-                  index={index}
-                  cameraSize={cameraStyle(index, ids, styles)}
-                  myUserData={myUserData}
-                  channelId={channelId}
-                  activeVoice={myUserData.activeVoice}
-                  countUsers={peerIds.length}
-                  sizeUserPoint={sizeUserPoint}
-                  wavesAroundUserPoint={wavesAroundUserPoint}
-                  isVideo={isVideo}
-                />
-              );
-            }
-          })}
-        </View>
+      <View style={[styles.videoContainer, getViewStyle(peerIds.length)]}>
+        <View style={getViewStyle(peerIds.length)}>{renderUsers()}</View>
         <ButtonBar
           exitHandler={() => exitChannelHandler(AgoraEngine, navigation)}
           cameraHandler={cameraHandler}

@@ -22,7 +22,7 @@ export const SIZE_BLOCKS_ITEM = 40;
 export const MARGIN = 5;
 
 export const HeaderStyles = (width: ScaledSize['width']) => {
-  const {mineShaft, white} = Colors;
+  const {mineShaftOpacity, white} = Colors;
 
   return StyleSheet.create<HeaderStyleType>({
     container: {
@@ -32,7 +32,7 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
       justifyContent: 'space-between',
     },
     titleContainer: {
-      backgroundColor: mineShaft,
+      backgroundColor: mineShaftOpacity,
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       height: SIZE_BLOCKS_ITEM,
       flex: 1,
@@ -47,7 +47,7 @@ export const HeaderStyles = (width: ScaledSize['width']) => {
       margin: MARGIN,
     },
     wrapperIcon: {
-      backgroundColor: mineShaft,
+      backgroundColor: mineShaftOpacity,
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       height: SIZE_BLOCKS_ITEM,
       width: SIZE_BLOCKS_ITEM,
