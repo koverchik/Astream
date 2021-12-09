@@ -1,8 +1,9 @@
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, Ref, useEffect, useRef, useState} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
-import MapView, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
+import MapView from 'react-native-map-clustering';
+import Map, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
 
 import database from '@react-native-firebase/database';
 
@@ -49,7 +50,7 @@ const INITIAL_COORDS = {
 export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const coordinates = useAppSelector(selectCoordinates);
   const channelsList = useAppSelector(selectChannelsList);
-  const mapRef = useRef<MapView | null>(null);
+  const mapRef = useRef<Map | null>(null);
   const dispatch = useAppDispatch();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -118,7 +119,19 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   };
 
   useEffect(() => {
-    mapRef.current?.animateToRegion(coordinates, 1000);
+    mapRef.current?.animateCamera(
+      {
+        center: {
+          latitude: coordinates.latitude,
+          longitude: coordinates.longitude,
+        },
+        pitch: 0,
+        zoom: 30,
+        altitude: 0,
+        heading: 0,
+      },
+      {duration: 1500},
+    );
   }, [coordinates]);
 
   useEffect(() => {
@@ -243,12 +256,14 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
           {renderSearchResultList()}
         </View>
         <MapView
-          ref={mapRef}
-          camera={cameraProperties}
+          initialRegion={INITIAL_COORDS}
           provider={PROVIDER_GOOGLE}
-          style={styles.map}
+          clusterColor={'#78adea'}
+          camera={cameraProperties}
+          ref={mapRef}
+          zoomControlEnabled={true}
           onPress={onPressMap}
-          zoomControlEnabled={true}>
+          style={styles.map}>
           {allMarkers}
         </MapView>
         <ModalCreatEvent
