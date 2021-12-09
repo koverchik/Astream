@@ -12,5 +12,6 @@ export const COLORS = {
   JUMBO: '#767577',
   MINE_SHAFT_OPACITY: 'rgba(52, 52, 52, 0.8)',
   MINE_SHAFT: '#343434ff',
+  COD_GRAY: '#1c1c1c',
   BLACK: '#000000',
 };

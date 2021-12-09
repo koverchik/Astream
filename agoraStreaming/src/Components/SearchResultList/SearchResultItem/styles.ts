@@ -7,12 +7,12 @@ type FoundStreamItemStylesType = {
   text: TextStyle;
 };
 
-const {WHITE, MINE_SHAFT} = COLORS;
+const {WHITE, COD_GRAY} = COLORS;
 
 export const styles = StyleSheet.create<FoundStreamItemStylesType>({
   container: {
     height: 40,
-    backgroundColor: MINE_SHAFT,
+    backgroundColor: COD_GRAY,
     marginBottom: 5,
     justifyContent: 'center',
     paddingHorizontal: 15,
