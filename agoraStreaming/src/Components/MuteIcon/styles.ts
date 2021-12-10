@@ -1,10 +1,12 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
-const MICROPHONE_SIZE = 20;
+import {COLORS} from '../../Colors/colors';
 
 type MuteIconStylesType = {
   muteIcon: ViewStyle;
 };
+
+const MICROPHONE_SIZE = 20;
 
 export const styles = StyleSheet.create<MuteIconStylesType>({
   muteIcon: {
@@ -14,6 +16,6 @@ export const styles = StyleSheet.create<MuteIconStylesType>({
     borderRadius: MICROPHONE_SIZE / 2,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#e01b4a',
+    backgroundColor: COLORS.CERISE_RED,
   },
 });

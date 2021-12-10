@@ -9,7 +9,7 @@ export type ModalCreatEventType = {
   coordinates?: Region;
 };
 
-export type EventInDatabases = {
+export type EventInDatabasesType = {
   name: string;
   video: boolean;
   dateTime: string;

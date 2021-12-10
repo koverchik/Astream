@@ -6,6 +6,7 @@ import {
 } from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 
+import {COLORS} from '../../Colors/colors';
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
 import {HomeSvg} from '../../Icons/HomeSvg';
@@ -50,8 +51,8 @@ export const BottomTabs = () => {
           return <CircleSvg color={color} size={size} />;
       }
     },
-    tabBarActiveTintColor: '#38a1e3',
-    tabBarInactiveTintColor: '#fff',
+    tabBarActiveTintColor: COLORS.CERULEAN,
+    tabBarInactiveTintColor: COLORS.WHITE,
     tabBarStyle: !joinedStream ? styles.tabBar : styles.hiddenTabBar,
     headerShown: !joinedStream,
   });

@@ -1,5 +1,6 @@
 import {ImageStyle, StyleSheet, ViewStyle} from 'react-native';
 
+import {COLORS} from '../../Colors/colors';
 import {CORNERS_RADIUS} from '../Home/style';
 
 type HomeScreenStylesType = {
@@ -13,18 +14,20 @@ type HomeScreenStylesType = {
 
 const SIZE_ICON_USER = 60;
 
+const {WHITE, BLACK, BABY_BLUE_EYES, BITTERSWEET} = COLORS;
+
 export const styles = StyleSheet.create<HomeScreenStylesType>({
   container: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    backgroundColor: '#ffffff',
+    backgroundColor: WHITE,
     borderBottomEndRadius: CORNERS_RADIUS,
     borderBottomStartRadius: CORNERS_RADIUS,
   },
   background: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: BLACK,
   },
   wrapperProfile: {
     flex: 1,
@@ -37,13 +40,13 @@ export const styles = StyleSheet.create<HomeScreenStylesType>({
     alignContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    backgroundColor: 'pink',
+    backgroundColor: BITTERSWEET,
     borderRadius: SIZE_ICON_USER / 2,
     margin: 20,
     padding: 10,
   },
   imageUser: {
-    backgroundColor: '#ffffff',
+    backgroundColor: WHITE,
     height: SIZE_ICON_USER,
     width: SIZE_ICON_USER,
     borderRadius: SIZE_ICON_USER / 2,
@@ -52,7 +55,7 @@ export const styles = StyleSheet.create<HomeScreenStylesType>({
     alignItems: 'center',
     width: 150,
     padding: 15,
-    backgroundColor: '#81b0ff',
+    backgroundColor: BABY_BLUE_EYES,
     alignSelf: 'center',
     marginBottom: 20,
     borderRadius: 8,

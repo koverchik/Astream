@@ -1,5 +1,7 @@
 import {Dimensions, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
+import {COLORS} from '../../Colors/colors';
+
 const {width} = Dimensions.get('window');
 
 const AVATAR_SIZE = 50;
@@ -17,11 +19,13 @@ type StreamStylesType = {
   name: TextStyle;
 };
 
+const {BABY_BLUE_EYES, WHITE, SILVER_CHALICE, PORCELAIN, WILD_SAND} = COLORS;
+
 export const styles = StyleSheet.create<StreamStylesType>({
   container: {
-    backgroundColor: '#f6f8f8',
+    backgroundColor: WILD_SAND,
     margin: 10,
-    borderColor: '#e8ecec',
+    borderColor: PORCELAIN,
     borderWidth: 1,
     flexDirection: 'row',
     width: width * 0.8,
@@ -33,6 +37,8 @@ export const styles = StyleSheet.create<StreamStylesType>({
   avatarBox: {
     width: AVATAR_SIZE,
     height: AVATAR_SIZE + 5,
+    backgroundColor: WHITE,
+    borderRadius: AVATAR_SIZE / 2,
   },
   avatar: {
     width: AVATAR_SIZE,
@@ -40,7 +46,7 @@ export const styles = StyleSheet.create<StreamStylesType>({
     borderRadius: AVATAR_SIZE / 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: WHITE,
   },
   type: {
     position: 'absolute',
@@ -49,7 +55,7 @@ export const styles = StyleSheet.create<StreamStylesType>({
     height: STREAM_TYPE_SIZE,
     width: STREAM_TYPE_SIZE,
     borderRadius: STREAM_TYPE_SIZE / 2,
-    backgroundColor: '#a5c5ec',
+    backgroundColor: BABY_BLUE_EYES,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -65,15 +71,15 @@ export const styles = StyleSheet.create<StreamStylesType>({
     height: '70%',
     paddingHorizontal: 10,
     borderRadius: 20,
-    backgroundColor: '#9acee5',
+    backgroundColor: BABY_BLUE_EYES,
   },
   buttonText: {
-    color: '#2997dc',
+    color: COLORS.AZURE_RADIANCE,
     fontSize: 10,
     fontWeight: 'bold',
   },
   time: {
-    color: '#b0b0b0',
+    color: SILVER_CHALICE,
   },
   name: {
     fontWeight: 'bold',

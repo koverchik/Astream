@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {View} from 'react-native';
 
+import {COLORS} from '../../Colors/colors';
 import {CameraMutedSvg} from '../../Icons/CameraMutedSvg';
 import {CameraSvg} from '../../Icons/CameraSvg';
 import {ExitSvg} from '../../Icons/ExitSvg';
@@ -35,13 +36,17 @@ export const ButtonBar: FC<ButtonBarPropsType> = (props) => {
             muteCamera ? (
               <CameraMutedSvg />
             ) : (
-              <CameraSvg color={'#000'} size={'60%'} />
+              <CameraSvg color={COLORS.BLACK} size={'60%'} />
             )
           }
         />
       )}
       <RoundButton handler={switchCamera} icon={<SwitchCameraSvg />} />
-      <RoundButton handler={exitHandler} icon={<ExitSvg />} color={'#da2b55'} />
+      <RoundButton
+        handler={exitHandler}
+        icon={<ExitSvg />}
+        color={COLORS.CERISE_RED}
+      />
     </View>
   );
 };
