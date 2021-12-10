@@ -1,4 +1,4 @@
-import React, {FC, Ref, useEffect, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
@@ -119,16 +119,13 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   };
 
   useEffect(() => {
+    const {latitude, longitude} = coordinates;
+
     mapRef.current?.animateCamera(
       {
-        center: {
-          latitude: coordinates.latitude,
-          longitude: coordinates.longitude,
-        },
-        pitch: 0,
+        ...cameraProperties,
+        center: {latitude, longitude},
         zoom: 30,
-        altitude: 0,
-        heading: 0,
       },
       {duration: 1500},
     );
