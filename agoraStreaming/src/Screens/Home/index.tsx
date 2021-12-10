@@ -7,6 +7,7 @@ import Map, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
 
 import database from '@react-native-firebase/database';
 
+import {COLORS} from '../../Colors/colors';
 import {GoogleMapsMarker} from '../../Components/GoogleMapsMarker';
 import {CustomHeader} from '../../Components/Header';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
@@ -254,7 +255,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
           provider={PROVIDER_GOOGLE}
           minZoom={8}
           maxZoom={30}
-          clusterColor={'#78adea'}
+          clusterColor={COLORS.BABY_BLUE_EYES}
           camera={cameraProperties}
           ref={mapRef}
           zoomControlEnabled={true}
