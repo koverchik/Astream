@@ -9,9 +9,9 @@ import {IconUserName} from '../IconUserName';
 import {MuteIcon} from '../MuteIcon';
 import {UserNameLabel} from '../UserNameLabel';
 import {styles} from './styles';
-import {RemoteUsersType} from './types';
+import {RemoteUserType} from './types';
 
-export const RemoteUsers: FC<RemoteUsersType> = (props) => {
+export const RemoteUser: FC<RemoteUserType> = (props) => {
   const {
     index,
     uid,

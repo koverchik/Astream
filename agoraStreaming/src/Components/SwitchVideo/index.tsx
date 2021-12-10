@@ -1,18 +1,20 @@
 import React, {FC} from 'react';
 import {Switch, Text, View} from 'react-native';
 
+import {COLORS} from '../../Colors/colors';
 import {styles} from './styles';
 import {SwitchVideoType} from './types';
 
 export const SwitchVideo: FC<SwitchVideoType> = (props) => {
   const {isEnabled, setIsEnabled} = props;
+  const {BITTERSWEET, WILD_SAND, JUMBO, BABY_BLUE_EYES} = COLORS;
 
   return (
     <View style={styles.wrapperView}>
       <Text>Video</Text>
       <Switch
-        trackColor={{false: '#767577', true: '#81b0ff'}}
-        thumbColor={isEnabled ? '#FF7070' : '#f4f3f4'}
+        trackColor={{false: JUMBO, true: BABY_BLUE_EYES}}
+        thumbColor={isEnabled ? BITTERSWEET : WILD_SAND}
         onValueChange={setIsEnabled}
         value={isEnabled}
       />

@@ -1,5 +1,6 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
+import {COLORS} from '../../Colors/colors';
 import {SIZE_BUTTON} from '../../Components/ModalCreateEvent/style';
 import {CORNERS_RADIUS} from '../Home/style';
 
@@ -15,6 +16,8 @@ type CalendarStylesType = {
   clearButton: ViewStyle;
 };
 
+const {WHITE, BITTERSWEET, BLACK, MINE_SHAFT} = COLORS;
+
 export const styles = StyleSheet.create<CalendarStylesType>({
   container: {
     flex: 1,
@@ -22,11 +25,11 @@ export const styles = StyleSheet.create<CalendarStylesType>({
     alignItems: 'center',
     borderBottomEndRadius: CORNERS_RADIUS,
     borderBottomStartRadius: CORNERS_RADIUS,
-    backgroundColor: '#fff',
+    backgroundColor: WHITE,
   },
   background: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: BLACK,
   },
   flatList: {
     width: '100%',
@@ -40,7 +43,7 @@ export const styles = StyleSheet.create<CalendarStylesType>({
     left: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FF7070',
+    backgroundColor: BITTERSWEET,
     width: SIZE_BUTTON,
     height: SIZE_BUTTON,
     borderRadius: 8,
@@ -62,7 +65,7 @@ export const styles = StyleSheet.create<CalendarStylesType>({
     height: SIZE_BUTTON,
     width: SIZE_BUTTON,
     borderRadius: SIZE_BUTTON / 2,
-    backgroundColor: '#262626',
+    backgroundColor: MINE_SHAFT,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',

@@ -1,0 +1,17 @@
+export const COLORS = {
+  BITTERSWEET: '#ff7070',
+  CERISE_RED: '#da2b55',
+  BERMUDA: '#7adaa8',
+  BABY_BLUE_EYES: '#a5c5ec',
+  CERULEAN: '#10b4ef',
+  AZURE_RADIANCE: '#007eff',
+  WHITE: '#ffffff',
+  WILD_SAND: '#f5f4f4',
+  PORCELAIN: '#e8ecec',
+  SILVER_CHALICE: '#b0b0b0',
+  JUMBO: '#767577',
+  MINE_SHAFT_OPACITY: 'rgba(52, 52, 52, 0.8)',
+  MINE_SHAFT: '#343434ff',
+  COD_GRAY: '#1c1c1c',
+  BLACK: '#000000',
+};

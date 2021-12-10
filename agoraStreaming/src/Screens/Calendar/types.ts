@@ -1,7 +1,7 @@
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {RouteProp} from '@react-navigation/native';
 
-import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
+import {EventInDatabasesType} from '../../Components/ModalCreateEvent/types';
 import {TabNavigation, TabParamList} from '../../Navigation/Tab/types';
 
 export type StreamType = {
@@ -29,4 +29,4 @@ export type TabNavigationPropsProfileType = BottomTabNavigationProp<
 
 export type FunctionSortByTimeType = (arr: StreamType[]) => StreamType[];
 
-export type ArrayListDataType = (data: EventInDatabases[]) => StreamType[];
+export type ArrayListDataType = (data: EventInDatabasesType[]) => StreamType[];

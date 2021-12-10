@@ -256,11 +256,9 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
           isModalVisible={modalVisible}
           coordinates={geolocation}
         />
-        <View style={styles.createContainer}>
-          <TouchableOpacity style={styles.button} onPress={changeModalVisible}>
-            <Text style={styles.buttonText}>Create channel</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.button} onPress={changeModalVisible}>
+          <Text style={styles.buttonText}>Create channel</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

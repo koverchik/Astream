@@ -1,5 +1,7 @@
 import {StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
+import {COLORS} from '../../Colors/colors';
+
 type LifeScreenStyles = {
   wrapperAllModalView: ViewStyle;
   button: ViewStyle;
@@ -16,6 +18,8 @@ type LifeScreenStyles = {
   inputContainer: ViewStyle;
 };
 export const SIZE_BUTTON = 30;
+
+const {BLACK, WHITE, BITTERSWEET} = COLORS;
 
 export const styles = StyleSheet.create<LifeScreenStyles>({
   wrapperAllModalView: {
@@ -34,7 +38,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: BLACK,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -44,7 +48,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     elevation: 5,
   },
   title: {
-    color: '#FF7070',
+    color: BITTERSWEET,
     fontSize: 20,
     marginBottom: 25,
   },
@@ -62,7 +66,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     paddingVertical: 7,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FF7070',
+    backgroundColor: BITTERSWEET,
   },
   closeButton: {
     borderRadius: SIZE_BUTTON / 2,
@@ -72,13 +76,13 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     alignSelf: 'flex-end',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FF7070',
+    backgroundColor: BITTERSWEET,
   },
   buttonDisabled: {
-    backgroundColor: '#b2b2b2',
+    backgroundColor: BITTERSWEET,
   },
   buttonText: {
-    color: '#fff',
+    color: WHITE,
     fontSize: 20,
   },
   inputContainer: {
@@ -86,7 +90,7 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
   },
   error: {
     margin: 5,
-    color: '#FF7070',
+    color: BITTERSWEET,
   },
   input: {
     width: '100%',
@@ -96,6 +100,6 @@ export const styles = StyleSheet.create<LifeScreenStyles>({
     marginBottom: 10,
   },
   errorInput: {
-    borderColor: '#FF7070',
+    borderColor: BITTERSWEET,
   },
 });

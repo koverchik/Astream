@@ -1,5 +1,7 @@
 import {StyleSheet, ViewStyle} from 'react-native';
 
+import {COLORS} from '../../Colors/colors';
+
 type UserNameLabelType = {
   pointUserName: ViewStyle;
   container: ViewStyle;
@@ -13,7 +15,7 @@ export const styles = StyleSheet.create<UserNameLabelType>({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: SIZE_USER_POINT / 2,
-    backgroundColor: '#5ebf9d',
+    backgroundColor: COLORS.BERMUDA,
     margin: 10,
   },
   container: {

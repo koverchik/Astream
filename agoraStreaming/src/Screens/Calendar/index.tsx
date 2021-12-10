@@ -7,11 +7,12 @@ import Animated, {
 
 import database from '@react-native-firebase/database';
 
+import {COLORS} from '../../Colors/colors';
 import {CustomHeader} from '../../Components/Header';
 import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
 import {DateInfoType} from '../../Components/HorizontalCalendar/types';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
-import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
+import {EventInDatabasesType} from '../../Components/ModalCreateEvent/types';
 import {StreamEventItem} from '../../Components/StreamEventItem';
 import {
   HeaderInputPlaceholders,
@@ -101,7 +102,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
         <TouchableOpacity
           style={styles.clearButton}
           onPress={onPressClearButton}>
-          <FontAwesomeIcon icon={faTimes} color={'white'} size={18} />
+          <FontAwesomeIcon icon={faTimes} color={COLORS.WHITE} size={18} />
         </TouchableOpacity>
       )
     );
@@ -134,7 +135,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     database()
       .ref(`/events/${chosenDay}`)
       .on('value', (snapshot) => {
-        const data: EventInDatabases[] = snapshot.val();
+        const data: EventInDatabasesType[] = snapshot.val();
         data ? setStreams(arrayListData(data)) : setStreams([]);
       });
   }, [chosenDay]);
@@ -143,7 +144,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     database()
       .ref(`/events/${chosenDay}`)
       .on('value', (snapshot) => {
-        const data: EventInDatabases[] = snapshot.val();
+        const data: EventInDatabasesType[] = snapshot.val();
         getTriggerNotificationIds(data);
       });
   }, []);
@@ -163,11 +164,11 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
           <TouchableOpacity
             onPress={changeModalVisible}
             style={styles.addNewEvent}>
-            <FontAwesomeIcon icon={faPlus} color={'white'} size={18} />
+            <FontAwesomeIcon icon={faPlus} color={COLORS.WHITE} size={18} />
           </TouchableOpacity>
           <HorizontalCalendar
             onDayPress={selectDay}
-            activeDayColor={'#007eff'}
+            activeDayColor={COLORS.AZURE_RADIANCE}
           />
         </View>
         <ModalCreatEvent
