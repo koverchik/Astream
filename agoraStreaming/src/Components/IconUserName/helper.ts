@@ -8,6 +8,7 @@ export const useValueForPosition = (
   const {height, width} = useWindowDimensions();
   const TOP_POSITION = height / 4 - SIZE_USER_POINT / 2;
   const LEFT_POSITION = width / 2 - SIZE_USER_POINT / 2;
+  const LEFT_POSITION_FOUR_USERS = width / 4 - SIZE_USER_POINT / 2;
 
   switch (countUser) {
     case 2:
@@ -24,13 +25,13 @@ export const useValueForPosition = (
       } else {
         return {
           top: TOP_POSITION,
-          left: width / 4 - SIZE_USER_POINT / 2,
+          left: LEFT_POSITION_FOUR_USERS,
         };
       }
     case 4:
       return {
-        top: height / 4 - SIZE_USER_POINT / 2,
-        left: width / 4 - SIZE_USER_POINT / 2,
+        top: TOP_POSITION,
+        left: LEFT_POSITION_FOUR_USERS,
       };
     default:
       return {
