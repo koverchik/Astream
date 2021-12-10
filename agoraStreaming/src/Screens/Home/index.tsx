@@ -134,7 +134,6 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       {
         ...cameraProperties,
         center: {latitude, longitude},
-        zoom: 20,
       },
       {duration: 1500},
     );
@@ -253,8 +252,6 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
         <MapView
           initialRegion={INITIAL_COORDS}
           provider={PROVIDER_GOOGLE}
-          minZoom={8}
-          maxZoom={30}
           clusterColor={COLORS.BABY_BLUE_EYES}
           camera={cameraProperties}
           ref={mapRef}
