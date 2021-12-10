@@ -71,66 +71,6 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     center: coordinates,
   };
 
-  const onChangeSearchValue = (event: InputEventType) => {
-    const result = channelsList.filter((channel) => {
-      const textFromInput = event.nativeEvent.text;
-      const matchFound = channel.name.includes(textFromInput);
-      const stringIsNotEmpty = !!textFromInput;
-
-      if (matchFound && stringIsNotEmpty) {
-        return channel;
-      }
-    });
-    setSearchResult(result);
-  };
-
-  const onPressResult = (stream: ListChannelsType) => {
-    const propertiesForShowCallout = {
-      channelId: stream.channelId,
-      calloutIsShow: true,
-    };
-
-    dispatch(setCoordinatesAction(stream.coords));
-    dispatch(setShowCalloutAction(propertiesForShowCallout));
-    activeSearchMode();
-    setSearchResult([]);
-  };
-
-  const activeSearchMode = () => {
-    setSearchMode((searchMode) => {
-      if (searchMode) {
-        setSearchValue('');
-      }
-
-      return !searchMode;
-    });
-  };
-
-  const renderSearchResultList = () => {
-    return (
-      !!searchValue &&
-      searchMode && (
-        <SearchResultList
-          searchResult={searchResult}
-          onPressResult={onPressResult}
-        />
-      )
-    );
-  };
-
-  useEffect(() => {
-    const {latitude, longitude} = coordinates;
-
-    mapRef.current?.animateCamera(
-      {
-        ...cameraProperties,
-        center: {latitude, longitude},
-        zoom: 30,
-      },
-      {duration: 1500},
-    );
-  }, [coordinates]);
-
   useEffect(() => {
     const newChannelList = addCallouts(channelListFirebase, channelsList);
     dispatch(setChannelsListAction(newChannelList));
@@ -163,6 +103,51 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
         }
       });
   }, []);
+
+  const onChangeSearchValue = (event: InputEventType) => {
+    const result = channelsList.filter((channel) => {
+      const textFromInput = event.nativeEvent.text;
+      const matchFound = channel.name.includes(textFromInput);
+      const stringIsNotEmpty = !!textFromInput;
+
+      if (matchFound && stringIsNotEmpty) {
+        return channel;
+      }
+    });
+    setSearchResult(result);
+  };
+
+  const onPressResult = (stream: ListChannelsType) => {
+    const {latitude, longitude} = coordinates;
+    const propertiesForShowCallout = {
+      channelId: stream.channelId,
+      calloutIsShow: true,
+    };
+
+    dispatch(setCoordinatesAction(stream.coords));
+    dispatch(setShowCalloutAction(propertiesForShowCallout));
+    activeSearchMode();
+    setSearchResult([]);
+
+    mapRef.current?.animateCamera(
+      {
+        ...cameraProperties,
+        center: {latitude, longitude},
+        zoom: 20,
+      },
+      {duration: 1500},
+    );
+  };
+
+  const activeSearchMode = () => {
+    setSearchMode((searchMode) => {
+      if (searchMode) {
+        setSearchValue('');
+      }
+
+      return !searchMode;
+    });
+  };
 
   const choseChannelAndJoinLive = (data: DataForCloseChannelType) => {
     const {channelId, isVideo} = data;
@@ -237,6 +222,18 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     );
   });
 
+  const renderSearchResultList = () => {
+    return (
+      !!searchValue &&
+      searchMode && (
+        <SearchResultList
+          searchResult={searchResult}
+          onPressResult={onPressResult}
+        />
+      )
+    );
+  };
+
   return (
     <View style={styles.background}>
       <View style={styles.container}>
@@ -255,6 +252,8 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
         <MapView
           initialRegion={INITIAL_COORDS}
           provider={PROVIDER_GOOGLE}
+          minZoom={8}
+          maxZoom={30}
           clusterColor={'#78adea'}
           camera={cameraProperties}
           ref={mapRef}
