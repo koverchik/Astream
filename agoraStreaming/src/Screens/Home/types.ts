@@ -1,4 +1,4 @@
-import {Camera, Region} from 'react-native-maps';
+import {LatLng, Region} from 'react-native-maps';
 
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {RouteProp} from '@react-navigation/native';
@@ -18,13 +18,13 @@ export type TabNavigationPropHomeType = BottomTabNavigationProp<
 
 export type ListChannelsType = {
   name: string;
-  coords: Region;
+  coords: LatLng | Region;
   channelId: string;
   isVideo: RootStackParamList['Live']['isVideo'];
   calloutIsShow: boolean;
 };
 
-export type ChannelsListFromFirebase = Pick<
+export type ChannelFromFirebaseType = Pick<
   ListChannelsType,
   'channelId' | 'isVideo' | 'coords' | 'name'
 >;
@@ -33,5 +33,3 @@ export type DataForCloseChannelType = Pick<
   ListChannelsType,
   'channelId' | 'isVideo'
 >;
-
-export type GeoType = Camera['center'];
