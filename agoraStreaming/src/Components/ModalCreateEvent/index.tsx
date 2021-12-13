@@ -52,11 +52,16 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
     });
   };
 
+  const closeModal = () => {
+    changeModalVisible();
+    setError('');
+  };
+
   const pressStart = async () => {
     if (!name.trim()) {
       setError('Name is required field!');
     } else {
-      changeModalVisible();
+      closeModal();
       dispatch(setConnectStatus(ConnectStatus.LOADING));
       setName('');
       coordinates ? createLive() : await createEvent();
@@ -83,9 +88,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
       onRequestClose={onRequestClose}>
       <View style={styles.wrapperModalView}>
         <View style={styles.modalView}>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={changeModalVisible}>
+          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
             <FontAwesomeIcon icon={faPlus} color={COLORS.WHITE} size={20} />
           </TouchableOpacity>
           <Text style={styles.title}>Create new event</Text>
