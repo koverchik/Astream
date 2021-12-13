@@ -11,12 +11,7 @@ import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
 import {HomeSvg} from '../../Icons/HomeSvg';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
-import {ConnectStatus} from '../../Redux/reducers/Live/types';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
-import {
-  getIsJoined,
-  selectConnectStatus,
-} from '../../Redux/selectors/LiveSelectors';
 import {AuthScreen} from '../../Screens/Auth';
 import {getUserData} from '../../Screens/Auth/helpers/googleSignIn';
 import {ScreenCalendar} from '../../Screens/Calendar';
@@ -29,8 +24,6 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 const Tab = createBottomTabNavigator<TabParamList>();
 
 export const BottomTabs = () => {
-  const joinedStream = useAppSelector(getIsJoined);
-  const status = useAppSelector(selectConnectStatus);
   const userData = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
@@ -58,10 +51,7 @@ export const BottomTabs = () => {
     },
     tabBarActiveTintColor: COLORS.CERULEAN,
     tabBarInactiveTintColor: COLORS.WHITE,
-    tabBarStyle:
-      !joinedStream && status !== ConnectStatus.LOADING
-        ? styles.tabBar
-        : styles.hiddenTabBar,
+    tabBarStyle: styles.tabBar,
   });
 
   const webClientId =

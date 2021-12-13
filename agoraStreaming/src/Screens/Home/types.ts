@@ -1,4 +1,4 @@
-import {Region} from 'react-native-maps';
+import {Camera, Region} from 'react-native-maps';
 
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -36,4 +36,4 @@ export type DataForCloseChannelType = Pick<
   'channelId' | 'isVideo'
 >;
 
-export type GeoType = Pick<Region, 'latitude' | 'longitude'>;
+export type GeoType = Camera['center'];

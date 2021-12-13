@@ -1,5 +1,11 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {Animated, Platform, View, useWindowDimensions} from 'react-native';
+import {
+  Animated,
+  Modal,
+  Platform,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import RtcEngine from 'react-native-agora';
 import {
   UidWithMutedCallback,
@@ -18,13 +24,6 @@ import {Preloader} from '../../Components/Preloader';
 import {RemoteUser} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
 import {HomeStackScreens} from '../../Navigation/Stack/types';
-import {
-  setConnectStatus,
-  setJoinedAction,
-} from '../../Redux/actions/LiveActions';
-import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
-import {ConnectStatus} from '../../Redux/reducers/Live/types';
-import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
 import {cameraStyle} from './helpers/CameraStyle';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
@@ -62,8 +61,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const {width} = useWindowDimensions();
   const styles = LiveStyles(width);
 
-  const dispatch = useAppDispatch();
-  const isJoined = useAppSelector(getIsJoined);
+  const [isJoined, setIsJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [peerIds, setPeerIds] = useState<UserType[]>([]);
   const [myUserData, setMyUserData] = useState<LocalUserType>(INITIAL_DATA);
@@ -86,8 +84,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   animationCircle(sizeUserPoint, wavesAroundUserPoint).start();
 
   const userJoinedCallback = () => {
-    dispatch(setJoinedAction(true));
-    dispatch(setConnectStatus(ConnectStatus.SUCCESS));
+    setIsJoined(true);
   };
 
   const userOfflineCallback: UserOfflineCallback = (uid) => {
@@ -182,7 +179,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const userLeaveChannel = async () => {
     const keyChannel = await findKeyDataInDatabase(channelId);
-    dispatch(setJoinedAction(false));
+    setIsJoined(false);
 
     if (keyChannel) {
       await deleteChannel(keyChannel);
@@ -283,21 +280,23 @@ export const Live: FC<LiveScreenProps> = (props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.videoContainer, getViewStyle(peerIds.length)]}>
-        <View style={getViewStyle(peerIds.length)}>{renderUsers()}</View>
-        <ButtonBar
-          exitHandler={() => exitChannelHandler(AgoraEngine, navigation)}
-          cameraHandler={cameraHandler}
-          microphoneHandler={microphoneHandler}
-          switchCamera={() => switchCamera(AgoraEngine)}
-          muteCamera={myUserData.camera}
-          muteVoice={myUserData.voice}
-          isVideo={isVideo}
-        />
+    <Modal animationType="fade" transparent={false} visible={isJoined}>
+      <View style={styles.container}>
+        <View style={[styles.videoContainer, getViewStyle(peerIds.length)]}>
+          <View style={getViewStyle(peerIds.length)}>{renderUsers()}</View>
+          <ButtonBar
+            exitHandler={() => exitChannelHandler(AgoraEngine, navigation)}
+            cameraHandler={cameraHandler}
+            microphoneHandler={microphoneHandler}
+            switchCamera={() => switchCamera(AgoraEngine)}
+            muteCamera={myUserData.camera}
+            muteVoice={myUserData.voice}
+            isVideo={isVideo}
+          />
+        </View>
+        {/* // TODO: hide element for demo*/}
+        {/* <ListUsers hiddenUsers={hiddenUsers} /> */}
       </View>
-      {/* // TODO: hide element for demo*/}
-      {/* <ListUsers hiddenUsers={hiddenUsers} /> */}
-    </View>
+    </Modal>
   );
 };

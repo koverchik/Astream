@@ -21,7 +21,6 @@ import {
   setChannelsListAction,
   setShowCalloutAction,
 } from '../../Redux/actions/HomeActions';
-import {setJoinedAction} from '../../Redux/actions/LiveActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {InputEventType} from '../../Types/universalTypes';
@@ -152,8 +151,6 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       channelId,
       isVideo,
     });
-
-    dispatch(setJoinedAction(true));
   };
 
   const changeModalVisible = () => {
