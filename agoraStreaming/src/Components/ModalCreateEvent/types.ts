@@ -13,4 +13,5 @@ export type EventInDatabasesType = {
   name: string;
   video: boolean;
   dateTime: string;
+  channelId?: string;
 };

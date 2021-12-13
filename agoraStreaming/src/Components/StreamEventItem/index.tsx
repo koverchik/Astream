@@ -1,30 +1,28 @@
 import React, {FC} from 'react';
-import {
-  Alert,
-  Text,
-  TouchableOpacity,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+import {Text, TouchableOpacity, View, useWindowDimensions} from 'react-native';
 import Animated, {interpolate, useAnimatedStyle} from 'react-native-reanimated';
 
 import {useNavigation} from '@react-navigation/native';
+
+import database from '@react-native-firebase/database';
 
 import {COLORS} from '../../Colors/colors';
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {DefaultAvatar} from '../../Icons/DefaultAvatar';
 import {LiveType, MainStackScreens} from '../../Navigation/Stack/types';
 import {addZeroForMinutes} from '../../Screens/Calendar/helpers/addZero';
+import {addNewChannelInDB} from '../../Screens/Live/helpers/addNewChannelInDB';
 import {StackNavigationPropLive} from '../../Screens/Live/types';
 import {getStreamTypeIcon} from './helpers/getStreamTypeIcon';
 import {StreamItemStyles} from './styles';
-import {StreamEventItemPropsType} from './types';
+import {StreamEventItemPropsType, StreamStatus} from './types';
 
 const START_ANIMATION = 95;
 
 export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
-  const {time, type, name, channelId, isVideo} = props.stream;
-  const {translationY, index} = props;
+  const {time, type, name, channelId, isVideo, eventId, chosenDay} =
+    props.stream;
+  const {translationY, index, geolocation} = props;
 
   const navigation = useNavigation<StackNavigationPropLive>();
 
@@ -38,7 +36,9 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
     (index + 1) * START_ANIMATION,
   ];
 
-  const onPressNotification = () => {
+  const newReference = database().ref(`/events/${chosenDay}/${eventId}`);
+
+  const onPressEventButton = async () => {
     if (channelId) {
       navigation.navigate(MainStackScreens.Live, {
         type: LiveType.JOIN,
@@ -46,7 +46,22 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
         isVideo,
       });
     } else {
-      Alert.alert('Stream is not started');
+      navigation.navigate(MainStackScreens.Live, {
+        type: LiveType.CREATE,
+        channelId: eventId,
+        coords: geolocation,
+        isVideo,
+        name,
+      });
+
+      await addNewChannelInDB({
+        name,
+        channelId: eventId,
+        isVideo,
+        coords: geolocation,
+      });
+
+      await newReference.update({channelId: eventId});
     }
   };
 
@@ -78,15 +93,17 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
         </Text>
         <View style={styles.streamStatus}>
           <View style={styles.streamStatusCircle} />
-          <Text>{channelId ? 'Online' : 'Offline'}</Text>
+          <Text>{channelId ? StreamStatus.ONLINE : StreamStatus.OFFLINE}</Text>
         </View>
       </View>
       <TouchableOpacity
         activeOpacity={0.5}
         style={styles.button}
-        onPress={onPressNotification}>
+        onPress={onPressEventButton}>
         <CalendarSvg color={COLORS.AZURE_RADIANCE} size={11} />
-        <Text style={styles.buttonText}>Add to Call</Text>
+        <Text style={styles.buttonText}>
+          {channelId ? 'Add to Call' : 'Create stream'}
+        </Text>
       </TouchableOpacity>
     </Animated.View>
   );

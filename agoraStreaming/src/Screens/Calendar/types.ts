@@ -5,10 +5,13 @@ import {EventInDatabasesType} from '../../Components/ModalCreateEvent/types';
 import {TabNavigation, TabParamList} from '../../Navigation/Tab/types';
 
 export type StreamType = {
-  id: string;
+  channelId: string | null;
   time: number;
   type: CallTypes;
   name: string;
+  isVideo: boolean;
+  eventId: string;
+  chosenDay: string;
 };
 
 export enum CallTypes {
@@ -29,4 +32,7 @@ export type TabNavigationPropsProfileType = BottomTabNavigationProp<
 
 export type FunctionSortByTimeType = (arr: StreamType[]) => StreamType[];
 
-export type ArrayListDataType = (data: EventInDatabasesType[]) => StreamType[];
+export type ArrayListDataType = (
+  data: EventInDatabasesType[],
+  chosenDay: string,
+) => StreamType[];

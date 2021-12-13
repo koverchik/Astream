@@ -1,5 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Text, TouchableOpacity, View} from 'react-native';
+import Geolocation from 'react-native-geolocation-service';
+import {LatLng} from 'react-native-maps';
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -35,6 +37,10 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
   const [streams, setStreams] = useState<StreamType[]>([]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [chosenDay, setChoseDay] = useState<string>(initDate);
+  const [geolocation, setGeolocation] = useState<LatLng>({
+    latitude: 0,
+    longitude: 0,
+  });
 
   const [searchResult, setSearchResult] = useState<StreamType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
@@ -116,9 +122,10 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
         return (
           <StreamEventItem
             stream={item}
-            key={item.id}
+            key={item.time + index}
             translationY={translationY}
             index={index}
+            geolocation={geolocation}
           />
         );
       });
@@ -135,8 +142,8 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     database()
       .ref(`/events/${chosenDay}`)
       .on('value', (snapshot) => {
-        const data: EventInDatabasesType[] = snapshot.val();
-        data ? setStreams(arrayListData(data)) : setStreams([]);
+        const data = snapshot.val();
+        data ? setStreams(arrayListData(data, chosenDay)) : setStreams([]);
       });
   }, [chosenDay]);
 
@@ -147,6 +154,16 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
         const data: EventInDatabasesType[] = snapshot.val();
         getTriggerNotificationIds(data);
       });
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const {latitude, longitude} = position.coords;
+        setGeolocation({latitude, longitude});
+      },
+      () => {
+        Alert.alert('Geolocation error');
+      },
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    );
   }, []);
 
   return (
