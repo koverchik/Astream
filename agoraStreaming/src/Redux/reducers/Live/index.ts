@@ -1,8 +1,9 @@
 import {LiveActions, LiveActionsType} from '../../actions/LiveActions/types';
-import {LiveInitialStateType} from './types';
+import {ConnectStatus, LiveInitialStateType} from './types';
 
 const liveInitialState: LiveInitialStateType = {
   isJoined: false,
+  connectStatus: ConnectStatus.IDLE,
 };
 
 export const liveReducer = (
@@ -12,6 +13,9 @@ export const liveReducer = (
   switch (action.type) {
     case LiveActions.SET_JOINED: {
       return {...state, isJoined: action.payload};
+    }
+    case LiveActions.SET_CONNECT_STATUS: {
+      return {...state, connectStatus: action.payload};
     }
     default:
       return state;

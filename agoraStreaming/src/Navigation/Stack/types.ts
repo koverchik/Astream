@@ -1,4 +1,4 @@
-import {Region} from 'react-native-maps';
+import {GeoType} from '../../Screens/Home/types';
 
 export enum LiveType {
   CREATE = 'create',
@@ -13,7 +13,7 @@ export type RootStackParamList = {
     isVideo: boolean;
 
     name?: string;
-    coords?: Region;
+    coords?: GeoType;
   };
 };
 

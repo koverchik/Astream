@@ -18,8 +18,12 @@ import {Preloader} from '../../Components/Preloader';
 import {RemoteUser} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
 import {HomeStackScreens} from '../../Navigation/Stack/types';
-import {setJoinedAction} from '../../Redux/actions/LiveActions';
+import {
+  setConnectStatus,
+  setJoinedAction,
+} from '../../Redux/actions/LiveActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
+import {ConnectStatus} from '../../Redux/reducers/Live/types';
 import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
 import {cameraStyle} from './helpers/CameraStyle';
 import {errorAlert} from './helpers/alert';
@@ -44,7 +48,7 @@ import {
 import {v4 as uuid} from 'uuid';
 
 export const Live: FC<LiveScreenProps> = (props) => {
-  const {channelId, name, coords, isVideo} = props.route.params;
+  const {channelId, name, coords, isVideo, type} = props.route.params;
 
   const INITIAL_DATA: LocalUserType = {
     uid: 0,
@@ -66,7 +70,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const [stash, setStash] = useState<UserType[]>([]);
 
-  const isBroadcaster = isBroadcasterFunction(props.route.params.type);
+  const isBroadcaster = isBroadcasterFunction(type);
 
   const AgoraEngine = useRef<RtcEngine>();
 
@@ -83,6 +87,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const userJoinedCallback = () => {
     dispatch(setJoinedAction(true));
+    dispatch(setConnectStatus(ConnectStatus.SUCCESS));
   };
 
   const userOfflineCallback: UserOfflineCallback = (uid) => {

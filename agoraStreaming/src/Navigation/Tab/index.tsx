@@ -11,8 +11,12 @@ import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
 import {HomeSvg} from '../../Icons/HomeSvg';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
+import {ConnectStatus} from '../../Redux/reducers/Live/types';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
-import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
+import {
+  getIsJoined,
+  selectConnectStatus,
+} from '../../Redux/selectors/LiveSelectors';
 import {AuthScreen} from '../../Screens/Auth';
 import {getUserData} from '../../Screens/Auth/helpers/googleSignIn';
 import {ScreenCalendar} from '../../Screens/Calendar';
@@ -26,6 +30,7 @@ const Tab = createBottomTabNavigator<TabParamList>();
 
 export const BottomTabs = () => {
   const joinedStream = useAppSelector(getIsJoined);
+  const status = useAppSelector(selectConnectStatus);
   const userData = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
@@ -53,8 +58,10 @@ export const BottomTabs = () => {
     },
     tabBarActiveTintColor: COLORS.CERULEAN,
     tabBarInactiveTintColor: COLORS.WHITE,
-    tabBarStyle: !joinedStream ? styles.tabBar : styles.hiddenTabBar,
-    headerShown: !joinedStream,
+    tabBarStyle:
+      !joinedStream && status !== ConnectStatus.LOADING
+        ? styles.tabBar
+        : styles.hiddenTabBar,
   });
 
   const webClientId =

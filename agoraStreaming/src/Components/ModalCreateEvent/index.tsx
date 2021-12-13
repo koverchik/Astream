@@ -1,6 +1,7 @@
 import React, {FC, useState} from 'react';
 import {Modal, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import DatePicker from 'react-native-date-picker';
+import {useDispatch} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -8,6 +9,8 @@ import database from '@react-native-firebase/database';
 
 import {COLORS} from '../../Colors/colors';
 import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
+import {setConnectStatus} from '../../Redux/actions/LiveActions';
+import {ConnectStatus} from '../../Redux/reducers/Live/types';
 import {StackNavigationPropHome} from '../../Screens/Home/types';
 import {InputEventType} from '../../Types/universalTypes';
 import {SwitchVideo} from '../SwitchVideo';
@@ -19,6 +22,7 @@ import {v4 as uuid} from 'uuid';
 
 export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
   const {day, changeModalVisible, isModalVisible, coordinates} = props;
+  const dispatch = useDispatch();
 
   const [name, setName] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -53,6 +57,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
       setError('Name is required field!');
     } else {
       changeModalVisible();
+      dispatch(setConnectStatus(ConnectStatus.LOADING));
       setName('');
       coordinates ? createLive() : await createEvent();
     }
