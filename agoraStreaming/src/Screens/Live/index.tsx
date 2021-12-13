@@ -10,8 +10,6 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 
-import database from '@react-native-firebase/database';
-
 import {ButtonBar} from '../../Components/ButtonBar';
 import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader';
@@ -19,6 +17,7 @@ import {RemoteUser} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
 import {MainStackScreens} from '../../Navigation/Stack/types';
 import {cameraStyle} from './helpers/CameraStyle';
+import {addNewChannelInDB} from './helpers/addNewChannelInDB';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
 import {audioVolumeIndicationCallback} from './helpers/audioVolumeIndicationCallback';
@@ -65,8 +64,6 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const isBroadcaster = isBroadcasterFunction(type);
 
   const AgoraEngine = useRef<RtcEngine>();
-
-  const newReference = database().ref('/channels').push();
 
   const navigation = useNavigation<StackNavigationPropLive>();
 
@@ -162,15 +159,6 @@ export const Live: FC<LiveScreenProps> = (props) => {
     });
   };
 
-  const addNewChannelInDB = async () => {
-    await newReference.set({
-      name,
-      channelId,
-      coords,
-      isVideo,
-    });
-  };
-
   const userLeaveChannel = async () => {
     const keyChannel = await findKeyDataInDatabase(channelId);
     setIsJoined(false);
@@ -202,7 +190,10 @@ export const Live: FC<LiveScreenProps> = (props) => {
           channelId,
           uuid(),
         );
-        isBroadcaster ? addNewChannelInDB() : null;
+        if (name && coords) {
+          isBroadcaster &&
+            addNewChannelInDB({channelId, name, coords, isVideo});
+        }
       })
       .catch((e) => {
         setError(true);
