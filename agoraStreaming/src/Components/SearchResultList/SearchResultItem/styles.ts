@@ -15,7 +15,7 @@ export const SearchItemStyles = (width: ScaledSize['width']) => {
       height: 40,
       width: width - 52,
       backgroundColor: COD_GRAY,
-      marginBottom: 5,
+      marginBottom: 7.5,
       justifyContent: 'center',
       paddingHorizontal: 15,
       borderRadius: 15,
