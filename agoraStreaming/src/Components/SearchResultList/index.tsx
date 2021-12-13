@@ -30,6 +30,7 @@ export const SearchResultList: FC<SearchResultListPropsType> = (props) => {
       style={styles.flatList}
       data={searchResult}
       renderItem={renderItem}
+      contentContainerStyle={styles.content}
       ListEmptyComponent={listEmptyComponent}
     />
   );

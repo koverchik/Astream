@@ -1,11 +1,14 @@
 import React, {FC} from 'react';
-import {Text, TouchableOpacity} from 'react-native';
+import {Text, TouchableOpacity, useWindowDimensions} from 'react-native';
 
-import {styles} from './styles';
+import {SearchItemStyles} from './styles';
 import {SearchResultItemPropsType} from './types';
 
 export const SearchResultItem: FC<SearchResultItemPropsType> = (props) => {
   const {onPressResult, item} = props;
+
+  const {width} = useWindowDimensions();
+  const styles = SearchItemStyles(width);
 
   const onPressItem = () => {
     if (onPressResult) {

@@ -1,34 +1,23 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 
 import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
 
 import {COLORS} from '../../Colors/colors';
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
 import {HomeSvg} from '../../Icons/HomeSvg';
-import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
-import {selectUser} from '../../Redux/selectors/AuthSelectors';
-import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
-import {AuthScreen} from '../../Screens/Auth';
-import {getUserData} from '../../Screens/Auth/helpers/googleSignIn';
 import {ScreenCalendar} from '../../Screens/Calendar';
+import {Home} from '../../Screens/Home';
 import {ProfileScreen} from '../../Screens/Profile';
-import {MainStack} from '../Stack';
-import {styles} from './styles';
+import {styles} from '../Stack/styles';
 import {ScreenOptionsType, TabNavigation, TabParamList} from './types';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
-export const BottomTabs = () => {
-  const joinedStream = useAppSelector(getIsJoined);
-  const userData = useAppSelector(selectUser);
-  const dispatch = useAppDispatch();
-
+export const MainTab = () => {
   const options: BottomTabNavigationOptions = {
     headerTransparent: true,
     tabBarShowLabel: false,
@@ -38,7 +27,7 @@ export const BottomTabs = () => {
   const screenOptions: ScreenOptionsType = ({route}) => ({
     tabBarIcon: ({color, size}) => {
       switch (route.name) {
-        case TabNavigation.Main:
+        case TabNavigation.Home:
           return <HomeSvg color={color} size={size} />;
         // TODO: hide icons for demo
         // case TabNavigation.Discover:
@@ -53,52 +42,37 @@ export const BottomTabs = () => {
     },
     tabBarActiveTintColor: COLORS.CERULEAN,
     tabBarInactiveTintColor: COLORS.WHITE,
-    tabBarStyle: !joinedStream ? styles.tabBar : styles.hiddenTabBar,
-    headerShown: !joinedStream,
+    tabBarStyle: styles.tabBar,
   });
 
-  const webClientId =
-    '1088468777432-7titji4f8tsu0oorpqfibu469sl8jvnj.apps.googleusercontent.com';
-
-  useEffect(() => {
-    GoogleSignin.configure({webClientId});
-    getUserData(dispatch);
-  }, []);
-
-  if (!userData) {
-    return <AuthScreen />;
-  }
-
   return (
-    <NavigationContainer>
-      <Tab.Navigator screenOptions={screenOptions}>
-        <Tab.Screen
-          name={TabNavigation.Main}
-          component={MainStack}
-          options={options}
-        />
-        {/* // TODO: hide element for demo*/}
-        {/*<Tab.Screen
+    <Tab.Navigator screenOptions={screenOptions}>
+      <Tab.Screen
+        name={TabNavigation.Home}
+        component={Home}
+        options={options}
+      />
+      {/* // TODO: hide element for demo*/}
+      {/*<Stack.Screen
           name={TabNavigation.Discover}
           component={ScreenCalendar}
           options={options}
         />
-        <Tab.Screen
+        <Stack.Screen
           name={TabNavigation.Plus}
           component={ScreenCalendar}
           options={options}
         />*/}
-        <Tab.Screen
-          name={TabNavigation.Calendar}
-          component={ScreenCalendar}
-          options={options}
-        />
-        <Tab.Screen
-          name={TabNavigation.Profile}
-          component={ProfileScreen}
-          options={options}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+      <Tab.Screen
+        name={TabNavigation.Calendar}
+        component={ScreenCalendar}
+        options={options}
+      />
+      <Tab.Screen
+        name={TabNavigation.Profile}
+        component={ProfileScreen}
+        options={options}
+      />
+    </Tab.Navigator>
   );
 };

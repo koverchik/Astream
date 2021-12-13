@@ -1,8 +1,5 @@
 import {ListChannelsType} from '../../../Screens/Home/types';
-import {
-  setChannelsListAction,
-  setCoordinatesAction,
-} from '../../actions/HomeActions';
+import {setChannelsListAction} from '../../actions/HomeActions';
 import {homeReducer} from './index';
 import {HomeInitialStateType} from './types';
 
@@ -11,26 +8,7 @@ let state: HomeInitialStateType;
 beforeEach(() => {
   state = {
     listChannels: [],
-    coordinates: {
-      latitude: 53.5078788,
-      longitude: 27.0877321,
-      latitudeDelta: 2,
-      longitudeDelta: 0.009,
-    },
   };
-});
-
-test('Coordinates should be changed', () => {
-  const newCoords = {
-    latitude: 1,
-    longitude: 1,
-    latitudeDelta: 1,
-    longitudeDelta: 1,
-  };
-
-  const endState = homeReducer(state, setCoordinatesAction(newCoords));
-
-  expect(endState.coordinates.longitudeDelta).toBe(1);
 });
 
 test('New channel should be added', () => {

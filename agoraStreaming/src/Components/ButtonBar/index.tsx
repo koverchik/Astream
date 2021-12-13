@@ -41,7 +41,9 @@ export const ButtonBar: FC<ButtonBarPropsType> = (props) => {
           }
         />
       )}
-      <RoundButton handler={switchCamera} icon={<SwitchCameraSvg />} />
+      {isVideo && (
+        <RoundButton handler={switchCamera} icon={<SwitchCameraSvg />} />
+      )}
       <RoundButton
         handler={exitHandler}
         icon={<ExitSvg />}

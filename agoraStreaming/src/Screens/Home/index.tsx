@@ -1,33 +1,33 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Image, Text, TouchableOpacity, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
-import MapView, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
+import MapView from 'react-native-map-clustering';
+import Map, {Callout, Camera, PROVIDER_GOOGLE} from 'react-native-maps';
+
+import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
 
+import {COLORS} from '../../Colors/colors';
 import {GoogleMapsMarker} from '../../Components/GoogleMapsMarker';
 import {CustomHeader} from '../../Components/Header';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
 import {SearchResultList} from '../../Components/SearchResultList';
-import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
+import {LiveType, MainStackScreens} from '../../Navigation/Stack/types';
 import {
   HeaderInputPlaceholders,
   TabNavigation,
 } from '../../Navigation/Tab/types';
 import {
   setChannelsListAction,
-  setCoordinatesAction,
   setShowCalloutAction,
 } from '../../Redux/actions/HomeActions';
-import {setJoinedAction} from '../../Redux/actions/LiveActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
-import {
-  selectChannelsList,
-  selectCoordinates,
-} from '../../Redux/selectors/HomeSelectors';
+import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {InputEventType} from '../../Types/universalTypes';
 import {CallTypes} from '../Calendar/types';
+import {StackNavigationPropLive} from '../Live/types';
 import {addCallouts} from './helpers/addCallouts';
 import {getImage} from './helpers/getImage';
 import {requestPermissions} from './helpers/requestPermissions';
@@ -35,6 +35,7 @@ import {styles} from './style';
 import {
   ChannelsListFromFirebase,
   DataForCloseChannelType,
+  GeoType,
   HomeScreenProps,
   ListChannelsType,
 } from './types';
@@ -46,14 +47,21 @@ const INITIAL_COORDS = {
   longitudeDelta: 0.009,
 };
 
-export const Home: FC<HomeScreenProps> = ({navigation}) => {
-  const coordinates = useAppSelector(selectCoordinates);
+const cameraProperties: Camera = {
+  heading: 0,
+  altitude: 0,
+  pitch: 0,
+  zoom: 10,
+  center: INITIAL_COORDS,
+};
+
+export const Home: FC<HomeScreenProps> = () => {
   const channelsList = useAppSelector(selectChannelsList);
-  const mapRef = useRef<MapView | null>(null);
+  const mapRef = useRef<Map | null>(null);
   const dispatch = useAppDispatch();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [geolocation, setGeolocation] = useState<Region>(INITIAL_COORDS);
+  const [geolocation, setGeolocation] = useState<GeoType>(INITIAL_COORDS);
   const [channelListFirebase, setChannelListFirebase] = useState<
     ChannelsListFromFirebase[]
   >([]);
@@ -62,64 +70,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchMode, setSearchMode] = useState<boolean>(false);
 
-  const cameraProperties = {
-    heading: 0,
-    altitude: 0,
-    pitch: 0,
-    zoom: 10,
-    center: coordinates,
-  };
-
-  const onChangeSearchValue = (event: InputEventType) => {
-    const result = channelsList.filter((channel) => {
-      const textFromInput = event.nativeEvent.text;
-      const matchFound = channel.name.includes(textFromInput);
-      const stringIsNotEmpty = !!textFromInput;
-
-      if (matchFound && stringIsNotEmpty) {
-        return channel;
-      }
-    });
-    setSearchResult(result);
-  };
-
-  const onPressResult = (stream: ListChannelsType) => {
-    const propertiesForShowCallout = {
-      channelId: stream.channelId,
-      calloutIsShow: true,
-    };
-
-    dispatch(setCoordinatesAction(stream.coords));
-    dispatch(setShowCalloutAction(propertiesForShowCallout));
-    activeSearchMode();
-    setSearchResult([]);
-  };
-
-  const activeSearchMode = () => {
-    setSearchMode((searchMode) => {
-      if (searchMode) {
-        setSearchValue('');
-      }
-
-      return !searchMode;
-    });
-  };
-
-  const renderSearchResultList = () => {
-    return (
-      !!searchValue &&
-      searchMode && (
-        <SearchResultList
-          searchResult={searchResult}
-          onPressResult={onPressResult}
-        />
-      )
-    );
-  };
-
-  useEffect(() => {
-    mapRef.current?.animateToRegion(coordinates, 1000);
-  }, [coordinates]);
+  const navigation = useNavigation<StackNavigationPropLive>();
 
   useEffect(() => {
     const newChannelList = addCallouts(channelListFirebase, channelsList);
@@ -131,10 +82,10 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     Geolocation.getCurrentPosition(
       (position) => {
         const {latitude, longitude} = position.coords;
-        setGeolocation({...coordinates, latitude, longitude});
+        setGeolocation({latitude, longitude});
       },
       () => {
-        dispatch(setCoordinatesAction(INITIAL_COORDS));
+        Alert.alert('Geolocation error');
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
@@ -154,16 +105,57 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       });
   }, []);
 
+  const onChangeSearchValue = (event: InputEventType) => {
+    const result = channelsList.filter((channel) => {
+      const textFromInput = event.nativeEvent.text;
+      const matchFound = channel.name.includes(textFromInput);
+      const stringIsNotEmpty = !!textFromInput;
+
+      if (matchFound && stringIsNotEmpty) {
+        return channel;
+      }
+    });
+    setSearchResult(result);
+  };
+
+  const onPressResult = (stream: ListChannelsType) => {
+    const {latitude, longitude} = stream.coords;
+    const propertiesForShowCallout = {
+      channelId: stream.channelId,
+      calloutIsShow: true,
+    };
+
+    dispatch(setShowCalloutAction(propertiesForShowCallout));
+    activeSearchMode();
+    setSearchResult([]);
+
+    mapRef.current?.animateCamera(
+      {
+        ...cameraProperties,
+        center: {latitude, longitude},
+      },
+      {duration: 1500},
+    );
+  };
+
+  const activeSearchMode = () => {
+    setSearchMode((searchMode) => {
+      if (searchMode) {
+        setSearchValue('');
+      }
+
+      return !searchMode;
+    });
+  };
+
   const choseChannelAndJoinLive = (data: DataForCloseChannelType) => {
     const {channelId, isVideo} = data;
 
-    navigation.navigate(HomeStackScreens.Live, {
+    navigation.navigate(MainStackScreens.Live, {
       type: LiveType.JOIN,
       channelId,
       isVideo,
     });
-
-    dispatch(setJoinedAction(true));
   };
 
   const changeModalVisible = () => {
@@ -227,13 +219,25 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     );
   });
 
+  const renderSearchResultList = () => {
+    return (
+      !!searchValue &&
+      searchMode && (
+        <SearchResultList
+          searchResult={searchResult}
+          onPressResult={onPressResult}
+        />
+      )
+    );
+  };
+
   return (
     <View style={styles.background}>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
           <CustomHeader
-            title={TabNavigation.Main}
-            placeholderText={HeaderInputPlaceholders.MAIN}
+            title={TabNavigation.Home}
+            placeholderText={HeaderInputPlaceholders.HOME}
             filter={onChangeSearchValue}
             inputValue={searchValue}
             onChangeInputText={setSearchValue}
@@ -243,12 +247,14 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
           {renderSearchResultList()}
         </View>
         <MapView
-          ref={mapRef}
-          camera={cameraProperties}
+          initialRegion={INITIAL_COORDS}
           provider={PROVIDER_GOOGLE}
-          style={styles.map}
+          clusterColor={COLORS.BABY_BLUE_EYES}
+          camera={cameraProperties}
+          ref={mapRef}
+          zoomControlEnabled={true}
           onPress={onPressMap}
-          zoomControlEnabled={true}>
+          style={styles.map}>
           {allMarkers}
         </MapView>
         <ModalCreatEvent

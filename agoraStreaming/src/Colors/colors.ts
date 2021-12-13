@@ -3,6 +3,7 @@ export const COLORS = {
   CERISE_RED: '#da2b55',
   BERMUDA: '#7adaa8',
   BABY_BLUE_EYES: '#a5c5ec',
+  BABY_BLUE_EYES_OPACITY: 'rgba(165,197,236, 0.6)',
   CERULEAN: '#10b4ef',
   AZURE_RADIANCE: '#007eff',
   WHITE: '#ffffff',

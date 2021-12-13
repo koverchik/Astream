@@ -21,7 +21,8 @@ const SIZE_MARKER = 30;
 const BORDER_SIZE = 4;
 export const CORNERS_RADIUS = 35;
 
-const {WHITE, BLACK, BITTERSWEET, BABY_BLUE_EYES} = COLORS;
+const {WHITE, BLACK, BITTERSWEET, BABY_BLUE_EYES, BABY_BLUE_EYES_OPACITY} =
+  COLORS;
 
 export const styles = StyleSheet.create<HomeScreenStyles>({
   container: {
@@ -39,6 +40,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
   headerContainer: {
     position: 'absolute',
     zIndex: 1,
+    alignItems: 'center',
   },
   marker: {
     position: 'absolute',
@@ -51,7 +53,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
     backgroundColor: BABY_BLUE_EYES,
     flex: 1,
     borderWidth: BORDER_SIZE,
-    borderColor: BABY_BLUE_EYES,
+    borderColor: BABY_BLUE_EYES_OPACITY,
     alignItems: 'center',
     justifyContent: 'center',
   },

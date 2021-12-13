@@ -7,8 +7,8 @@ import {useNavigation} from '@react-navigation/native';
 import database from '@react-native-firebase/database';
 
 import {COLORS} from '../../Colors/colors';
-import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
-import {StackNavigationPropHome} from '../../Screens/Home/types';
+import {LiveType, MainStackScreens} from '../../Navigation/Stack/types';
+import {StackNavigationPropLive} from '../../Screens/Live/types';
 import {InputEventType} from '../../Types/universalTypes';
 import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
@@ -28,10 +28,10 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
 
   const newReference = database().ref(`/events/${day}`).push();
 
-  const navigation = useNavigation<StackNavigationPropHome>();
+  const navigation = useNavigation<StackNavigationPropLive>();
 
   const createLive = () => {
-    navigation.navigate(HomeStackScreens.Live, {
+    navigation.navigate(MainStackScreens.Live, {
       type: LiveType.CREATE,
       channelId: uuid(),
       coords: coordinates,
@@ -48,11 +48,16 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
     });
   };
 
+  const closeModal = () => {
+    changeModalVisible();
+    setError('');
+  };
+
   const pressStart = async () => {
     if (!name.trim()) {
       setError('Name is required field!');
     } else {
-      changeModalVisible();
+      closeModal();
       setName('');
       coordinates ? createLive() : await createEvent();
     }
@@ -78,9 +83,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
       onRequestClose={onRequestClose}>
       <View style={styles.wrapperModalView}>
         <View style={styles.modalView}>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={changeModalVisible}>
+          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
             <FontAwesomeIcon icon={faPlus} color={COLORS.WHITE} size={20} />
           </TouchableOpacity>
           <Text style={styles.title}>Create new event</Text>

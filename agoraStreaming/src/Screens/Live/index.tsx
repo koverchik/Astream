@@ -17,10 +17,7 @@ import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader';
 import {RemoteUser} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
-import {HomeStackScreens} from '../../Navigation/Stack/types';
-import {setJoinedAction} from '../../Redux/actions/LiveActions';
-import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
-import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
+import {MainStackScreens} from '../../Navigation/Stack/types';
 import {cameraStyle} from './helpers/CameraStyle';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
@@ -44,7 +41,7 @@ import {
 import {v4 as uuid} from 'uuid';
 
 export const Live: FC<LiveScreenProps> = (props) => {
-  const {channelId, name, coords, isVideo} = props.route.params;
+  const {channelId, name, coords, isVideo, type} = props.route.params;
 
   const INITIAL_DATA: LocalUserType = {
     uid: 0,
@@ -58,15 +55,14 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const {width} = useWindowDimensions();
   const styles = LiveStyles(width);
 
-  const dispatch = useAppDispatch();
-  const isJoined = useAppSelector(getIsJoined);
+  const [isJoined, setIsJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [peerIds, setPeerIds] = useState<UserType[]>([]);
   const [myUserData, setMyUserData] = useState<LocalUserType>(INITIAL_DATA);
 
   const [stash, setStash] = useState<UserType[]>([]);
 
-  const isBroadcaster = isBroadcasterFunction(props.route.params.type);
+  const isBroadcaster = isBroadcasterFunction(type);
 
   const AgoraEngine = useRef<RtcEngine>();
 
@@ -74,7 +70,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const navigation = useNavigation<StackNavigationPropLive>();
 
-  const goHome = () => navigation.navigate(HomeStackScreens.Home);
+  const goHome = () => navigation.navigate(MainStackScreens.Main);
 
   const sizeUserPoint = useRef(new Animated.Value(5)).current;
   const wavesAroundUserPoint = useRef(new Animated.Value(3)).current;
@@ -82,7 +78,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   animationCircle(sizeUserPoint, wavesAroundUserPoint).start();
 
   const userJoinedCallback = () => {
-    dispatch(setJoinedAction(true));
+    setIsJoined(true);
   };
 
   const userOfflineCallback: UserOfflineCallback = (uid) => {
@@ -177,7 +173,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const userLeaveChannel = async () => {
     const keyChannel = await findKeyDataInDatabase(channelId);
-    dispatch(setJoinedAction(false));
+    setIsJoined(false);
 
     if (keyChannel) {
       await deleteChannel(keyChannel);
@@ -238,7 +234,9 @@ export const Live: FC<LiveScreenProps> = (props) => {
             isVideo={isVideo}
           />
         );
-      } else if (!remoteUserId && isJoined) {
+      }
+
+      if (!remoteUserId && isJoined) {
         return (
           <LocalUser
             key={user.uid}
