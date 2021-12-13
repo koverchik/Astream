@@ -5,6 +5,7 @@ import {SIZE_BLOCKS_ITEM} from '../Header/styles';
 
 type SearchResultListStylesType = {
   flatList: ViewStyle;
+  content: ViewStyle;
   emptyListTitle: TextStyle;
 };
 
@@ -15,13 +16,16 @@ export const SearchResultStyles = (width: ScaledSize['width']) => {
     flatList: {
       width: width - 20,
       backgroundColor: MINE_SHAFT,
-      marginHorizontal: 10,
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       padding: 10,
+      height: 200,
     },
     emptyListTitle: {
       color: WHITE,
       textAlign: 'center',
+    },
+    content: {
+      alignItems: 'center',
     },
   });
 };

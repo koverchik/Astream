@@ -40,6 +40,7 @@ export const styles = StyleSheet.create<HomeScreenStyles>({
   headerContainer: {
     position: 'absolute',
     zIndex: 1,
+    alignItems: 'center',
   },
   marker: {
     position: 'absolute',
