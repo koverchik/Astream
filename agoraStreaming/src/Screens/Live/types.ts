@@ -2,18 +2,18 @@ import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import {
-  HomeStackScreens,
+  MainStackScreens,
   RootStackParamList,
 } from '../../Navigation/Stack/types';
 
 export type LiveScreenProps = {
   navigation: StackNavigationPropLive;
-  route: RouteProp<RootStackParamList, HomeStackScreens.Live>;
+  route: RouteProp<RootStackParamList, MainStackScreens.Live>;
 };
 
 export type StackNavigationPropLive = StackNavigationProp<
   RootStackParamList,
-  HomeStackScreens.Live
+  MainStackScreens.Live
 >;
 
 export enum Members {

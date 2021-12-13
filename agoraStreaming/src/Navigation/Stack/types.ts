@@ -6,7 +6,7 @@ export enum LiveType {
 }
 
 export type RootStackParamList = {
-  Home: undefined;
+  Main: undefined;
   Live: {
     type: LiveType;
     channelId: string;
@@ -17,7 +17,7 @@ export type RootStackParamList = {
   };
 };
 
-export enum HomeStackScreens {
-  Home = 'Home',
+export enum MainStackScreens {
+  Main = 'Main',
   Live = 'Live',
 }

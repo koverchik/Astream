@@ -1,11 +1,5 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {
-  Animated,
-  Modal,
-  Platform,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+import {Animated, Platform, View, useWindowDimensions} from 'react-native';
 import RtcEngine from 'react-native-agora';
 import {
   UidWithMutedCallback,
@@ -23,7 +17,7 @@ import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader';
 import {RemoteUser} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
-import {HomeStackScreens} from '../../Navigation/Stack/types';
+import {MainStackScreens} from '../../Navigation/Stack/types';
 import {cameraStyle} from './helpers/CameraStyle';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
@@ -76,7 +70,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const navigation = useNavigation<StackNavigationPropLive>();
 
-  const goHome = () => navigation.navigate(HomeStackScreens.Home);
+  const goHome = () => navigation.navigate(MainStackScreens.Main);
 
   const sizeUserPoint = useRef(new Animated.Value(5)).current;
   const wavesAroundUserPoint = useRef(new Animated.Value(3)).current;
@@ -280,23 +274,21 @@ export const Live: FC<LiveScreenProps> = (props) => {
   };
 
   return (
-    <Modal animationType="fade" transparent={false} visible={isJoined}>
-      <View style={styles.container}>
-        <View style={[styles.videoContainer, getViewStyle(peerIds.length)]}>
-          <View style={getViewStyle(peerIds.length)}>{renderUsers()}</View>
-          <ButtonBar
-            exitHandler={() => exitChannelHandler(AgoraEngine, navigation)}
-            cameraHandler={cameraHandler}
-            microphoneHandler={microphoneHandler}
-            switchCamera={() => switchCamera(AgoraEngine)}
-            muteCamera={myUserData.camera}
-            muteVoice={myUserData.voice}
-            isVideo={isVideo}
-          />
-        </View>
-        {/* // TODO: hide element for demo*/}
-        {/* <ListUsers hiddenUsers={hiddenUsers} /> */}
+    <View style={styles.container}>
+      <View style={[styles.videoContainer, getViewStyle(peerIds.length)]}>
+        <View style={getViewStyle(peerIds.length)}>{renderUsers()}</View>
+        <ButtonBar
+          exitHandler={() => exitChannelHandler(AgoraEngine, navigation)}
+          cameraHandler={cameraHandler}
+          microphoneHandler={microphoneHandler}
+          switchCamera={() => switchCamera(AgoraEngine)}
+          muteCamera={myUserData.camera}
+          muteVoice={myUserData.voice}
+          isVideo={isVideo}
+        />
       </View>
-    </Modal>
+      {/* // TODO: hide element for demo*/}
+      {/* <ListUsers hiddenUsers={hiddenUsers} /> */}
+    </View>
   );
 };

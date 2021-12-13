@@ -1,21 +1,19 @@
 import {Camera, Region} from 'react-native-maps';
 
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {RouteProp} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 
-import {
-  HomeStackScreens,
-  RootStackParamList,
-} from '../../Navigation/Stack/types';
+import {RootStackParamList} from '../../Navigation/Stack/types';
+import {TabNavigation, TabParamList} from '../../Navigation/Tab/types';
 
 export type HomeScreenProps = {
-  navigation: StackNavigationPropHome;
-  route: RouteProp<RootStackParamList, HomeStackScreens.Home>;
+  navigation: TabNavigationPropHomeType;
+  route: RouteProp<TabParamList, TabNavigation.Home>;
 };
 
-export type StackNavigationPropHome = StackNavigationProp<
-  RootStackParamList,
-  HomeStackScreens.Home
+export type TabNavigationPropHomeType = BottomTabNavigationProp<
+  TabParamList,
+  TabNavigation.Home
 >;
 
 export type ListChannelsType = {

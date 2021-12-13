@@ -7,8 +7,8 @@ import {useNavigation} from '@react-navigation/native';
 import database from '@react-native-firebase/database';
 
 import {COLORS} from '../../Colors/colors';
-import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
-import {StackNavigationPropHome} from '../../Screens/Home/types';
+import {LiveType, MainStackScreens} from '../../Navigation/Stack/types';
+import {StackNavigationPropLive} from '../../Screens/Live/types';
 import {InputEventType} from '../../Types/universalTypes';
 import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
@@ -28,10 +28,10 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
 
   const newReference = database().ref(`/events/${day}`).push();
 
-  const navigation = useNavigation<StackNavigationPropHome>();
+  const navigation = useNavigation<StackNavigationPropLive>();
 
   const createLive = () => {
-    navigation.navigate(HomeStackScreens.Live, {
+    navigation.navigate(MainStackScreens.Live, {
       type: LiveType.CREATE,
       channelId: uuid(),
       coords: coordinates,

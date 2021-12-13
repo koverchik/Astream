@@ -5,6 +5,8 @@ import 'react-native-get-random-values';
 import MapView from 'react-native-map-clustering';
 import Map, {Callout, Camera, PROVIDER_GOOGLE} from 'react-native-maps';
 
+import {useNavigation} from '@react-navigation/native';
+
 import database from '@react-native-firebase/database';
 
 import {COLORS} from '../../Colors/colors';
@@ -12,7 +14,7 @@ import {GoogleMapsMarker} from '../../Components/GoogleMapsMarker';
 import {CustomHeader} from '../../Components/Header';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
 import {SearchResultList} from '../../Components/SearchResultList';
-import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
+import {LiveType, MainStackScreens} from '../../Navigation/Stack/types';
 import {
   HeaderInputPlaceholders,
   TabNavigation,
@@ -25,6 +27,7 @@ import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {InputEventType} from '../../Types/universalTypes';
 import {CallTypes} from '../Calendar/types';
+import {StackNavigationPropLive} from '../Live/types';
 import {addCallouts} from './helpers/addCallouts';
 import {getImage} from './helpers/getImage';
 import {requestPermissions} from './helpers/requestPermissions';
@@ -52,7 +55,7 @@ const cameraProperties: Camera = {
   center: INITIAL_COORDS,
 };
 
-export const Home: FC<HomeScreenProps> = ({navigation}) => {
+export const Home: FC<HomeScreenProps> = () => {
   const channelsList = useAppSelector(selectChannelsList);
   const mapRef = useRef<Map | null>(null);
   const dispatch = useAppDispatch();
@@ -66,6 +69,8 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const [searchResult, setSearchResult] = useState<ListChannelsType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchMode, setSearchMode] = useState<boolean>(false);
+
+  const navigation = useNavigation<StackNavigationPropLive>();
 
   useEffect(() => {
     const newChannelList = addCallouts(channelListFirebase, channelsList);
@@ -146,7 +151,7 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const choseChannelAndJoinLive = (data: DataForCloseChannelType) => {
     const {channelId, isVideo} = data;
 
-    navigation.navigate(HomeStackScreens.Live, {
+    navigation.navigate(MainStackScreens.Live, {
       type: LiveType.JOIN,
       channelId,
       isVideo,
@@ -231,8 +236,8 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
       <View style={styles.container}>
         <View style={styles.headerContainer}>
           <CustomHeader
-            title={TabNavigation.Main}
-            placeholderText={HeaderInputPlaceholders.MAIN}
+            title={TabNavigation.Home}
+            placeholderText={HeaderInputPlaceholders.HOME}
             filter={onChangeSearchValue}
             inputValue={searchValue}
             onChangeInputText={setSearchValue}
