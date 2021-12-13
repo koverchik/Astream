@@ -1,9 +1,9 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Image, Text, TouchableOpacity, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
 import MapView from 'react-native-map-clustering';
-import Map, {Callout, PROVIDER_GOOGLE, Region} from 'react-native-maps';
+import Map, {Callout, Camera, PROVIDER_GOOGLE} from 'react-native-maps';
 
 import database from '@react-native-firebase/database';
 
@@ -19,15 +19,11 @@ import {
 } from '../../Navigation/Tab/types';
 import {
   setChannelsListAction,
-  setCoordinatesAction,
   setShowCalloutAction,
 } from '../../Redux/actions/HomeActions';
 import {setJoinedAction} from '../../Redux/actions/LiveActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
-import {
-  selectChannelsList,
-  selectCoordinates,
-} from '../../Redux/selectors/HomeSelectors';
+import {selectChannelsList} from '../../Redux/selectors/HomeSelectors';
 import {InputEventType} from '../../Types/universalTypes';
 import {CallTypes} from '../Calendar/types';
 import {addCallouts} from './helpers/addCallouts';
@@ -37,6 +33,7 @@ import {styles} from './style';
 import {
   ChannelsListFromFirebase,
   DataForCloseChannelType,
+  GeoType,
   HomeScreenProps,
   ListChannelsType,
 } from './types';
@@ -48,14 +45,21 @@ const INITIAL_COORDS = {
   longitudeDelta: 0.009,
 };
 
+const cameraProperties: Camera = {
+  heading: 0,
+  altitude: 0,
+  pitch: 0,
+  zoom: 10,
+  center: INITIAL_COORDS,
+};
+
 export const Home: FC<HomeScreenProps> = ({navigation}) => {
-  const coordinates = useAppSelector(selectCoordinates);
   const channelsList = useAppSelector(selectChannelsList);
   const mapRef = useRef<Map | null>(null);
   const dispatch = useAppDispatch();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [geolocation, setGeolocation] = useState<Region>(INITIAL_COORDS);
+  const [geolocation, setGeolocation] = useState<GeoType>(INITIAL_COORDS);
   const [channelListFirebase, setChannelListFirebase] = useState<
     ChannelsListFromFirebase[]
   >([]);
@@ -63,14 +67,6 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   const [searchResult, setSearchResult] = useState<ListChannelsType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [searchMode, setSearchMode] = useState<boolean>(false);
-
-  const cameraProperties = {
-    heading: 0,
-    altitude: 0,
-    pitch: 0,
-    zoom: 10,
-    center: coordinates,
-  };
 
   useEffect(() => {
     const newChannelList = addCallouts(channelListFirebase, channelsList);
@@ -82,10 +78,10 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
     Geolocation.getCurrentPosition(
       (position) => {
         const {latitude, longitude} = position.coords;
-        setGeolocation({...coordinates, latitude, longitude});
+        setGeolocation({latitude, longitude});
       },
       () => {
-        dispatch(setCoordinatesAction(INITIAL_COORDS));
+        Alert.alert('Geolocation error');
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
@@ -119,13 +115,12 @@ export const Home: FC<HomeScreenProps> = ({navigation}) => {
   };
 
   const onPressResult = (stream: ListChannelsType) => {
-    const {latitude, longitude} = coordinates;
+    const {latitude, longitude} = stream.coords;
     const propertiesForShowCallout = {
       channelId: stream.channelId,
       calloutIsShow: true,
     };
 
-    dispatch(setCoordinatesAction(stream.coords));
     dispatch(setShowCalloutAction(propertiesForShowCallout));
     activeSearchMode();
     setSearchResult([]);

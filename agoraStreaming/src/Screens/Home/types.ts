@@ -35,3 +35,5 @@ export type DataForCloseChannelType = Pick<
   ListChannelsType,
   'channelId' | 'isVideo'
 >;
+
+export type GeoType = Pick<Region, 'latitude' | 'longitude'>;

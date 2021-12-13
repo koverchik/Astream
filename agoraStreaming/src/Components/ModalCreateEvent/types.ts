@@ -1,12 +1,13 @@
 import {DateData} from 'react-native-calendars/src/types';
-import {Region} from 'react-native-maps';
+
+import {GeoType} from '../../Screens/Home/types';
 
 export type ModalCreatEventType = {
   isModalVisible: boolean;
   changeModalVisible: () => void;
 
   day?: DateData['dateString'];
-  coordinates?: Region;
+  coordinates?: GeoType;
 };
 
 export type EventInDatabasesType = {
