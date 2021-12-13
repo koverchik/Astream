@@ -238,7 +238,9 @@ export const Live: FC<LiveScreenProps> = (props) => {
             isVideo={isVideo}
           />
         );
-      } else if (!remoteUserId && isJoined) {
+      }
+
+      if (!remoteUserId && isJoined) {
         return (
           <LocalUser
             key={user.uid}
