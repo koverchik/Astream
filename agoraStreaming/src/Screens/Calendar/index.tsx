@@ -22,6 +22,7 @@ import {
 } from '../../Navigation/Tab/types';
 import {InputEventType} from '../../Types/universalTypes';
 import {arrayListData} from './helpers/arrayListData';
+import {deleteOldEvents} from './helpers/deleteOldEvents';
 import {getTriggerNotificationIds} from './helpers/getTriggerNotificationIds';
 import {styles} from './styles';
 import {CalendarScreenProps, StreamType} from './types';
@@ -164,6 +165,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
+    deleteOldEvents();
   }, []);
 
   return (
