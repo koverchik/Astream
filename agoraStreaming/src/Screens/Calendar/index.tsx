@@ -77,6 +77,18 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     setSearchResult(result);
   };
 
+  const dateIsCorrect = () => {
+    if (Date.parse(initDate) <= Date.parse(chosenDay)) {
+      return (
+        <TouchableOpacity
+          onPress={changeModalVisible}
+          style={styles.addNewEvent}>
+          <FontAwesomeIcon icon={faPlus} color={COLORS.WHITE} size={18} />
+        </TouchableOpacity>
+      );
+    }
+  };
+
   const showData = () => {
     if (searchResult.length > 0 || (!searchResult.length && searchValue)) {
       return searchResult;
@@ -180,11 +192,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
         />
         {renderClearButton()}
         <View>
-          <TouchableOpacity
-            onPress={changeModalVisible}
-            style={styles.addNewEvent}>
-            <FontAwesomeIcon icon={faPlus} color={COLORS.WHITE} size={18} />
-          </TouchableOpacity>
+          {dateIsCorrect()}
           <HorizontalCalendar
             onDayPress={selectDay}
             activeDayColor={COLORS.AZURE_RADIANCE}
