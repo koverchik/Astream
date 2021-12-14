@@ -8,7 +8,6 @@ import {COLORS} from '../../Colors/colors';
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {DefaultAvatar} from '../../Icons/DefaultAvatar';
 import {StackNavigationPropLive} from '../../Screens/Live/types';
-import {disabledButton} from './helpers/disabledEventButton';
 import {getEventButtonTitle} from './helpers/getEventButtonTitle';
 import {getStreamTypeIcon} from './helpers/getStreamTypeIcon';
 import {getTimeForUI} from './helpers/getTimeForUI';
@@ -39,13 +38,13 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
   const timeForUI = getTimeForUI(dataTime);
 
   const itsNotTimeYet = currentTime < time;
-  const disabled = disabledButton(itsNotTimeYet, eventIsOver);
+  const disabledEventButton = itsNotTimeYet || eventIsOver;
 
   const {AZURE_RADIANCE, PORCELAIN} = COLORS;
   const {width} = useWindowDimensions();
-  const styles = StreamItemStyles(width, channelId, disabled);
+  const styles = StreamItemStyles(width, channelId, disabledEventButton);
 
-  const calendarSvgColor = disabled ? PORCELAIN : AZURE_RADIANCE;
+  const calendarSvgColor = disabledEventButton ? PORCELAIN : AZURE_RADIANCE;
   const streamTypeIcon = getStreamTypeIcon(type);
   const buttonTitle = getEventButtonTitle(
     channelId,
@@ -94,7 +93,7 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
       <TouchableOpacity
         activeOpacity={0.5}
         style={styles.button}
-        disabled={disabled}
+        disabled={disabledEventButton}
         onPress={() => onPressEventButton(stream, geolocation, navigation)}>
         <CalendarSvg color={calendarSvgColor} size={11} />
         <Text style={styles.buttonText}>{buttonTitle}</Text>
