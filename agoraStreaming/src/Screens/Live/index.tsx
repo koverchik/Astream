@@ -15,6 +15,8 @@ import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader';
 import {RemoteUser} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
+import {deleteChannelIdForEvent} from '../../Components/StreamEventItem/helpers/deleteChannelIdForEvent';
+import {findEventDate} from '../../Components/StreamEventItem/helpers/findEventDate';
 import {MainStackScreens} from '../../Navigation/Stack/types';
 import {cameraStyle} from './helpers/CameraStyle';
 import {addNewChannelInDB} from './helpers/addNewChannelInDB';
@@ -92,11 +94,11 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const localUserRegisteredCallback: UserAccountCallback = (uid, userInfo) => {
     setMyUserData((prev) => ({
       ...prev,
-      uid: uid,
+      uid,
       userAccount: userInfo,
     }));
     const user: UserType = {
-      uid: uid,
+      uid,
       userAccount: userInfo,
       camera: false,
       voice: false,
@@ -161,10 +163,15 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const userLeaveChannel = async () => {
     const keyChannel = await findKeyDataInDatabase(channelId);
+    const eventDate = await findEventDate(channelId);
     setIsJoined(false);
 
     if (keyChannel) {
       await deleteChannel(keyChannel);
+    }
+
+    if (eventDate && keyChannel) {
+      await deleteChannelIdForEvent(eventDate, keyChannel);
     }
   };
 
