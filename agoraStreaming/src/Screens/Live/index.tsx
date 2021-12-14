@@ -10,6 +10,7 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 
+import analytics from '@react-native-firebase/analytics';
 import database from '@react-native-firebase/database';
 
 import {ButtonBar} from '../../Components/ButtonBar';
@@ -21,6 +22,7 @@ import {HomeStackScreens} from '../../Navigation/Stack/types';
 import {setJoinedAction} from '../../Redux/actions/LiveActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
+import {AnalyticsType} from '../../Types/universalTypes';
 import {cameraStyle} from './helpers/CameraStyle';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
@@ -206,6 +208,8 @@ export const Live: FC<LiveScreenProps> = (props) => {
           channelId,
           uuid(),
         );
+        const typeStream = isVideo ? AnalyticsType.VIDEO : AnalyticsType.AUDIO;
+        analytics().logEvent(AnalyticsType.CREATE_STREAM, {type: typeStream});
         isBroadcaster ? addNewChannelInDB() : null;
       })
       .catch((e) => {
