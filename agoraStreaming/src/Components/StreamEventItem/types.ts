@@ -14,3 +14,10 @@ export enum StreamStatus {
   ONLINE = 'Online',
   OFFLINE = 'Offline',
 }
+
+export enum ButtonTitles {
+  TIME = "It's not time yet",
+  ONLINE = 'Connect to stream',
+  OFFLINE = 'Create stream',
+  END = 'Event is over',
+}
