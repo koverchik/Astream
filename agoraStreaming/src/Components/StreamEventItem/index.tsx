@@ -36,35 +36,6 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
     (index + 1) * START_ANIMATION,
   ];
 
-  const newReference = database().ref(`/events/${chosenDay}/${eventId}`);
-
-  const onPressEventButton = async () => {
-    if (channelId) {
-      navigation.navigate(MainStackScreens.Live, {
-        type: LiveType.JOIN,
-        channelId,
-        isVideo,
-      });
-    } else {
-      navigation.navigate(MainStackScreens.Live, {
-        type: LiveType.CREATE,
-        channelId: eventId,
-        coords: geolocation,
-        isVideo,
-        name,
-      });
-
-      await addNewChannelInDB({
-        name,
-        channelId: eventId,
-        isVideo,
-        coords: geolocation,
-      });
-
-      await newReference.update({channelId: eventId});
-    }
-  };
-
   const reanimatedStyle = useAnimatedStyle(() => {
     const scale = interpolate(translationY.value, inputRange, [1, 1, 0.7]);
     const opacity = interpolate(translationY.value, inputRange, [1, 1, 0.5]);
