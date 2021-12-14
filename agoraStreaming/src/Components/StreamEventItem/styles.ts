@@ -23,7 +23,7 @@ type StreamStylesType = {
   time: TextStyle;
   name: TextStyle;
   streamStatus: ViewStyle;
-  streamStatusCircle: ViewStyle;
+  streamStatusIndicator: ViewStyle;
 };
 
 export const StreamItemStyles = (
@@ -109,7 +109,7 @@ export const StreamItemStyles = (
       flexDirection: 'row',
       alignItems: 'center',
     },
-    streamStatusCircle: {
+    streamStatusIndicator: {
       height: 10,
       width: 10,
       backgroundColor: id ? BERMUDA : CERISE_RED,
