@@ -13,7 +13,7 @@ export const arrayListData: ArrayListDataType = (data, chosenDay) => {
   const dataForList: StreamType[] = [];
 
   for (const key in data) {
-    const {video, name, dateTime, channelId} = data[key];
+    const {video, name, dateTime, channelId, eventIsOver} = data[key];
     const time = Date.parse(dateTime);
 
     dataForList.push({
@@ -24,6 +24,7 @@ export const arrayListData: ArrayListDataType = (data, chosenDay) => {
       isVideo: video,
       eventId: key,
       chosenDay,
+      eventIsOver,
     });
   }
   sortByTime(dataForList);
