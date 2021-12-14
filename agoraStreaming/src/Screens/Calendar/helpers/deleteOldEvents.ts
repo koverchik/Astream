@@ -10,7 +10,7 @@ export const deleteOldEvents = async () => {
   const currentDate = `${currentYear}-${currentMonth}-${today + 1}`;
 
   for (const date in events) {
-    if (date !== currentDate) {
+    if (Date.parse(date) < Date.parse(currentDate)) {
       await database().ref(`/events/${date}`).remove();
     }
   }

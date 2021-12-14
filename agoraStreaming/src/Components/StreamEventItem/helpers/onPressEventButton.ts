@@ -9,7 +9,7 @@ import {StackNavigationPropLive} from '../../../Screens/Live/types';
 
 export const onPressEventButton = async (
   stream: StreamType,
-  geo: LatLng,
+  geolocation: LatLng,
   navigation: StackNavigationPropLive,
 ) => {
   const {channelId, eventId, isVideo, name, chosenDay} = stream;
@@ -26,7 +26,7 @@ export const onPressEventButton = async (
     navigation.navigate(MainStackScreens.Live, {
       type: LiveType.CREATE,
       channelId: eventId,
-      coords: geo,
+      coords: geolocation,
       isVideo,
       name,
     });
@@ -35,7 +35,7 @@ export const onPressEventButton = async (
       name,
       channelId: eventId,
       isVideo,
-      coords: geo,
+      coords: geolocation,
     });
 
     await newReference.update({channelId: eventId});
