@@ -2,9 +2,12 @@ import React, {FC, useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View, useWindowDimensions} from 'react-native';
 import Animated, {interpolate, useAnimatedStyle} from 'react-native-reanimated';
 
+import {useNavigation} from '@react-navigation/native';
+
 import {COLORS} from '../../Colors/colors';
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {DefaultAvatar} from '../../Icons/DefaultAvatar';
+import {StackNavigationPropLive} from '../../Screens/Live/types';
 import {disabledButton} from './helpers/disabledEventButton';
 import {getEventButtonTitle} from './helpers/getEventButtonTitle';
 import {getStreamTypeIcon} from './helpers/getStreamTypeIcon';
@@ -20,6 +23,7 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
   const {time, type, name, channelId, eventIsOver} = stream;
 
   const [currentTime, setCurrentTime] = useState<number>(Date.now());
+  const navigation = useNavigation<StackNavigationPropLive>();
 
   useEffect(() => {
     const timeoutId = setInterval(() => {
@@ -90,7 +94,7 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
         activeOpacity={0.5}
         style={styles.button}
         disabled={disabled}
-        onPress={() => onPressEventButton(stream, geolocation)}>
+        onPress={() => onPressEventButton(stream, geolocation, navigation)}>
         <CalendarSvg color={calendarSvgColor} size={11} />
         <Text style={styles.buttonText}>{buttonTitle}</Text>
       </TouchableOpacity>

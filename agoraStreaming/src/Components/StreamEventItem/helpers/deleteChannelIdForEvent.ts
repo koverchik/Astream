@@ -4,5 +4,9 @@ export const deleteChannelIdForEvent = async (
   eventDate: string,
   eventId: string,
 ) => {
-  await database().ref(`/events/${eventDate}/${eventId}/channelId`).remove();
+  const baseAddress = `/events/${eventDate}/${eventId}`;
+  const removeId = database().ref(`${baseAddress}/channelId`).remove();
+  const endStream = database().ref(baseAddress).update({eventIsOver: true});
+
+  await Promise.all([removeId, endStream]);
 };
