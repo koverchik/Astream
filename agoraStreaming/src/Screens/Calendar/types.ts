@@ -12,6 +12,7 @@ export type StreamType = {
   isVideo: boolean;
   eventId: string;
   chosenDay: string;
+  eventIsOver: boolean;
 };
 
 export enum CallTypes {
