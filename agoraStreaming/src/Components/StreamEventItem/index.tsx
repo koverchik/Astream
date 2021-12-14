@@ -28,7 +28,8 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
   useEffect(() => {
     const timeoutId = setInterval(() => {
       setCurrentTime(Date.now());
-    }, 60000);
+    }, 30000);
+
     return () => {
       clearInterval(timeoutId);
     };
@@ -86,7 +87,7 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.time}>{timeForUI}</Text>
         <View style={styles.streamStatus}>
-          <View style={styles.streamStatusCircle} />
+          <View style={styles.streamStatusIndicator} />
           <Text>{streamIndicatorTitle}</Text>
         </View>
       </View>
