@@ -1,35 +1,56 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View, useWindowDimensions} from 'react-native';
 import Animated, {interpolate, useAnimatedStyle} from 'react-native-reanimated';
-
-import {useNavigation} from '@react-navigation/native';
-
-import database from '@react-native-firebase/database';
 
 import {COLORS} from '../../Colors/colors';
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {DefaultAvatar} from '../../Icons/DefaultAvatar';
-import {LiveType, MainStackScreens} from '../../Navigation/Stack/types';
-import {addZeroForMinutes} from '../../Screens/Calendar/helpers/addZero';
-import {addNewChannelInDB} from '../../Screens/Live/helpers/addNewChannelInDB';
-import {StackNavigationPropLive} from '../../Screens/Live/types';
+import {disabledButton} from './helpers/disabledEventButton';
+import {getEventButtonTitle} from './helpers/getEventButtonTitle';
 import {getStreamTypeIcon} from './helpers/getStreamTypeIcon';
+import {getTimeForUI} from './helpers/getTimeForUI';
+import {onPressEventButton} from './helpers/onPressEventButton';
 import {StreamItemStyles} from './styles';
 import {StreamEventItemPropsType, StreamStatus} from './types';
 
 const START_ANIMATION = 95;
 
 export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
-  const {time, type, name, channelId, isVideo, eventId, chosenDay} =
-    props.stream;
-  const {translationY, index, geolocation} = props;
+  const {translationY, index, stream, geolocation} = props;
+  const {time, type, name, channelId, eventIsOver} = stream;
 
-  const navigation = useNavigation<StackNavigationPropLive>();
+  const [currentTime, setCurrentTime] = useState<number>(Date.now());
 
-  const {width} = useWindowDimensions();
-  const styles = StreamItemStyles(width, channelId);
+  useEffect(() => {
+    const timeoutId = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 60000);
+    return () => {
+      clearInterval(timeoutId);
+    };
+  }, []);
 
   const dataTime = new Date(time);
+  const timeForUI = getTimeForUI(dataTime);
+
+  const itsNotTimeYet = currentTime < time;
+  const disabled = disabledButton(itsNotTimeYet, eventIsOver);
+
+  const {AZURE_RADIANCE, PORCELAIN} = COLORS;
+  const {width} = useWindowDimensions();
+  const styles = StreamItemStyles(width, channelId, disabled);
+
+  const calendarSvgColor = disabled ? PORCELAIN : AZURE_RADIANCE;
+  const streamTypeIcon = getStreamTypeIcon(type);
+  const buttonTitle = getEventButtonTitle(
+    channelId,
+    eventIsOver,
+    itsNotTimeYet,
+  );
+  const streamIndicatorTitle = channelId
+    ? StreamStatus.ONLINE
+    : StreamStatus.OFFLINE;
+
   const inputRange = [
     (-index - 1) * START_ANIMATION,
     index * START_ANIMATION,
@@ -55,26 +76,23 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
         <View style={styles.avatar}>
           <DefaultAvatar size={'70%'} />
         </View>
-        <View style={styles.type}>{getStreamTypeIcon(type)}</View>
+        <View style={styles.type}>{streamTypeIcon}</View>
       </View>
       <View style={styles.middleBox}>
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.time}>
-          {`${dataTime.getHours()}:${addZeroForMinutes(dataTime.getMinutes())}`}
-        </Text>
+        <Text style={styles.time}>{timeForUI}</Text>
         <View style={styles.streamStatus}>
           <View style={styles.streamStatusCircle} />
-          <Text>{channelId ? StreamStatus.ONLINE : StreamStatus.OFFLINE}</Text>
+          <Text>{streamIndicatorTitle}</Text>
         </View>
       </View>
       <TouchableOpacity
         activeOpacity={0.5}
         style={styles.button}
-        onPress={onPressEventButton}>
-        <CalendarSvg color={COLORS.AZURE_RADIANCE} size={11} />
-        <Text style={styles.buttonText}>
-          {channelId ? 'Add to Call' : 'Create stream'}
-        </Text>
+        disabled={disabled}
+        onPress={() => onPressEventButton(stream, geolocation)}>
+        <CalendarSvg color={calendarSvgColor} size={11} />
+        <Text style={styles.buttonText}>{buttonTitle}</Text>
       </TouchableOpacity>
     </Animated.View>
   );

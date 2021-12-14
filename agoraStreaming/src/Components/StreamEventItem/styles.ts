@@ -1,4 +1,10 @@
-import {ScaledSize, StyleSheet, TextStyle, ViewStyle} from 'react-native';
+import {
+  ScaledSize,
+  StyleSheet,
+  TextStyle,
+  TouchableOpacityProps,
+  ViewStyle,
+} from 'react-native';
 
 import {COLORS} from '../../Colors/colors';
 import {StreamType} from '../../Screens/Calendar/types';
@@ -23,6 +29,7 @@ type StreamStylesType = {
 export const StreamItemStyles = (
   width: ScaledSize['width'],
   id: StreamType['channelId'],
+  disabled: TouchableOpacityProps['disabled'],
 ) => {
   const {
     CERISE_RED,
@@ -85,10 +92,10 @@ export const StreamItemStyles = (
       height: '70%',
       paddingHorizontal: 10,
       borderRadius: 20,
-      backgroundColor: BABY_BLUE_EYES,
+      backgroundColor: disabled ? SILVER_CHALICE : BABY_BLUE_EYES,
     },
     buttonText: {
-      color: AZURE_RADIANCE,
+      color: disabled ? PORCELAIN : AZURE_RADIANCE,
       fontSize: 10,
       fontWeight: 'bold',
     },
