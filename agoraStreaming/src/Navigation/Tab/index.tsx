@@ -4,9 +4,7 @@ import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import {NavigationContainer, NavigationState} from '@react-navigation/native';
-
-import analytics from '@react-native-firebase/analytics';
+import {NavigationContainer} from '@react-navigation/native';
 
 import {CalendarSvg} from '../../Icons/CalendarSvg';
 import {CircleSvg} from '../../Icons/CircleSvg';
@@ -18,8 +16,8 @@ import {AuthScreen} from '../../Screens/Auth';
 import {getUserData} from '../../Screens/Auth/helpers/googleSignIn';
 import {ScreenCalendar} from '../../Screens/Calendar';
 import {ProfileScreen} from '../../Screens/Profile';
-import {AnalyticsType} from '../../Types/universalTypes';
 import {MainStack} from '../Stack';
+import {eventChangeScreen} from './helpers';
 import {styles} from './styles';
 import {ScreenOptionsType, TabNavigation, TabParamList} from './types';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
@@ -72,13 +70,7 @@ export const BottomTabs = () => {
   }
 
   return (
-    <NavigationContainer
-      onStateChange={(state) => {
-        AnalyticsType.CLICK_ON_TAB;
-        analytics().logEvent(AnalyticsType.CLICK_ON_TAB, {
-          tab: state.routeNames[state.index],
-        });
-      }}>
+    <NavigationContainer onStateChange={eventChangeScreen}>
       <Tab.Navigator screenOptions={screenOptions}>
         <Tab.Screen
           name={TabNavigation.Main}
