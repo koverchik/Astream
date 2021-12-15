@@ -1,7 +1,5 @@
 import {BottomTabNavigationOptions} from '@react-navigation/bottom-tabs';
-import {NavigationState, RouteProp} from '@react-navigation/native';
-
-import {HomeStackScreens} from '../Stack/types';
+import {RouteProp} from '@react-navigation/native';
 
 export enum TabNavigation {
   Main = 'Main',
@@ -26,5 +24,3 @@ export enum HeaderInputPlaceholders {
   MAIN = 'Enter stream name ...',
   CALENDAR = 'Enter event name ...',
 }
-
-export type TakeNameScreenType = (routes: NavigationState) => string;
