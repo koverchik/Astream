@@ -9,7 +9,7 @@ export type ModalCreatEventType = {
   coordinates?: LatLng;
 };
 
-export type EventInDatabasesType = {
+export type PlannedLiveEvent = {
   name: string;
   video: boolean;
   dateTime: string;

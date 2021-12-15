@@ -1,4 +1,4 @@
-import {StreamType} from '../../../Screens/Calendar/types';
+import {StreamType} from '../../../../Screens/Calendar/types';
 import {ButtonTitles} from '../types';
 
 export const getEventButtonTitle = (

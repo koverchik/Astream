@@ -6,8 +6,8 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import {COLORS} from '../../Colors/colors';
-import {StreamType} from '../../Screens/Calendar/types';
+import {COLORS} from '../../../Colors/colors';
+import {StreamType} from '../../../Screens/Calendar/types';
 
 const AVATAR_SIZE = 50;
 const STREAM_TYPE_SIZE = 20;

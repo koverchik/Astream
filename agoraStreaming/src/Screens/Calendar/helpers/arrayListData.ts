@@ -17,14 +17,14 @@ export const arrayListData: ArrayListDataType = (data, chosenDay) => {
     const time = Date.parse(dateTime);
 
     dataForList.push({
-      channelId: channelId ?? null,
       time,
-      type: video ? CallTypes.Video : CallTypes.Audio,
       name,
-      isVideo: video,
-      eventId: key,
       chosenDay,
       eventIsOver,
+      channelId: channelId ?? null,
+      type: video ? CallTypes.Video : CallTypes.Audio,
+      isVideo: video,
+      eventId: key,
     });
   }
   sortByTime(dataForList);

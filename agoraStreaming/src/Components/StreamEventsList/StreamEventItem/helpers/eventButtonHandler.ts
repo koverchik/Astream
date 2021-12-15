@@ -2,12 +2,12 @@ import {LatLng} from 'react-native-maps';
 
 import database from '@react-native-firebase/database';
 
-import {LiveType, MainStackScreens} from '../../../Navigation/Stack/types';
-import {StreamType} from '../../../Screens/Calendar/types';
-import {addNewChannelInDB} from '../../../Screens/Live/helpers/addNewChannelInDB';
-import {StackNavigationPropLive} from '../../../Screens/Live/types';
+import {LiveType, MainStackScreens} from '../../../../Navigation/Stack/types';
+import {StreamType} from '../../../../Screens/Calendar/types';
+import {addNewChannelInDB} from '../../../../Screens/Live/helpers/addNewChannelInDB';
+import {StackNavigationPropLive} from '../../../../Screens/Live/types';
 
-export const onPressEventButton = async (
+export const eventButtonHandler = async (
   stream: StreamType,
   geolocation: LatLng,
   navigation: StackNavigationPropLive,

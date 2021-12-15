@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Alert, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {LatLng} from 'react-native-maps';
 import Animated, {
@@ -13,9 +13,10 @@ import {COLORS} from '../../Colors/colors';
 import {CustomHeader} from '../../Components/Header';
 import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
 import {DateInfoType} from '../../Components/HorizontalCalendar/types';
+import {IconButton} from '../../Components/IconButton';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
-import {EventInDatabasesType} from '../../Components/ModalCreateEvent/types';
-import {StreamEventItem} from '../../Components/StreamEventItem';
+import {PlannedLiveEvent} from '../../Components/ModalCreateEvent/types';
+import {StreamEventsList} from '../../Components/StreamEventsList';
 import {
   HeaderInputPlaceholders,
   TabNavigation,
@@ -27,7 +28,6 @@ import {getTriggerNotificationIds} from './helpers/getTriggerNotificationIds';
 import {styles} from './styles';
 import {CalendarScreenProps, StreamType} from './types';
 import {faPlus, faTimes} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 export const ScreenCalendar: FC<CalendarScreenProps> = () => {
   const dataSystem = new Date();
@@ -77,19 +77,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     setSearchResult(result);
   };
 
-  const dateIsCorrect = () => {
-    if (Date.parse(initDate) <= Date.parse(chosenDay)) {
-      return (
-        <TouchableOpacity
-          onPress={changeModalVisible}
-          style={styles.addNewEvent}>
-          <FontAwesomeIcon icon={faPlus} color={COLORS.WHITE} size={18} />
-        </TouchableOpacity>
-      );
-    }
-  };
-
-  const showData = () => {
+  const dataForStreamEventList = () => {
     if (searchResult.length > 0 || (!searchResult.length && searchValue)) {
       return searchResult;
     }
@@ -115,42 +103,6 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     setSearchResult([]);
   };
 
-  const renderClearButton = () => {
-    return (
-      !!searchValue && (
-        <TouchableOpacity
-          style={styles.clearButton}
-          onPress={onPressClearButton}>
-          <FontAwesomeIcon icon={faTimes} color={COLORS.WHITE} size={18} />
-        </TouchableOpacity>
-      )
-    );
-  };
-
-  const renderStreamEventItems = () => {
-    const streamsArrayIsNotEmpty = streams.length;
-
-    if (streamsArrayIsNotEmpty) {
-      return showData()?.map((item, index) => {
-        return (
-          <StreamEventItem
-            stream={item}
-            key={item.time + index}
-            translationY={translationY}
-            index={index}
-            geolocation={geolocation}
-          />
-        );
-      });
-    } else {
-      return (
-        <View style={styles.titleForEmptyListContainer}>
-          <Text>No scheduled streams</Text>
-        </View>
-      );
-    }
-  };
-
   useEffect(() => {
     database()
       .ref(`/events/${chosenDay}`)
@@ -164,9 +116,10 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     database()
       .ref(`/events/${chosenDay}`)
       .on('value', (snapshot) => {
-        const data: EventInDatabasesType[] = snapshot.val();
+        const data: PlannedLiveEvent[] = snapshot.val();
         getTriggerNotificationIds(data);
       });
+
     Geolocation.getCurrentPosition(
       (position) => {
         const {latitude, longitude} = position.coords;
@@ -177,6 +130,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
       },
       {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
     );
+
     deleteOldEvents();
   }, []);
 
@@ -190,9 +144,25 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
           searchMode={searchMode}
           onChangeSearchMode={activeSearchMode}
         />
-        {renderClearButton()}
+        {!!searchValue && (
+          <IconButton
+            icon={faTimes}
+            size={18}
+            color={COLORS.WHITE}
+            onPress={onPressClearButton}
+            style={styles.clearButton}
+          />
+        )}
         <View>
-          {dateIsCorrect()}
+          {Date.parse(initDate) <= Date.parse(chosenDay) && (
+            <IconButton
+              icon={faPlus}
+              size={18}
+              color={COLORS.WHITE}
+              onPress={changeModalVisible}
+              style={styles.addNewEvent}
+            />
+          )}
           <HorizontalCalendar
             onDayPress={selectDay}
             activeDayColor={COLORS.AZURE_RADIANCE}
@@ -208,7 +178,12 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
           scrollEventThrottle={46}
           onScroll={scrollHandler}
           contentContainerStyle={styles.contentContainerStyle}>
-          {renderStreamEventItems()}
+          <StreamEventsList
+            streams={streams}
+            dataForStreamEventList={dataForStreamEventList()}
+            geolocation={geolocation}
+            translationY={translationY}
+          />
         </Animated.ScrollView>
       </View>
     </View>

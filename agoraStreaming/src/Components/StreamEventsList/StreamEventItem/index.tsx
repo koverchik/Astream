@@ -4,14 +4,14 @@ import Animated, {interpolate, useAnimatedStyle} from 'react-native-reanimated';
 
 import {useNavigation} from '@react-navigation/native';
 
-import {COLORS} from '../../Colors/colors';
-import {CalendarSvg} from '../../Icons/CalendarSvg';
-import {DefaultAvatar} from '../../Icons/DefaultAvatar';
-import {StackNavigationPropLive} from '../../Screens/Live/types';
+import {COLORS} from '../../../Colors/colors';
+import {CalendarSvg} from '../../../Icons/CalendarSvg';
+import {DefaultAvatar} from '../../../Icons/DefaultAvatar';
+import {StackNavigationPropLive} from '../../../Screens/Live/types';
+import {eventButtonHandler} from './helpers/eventButtonHandler';
 import {getEventButtonTitle} from './helpers/getEventButtonTitle';
+import {getPlannedLiveEventTime} from './helpers/getPlannedLiveEventTime';
 import {getStreamTypeIcon} from './helpers/getStreamTypeIcon';
-import {getTimeForUI} from './helpers/getTimeForUI';
-import {onPressEventButton} from './helpers/onPressEventButton';
 import {StreamItemStyles} from './styles';
 import {StreamEventItemPropsType, StreamStatus} from './types';
 
@@ -33,9 +33,6 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
       clearInterval(timeoutId);
     };
   }, []);
-
-  const dataTime = new Date(time);
-  const timeForUI = getTimeForUI(dataTime);
 
   const itsNotTimeYet = currentTime < time;
   const disabledEventButton = itsNotTimeYet || eventIsOver;
@@ -74,6 +71,10 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
     };
   });
 
+  const onPressEventButton = async () => {
+    await eventButtonHandler(stream, geolocation, navigation);
+  };
+
   return (
     <Animated.View style={[styles.container, reanimatedStyle]}>
       <View style={styles.avatarBox}>
@@ -84,7 +85,9 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
       </View>
       <View style={styles.middleBox}>
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.time}>{timeForUI}</Text>
+        <Text style={styles.time}>
+          {getPlannedLiveEventTime(new Date(time))}
+        </Text>
         <View style={styles.streamStatus}>
           <View style={styles.streamStatusIndicator} />
           <Text>{streamIndicatorTitle}</Text>
@@ -94,7 +97,7 @@ export const StreamEventItem: FC<StreamEventItemPropsType> = (props) => {
         activeOpacity={0.5}
         style={styles.button}
         disabled={disabledEventButton}
-        onPress={() => onPressEventButton(stream, geolocation, navigation)}>
+        onPress={onPressEventButton}>
         <CalendarSvg color={calendarSvgColor} size={11} />
         <Text style={styles.buttonText}>{buttonTitle}</Text>
       </TouchableOpacity>
