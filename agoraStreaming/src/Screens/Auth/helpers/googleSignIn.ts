@@ -28,11 +28,11 @@ export const onAuth = async (dispatch: AppDispatch) => {
       const user = await GoogleSignin.getCurrentUser();
       user && dispatch(setUser(user?.user));
       getAndroidId().then((androidId) => {
-        analytics().setUserProperty('id', androidId);
+        analytics().setUserProperty('id_devices', androidId);
       });
 
       if (user?.user.email) {
-        await analytics().logSignUp({
+        await analytics().logLogin({
           method: user?.user.email,
         });
         await analytics().setUserId(uuid());
