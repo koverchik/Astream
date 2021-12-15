@@ -28,8 +28,8 @@ export const eventChangeScreen: NavigationContainerProps['onStateChange'] = (
   state,
 ) => {
   if (state) {
-    analytics().logEvent(AnalyticsType.CLICK_ON_TAB, {
-      tab: takeNameScreen(state),
+    analytics().logEvent(AnalyticsType.PASSAGE_TO_SCREEN, {
+      screan: takeNameScreen(state),
     });
   }
 };

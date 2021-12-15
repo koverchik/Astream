@@ -9,5 +9,5 @@ export enum AnalyticsType {
   VIDEO = 'video',
   CREATE_STREAM = 'create_stream',
   SIGN_OUT = 'sign_out',
-  CLICK_ON_TAB = 'click_on_tab',
+  PASSAGE_TO_SCREEN = 'passage_to_screen',
 }
