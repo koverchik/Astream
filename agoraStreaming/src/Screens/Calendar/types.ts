@@ -1,14 +1,18 @@
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {RouteProp} from '@react-navigation/native';
 
-import {EventInDatabasesType} from '../../Components/ModalCreateEvent/types';
+import {PlannedLiveEvent} from '../../Components/ModalCreateEvent/types';
 import {TabNavigation, TabParamList} from '../../Navigation/Tab/types';
 
 export type StreamType = {
-  id: string;
+  channelId: string | null;
   time: number;
   type: CallTypes;
   name: string;
+  isVideo: boolean;
+  eventId: string;
+  chosenDay: string;
+  eventIsOver: boolean;
 };
 
 export enum CallTypes {
@@ -29,4 +33,7 @@ export type TabNavigationPropsProfileType = BottomTabNavigationProp<
 
 export type FunctionSortByTimeType = (arr: StreamType[]) => StreamType[];
 
-export type ArrayListDataType = (data: EventInDatabasesType[]) => StreamType[];
+export type ArrayListDataType = (
+  data: PlannedLiveEvent[],
+  chosenDay: string,
+) => StreamType[];

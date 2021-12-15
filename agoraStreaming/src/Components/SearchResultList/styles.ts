@@ -18,7 +18,7 @@ export const SearchResultStyles = (width: ScaledSize['width']) => {
       backgroundColor: MINE_SHAFT,
       borderRadius: SIZE_BLOCKS_ITEM / 2,
       padding: 10,
-      height: 200,
+      maxHeight: 200,
     },
     emptyListTitle: {
       color: WHITE,

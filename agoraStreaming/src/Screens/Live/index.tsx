@@ -10,15 +10,16 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 
-import database from '@react-native-firebase/database';
-
 import {ButtonBar} from '../../Components/ButtonBar';
 import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader';
 import {RemoteUser} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
+import {deleteChannelIdForEvent} from '../../Components/StreamEventsList/StreamEventItem/helpers/deleteChannelIdForEvent';
+import {findEventDate} from '../../Components/StreamEventsList/StreamEventItem/helpers/findEventDate';
 import {MainStackScreens} from '../../Navigation/Stack/types';
 import {cameraStyle} from './helpers/CameraStyle';
+import {addNewChannelInDB} from './helpers/addNewChannelInDB';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
 import {audioVolumeIndicationCallback} from './helpers/audioVolumeIndicationCallback';
@@ -66,8 +67,6 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const AgoraEngine = useRef<RtcEngine>();
 
-  const newReference = database().ref('/channels').push();
-
   const navigation = useNavigation<StackNavigationPropLive>();
 
   const goHome = () => navigation.navigate(MainStackScreens.Main);
@@ -95,11 +94,11 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const localUserRegisteredCallback: UserAccountCallback = (uid, userInfo) => {
     setMyUserData((prev) => ({
       ...prev,
-      uid: uid,
+      uid,
       userAccount: userInfo,
     }));
     const user: UserType = {
-      uid: uid,
+      uid,
       userAccount: userInfo,
       camera: false,
       voice: false,
@@ -162,21 +161,17 @@ export const Live: FC<LiveScreenProps> = (props) => {
     });
   };
 
-  const addNewChannelInDB = async () => {
-    await newReference.set({
-      name,
-      channelId,
-      coords,
-      isVideo,
-    });
-  };
-
   const userLeaveChannel = async () => {
     const keyChannel = await findKeyDataInDatabase(channelId);
+    const eventDate = await findEventDate(channelId);
     setIsJoined(false);
 
     if (keyChannel) {
       await deleteChannel(keyChannel);
+    }
+
+    if (eventDate && keyChannel) {
+      await deleteChannelIdForEvent(eventDate, keyChannel);
     }
   };
 
@@ -202,7 +197,10 @@ export const Live: FC<LiveScreenProps> = (props) => {
           channelId,
           uuid(),
         );
-        isBroadcaster ? addNewChannelInDB() : null;
+        if (name && coords) {
+          isBroadcaster &&
+            addNewChannelInDB({channelId, name, coords, isVideo});
+        }
       })
       .catch((e) => {
         setError(true);

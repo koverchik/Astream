@@ -1,9 +1,9 @@
 import React, {ReactNode} from 'react';
 
-import {CameraSvg} from '../../../Icons/CameraSvg';
-import {ChatSvg} from '../../../Icons/ChatSvg';
-import {SoundSvg} from '../../../Icons/SoundSvg';
-import {CallTypes, StreamType} from '../../../Screens/Calendar/types';
+import {CameraSvg} from '../../../../Icons/CameraSvg';
+import {ChatSvg} from '../../../../Icons/ChatSvg';
+import {SoundSvg} from '../../../../Icons/SoundSvg';
+import {CallTypes, StreamType} from '../../../../Screens/Calendar/types';
 
 export const getStreamTypeIcon = (type: StreamType['type']): ReactNode => {
   switch (type) {

@@ -45,6 +45,7 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
       name,
       video: isEnabled,
       dateTime: date.toUTCString(),
+      eventIsOver: false,
     });
   };
 

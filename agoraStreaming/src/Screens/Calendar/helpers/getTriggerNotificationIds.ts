@@ -1,14 +1,12 @@
 import notifee from '@notifee/react-native';
 
-import {EventInDatabasesType} from '../../../Components/ModalCreateEvent/types';
+import {PlannedLiveEvent} from '../../../Components/ModalCreateEvent/types';
 import {
   TIME_NOTIFICATION,
   onCreateTriggerNotification,
 } from './onCreateTriggerNotification';
 
-export const getTriggerNotificationIds = async (
-  data: EventInDatabasesType[],
-) => {
+export const getTriggerNotificationIds = async (data: PlannedLiveEvent[]) => {
   const ids = await notifee.getTriggerNotificationIds();
 
   if (data) {

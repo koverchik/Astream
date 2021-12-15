@@ -12,7 +12,6 @@ type CalendarStylesType = {
   flatListContentCenter: ViewStyle;
   addNewEvent: ViewStyle;
   contentContainerStyle: ViewStyle;
-  titleForEmptyListContainer: ViewStyle;
   clearButton: ViewStyle;
 };
 
@@ -55,11 +54,6 @@ export const styles = StyleSheet.create<CalendarStylesType>({
   flatListContentCenter: {
     flex: 1,
     justifyContent: 'center',
-  },
-  titleForEmptyListContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   clearButton: {
     height: SIZE_BUTTON,

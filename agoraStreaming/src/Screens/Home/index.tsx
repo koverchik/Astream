@@ -3,7 +3,7 @@ import {Alert, Image, Text, TouchableOpacity, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import 'react-native-get-random-values';
 import MapView from 'react-native-map-clustering';
-import Map, {Callout, Camera, PROVIDER_GOOGLE} from 'react-native-maps';
+import Map, {Callout, Camera, LatLng, PROVIDER_GOOGLE} from 'react-native-maps';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -33,9 +33,8 @@ import {getImage} from './helpers/getImage';
 import {requestPermissions} from './helpers/requestPermissions';
 import {styles} from './style';
 import {
-  ChannelsListFromFirebase,
+  ChannelFromFirebaseType,
   DataForCloseChannelType,
-  GeoType,
   HomeScreenProps,
   ListChannelsType,
 } from './types';
@@ -61,9 +60,9 @@ export const Home: FC<HomeScreenProps> = () => {
   const dispatch = useAppDispatch();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [geolocation, setGeolocation] = useState<GeoType>(INITIAL_COORDS);
+  const [geolocation, setGeolocation] = useState<LatLng>(INITIAL_COORDS);
   const [channelListFirebase, setChannelListFirebase] = useState<
-    ChannelsListFromFirebase[]
+    ChannelFromFirebaseType[]
   >([]);
 
   const [searchResult, setSearchResult] = useState<ListChannelsType[]>([]);
@@ -94,7 +93,7 @@ export const Home: FC<HomeScreenProps> = () => {
       .ref('/channels')
       .on('value', (snapshot) => {
         if (snapshot.val()) {
-          const channelListFirebase: ChannelsListFromFirebase[] = Object.values(
+          const channelListFirebase: ChannelFromFirebaseType[] = Object.values(
             snapshot.val(),
           );
 
