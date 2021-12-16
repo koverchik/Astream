@@ -1,3 +1,5 @@
+import {ViewStyle} from 'react-native';
+
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
@@ -39,3 +41,8 @@ export enum Devices {
   VOICE = 'voice',
   CAMERA = 'camera',
 }
+
+export type PositionType = {
+  top: ViewStyle['top'];
+  left: ViewStyle['left'];
+};
