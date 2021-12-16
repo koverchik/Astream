@@ -58,7 +58,29 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const [isJoined, setIsJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [peerIds, setPeerIds] = useState<UserType[]>([]);
+  const [peerIds, setPeerIds] = useState<UserType[]>([
+    // {
+    //   userAccount: 'name',
+    //   uid: 2324,
+    //   camera: true,
+    //   voice: false,
+    //   activeVoice: false,
+    // },
+    // {
+    //   userAccount: 'sd',
+    //   uid: 242,
+    //   camera: true,
+    //   voice: false,
+    //   activeVoice: false,
+    // },
+    // {
+    //   userAccount: 'df',
+    //   uid: 2323424,
+    //   camera: true,
+    //   voice: false,
+    //   activeVoice: false,
+    // },
+  ]);
   const [myUserData, setMyUserData] = useState<LocalUserType>(INITIAL_DATA);
 
   const [stash, setStash] = useState<UserType[]>([]);
@@ -212,46 +234,44 @@ export const Live: FC<LiveScreenProps> = (props) => {
     };
   }, []);
 
-  const renderUsers = () => {
-    return peerIds.map((user, index, ids) => {
-      const remoteUserId = user.uid !== myUserData.uid;
+  const renderUsers = peerIds.map((user, index, ids) => {
+    const remoteUserId = user.uid !== myUserData.uid;
 
-      if (remoteUserId) {
-        return (
-          <RemoteUser
-            index={index}
-            cameraStyle={cameraStyle(index, ids, styles)}
-            key={'RemoteUser' + user.uid}
-            uid={user.uid}
-            channelId={channelId}
-            countUsers={peerIds.length}
-            userAccount={user.userAccount}
-            voice={user.voice}
-            camera={user.camera}
-            activeVoice={user.activeVoice}
-            isVideo={isVideo}
-          />
-        );
-      }
+    if (remoteUserId) {
+      return (
+        <RemoteUser
+          index={index}
+          cameraStyle={cameraStyle(index, ids, styles)}
+          key={'RemoteUser' + user.uid}
+          uid={user.uid}
+          channelId={channelId}
+          countUsers={peerIds.length}
+          userAccount={user.userAccount}
+          voice={user.voice}
+          camera={user.camera}
+          activeVoice={user.activeVoice}
+          isVideo={isVideo}
+        />
+      );
+    }
 
-      if (!remoteUserId && isJoined) {
-        return (
-          <LocalUser
-            key={user.uid}
-            index={index}
-            cameraSize={cameraStyle(index, ids, styles)}
-            myUserData={myUserData}
-            channelId={channelId}
-            activeVoice={myUserData.activeVoice}
-            countUsers={peerIds.length}
-            sizeUserPoint={sizeUserPoint}
-            wavesAroundUserPoint={wavesAroundUserPoint}
-            isVideo={isVideo}
-          />
-        );
-      }
-    });
-  };
+    if (!remoteUserId && isJoined) {
+      return (
+        <LocalUser
+          key={user.uid}
+          index={index}
+          cameraSize={cameraStyle(index, ids, styles)}
+          myUserData={myUserData}
+          channelId={channelId}
+          activeVoice={myUserData.activeVoice}
+          countUsers={peerIds.length}
+          sizeUserPoint={sizeUserPoint}
+          wavesAroundUserPoint={wavesAroundUserPoint}
+          isVideo={isVideo}
+        />
+      );
+    }
+  });
 
   if (!error && !isJoined) {
     return <Preloader text={'Joining Stream, Please Wait'} />;
@@ -263,7 +283,8 @@ export const Live: FC<LiveScreenProps> = (props) => {
       case 2: {
         return styles.column;
       }
-      case 3: {
+      case 3:
+      case 4: {
         return styles.row;
       }
       default:
@@ -274,7 +295,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   return (
     <View style={styles.container}>
       <View style={[styles.videoContainer, getViewStyle(peerIds.length)]}>
-        <View style={getViewStyle(peerIds.length)}>{renderUsers()}</View>
+        <View style={getViewStyle(peerIds.length)}>{renderUsers}</View>
         <ButtonBar
           exitHandler={() => exitChannelHandler(AgoraEngine, navigation)}
           cameraHandler={cameraHandler}
