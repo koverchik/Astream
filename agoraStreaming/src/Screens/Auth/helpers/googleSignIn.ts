@@ -1,10 +1,13 @@
 import {Alert} from 'react-native';
+import {getUniqueId} from 'react-native-device-info';
 
+import analytics from '@react-native-firebase/analytics';
 import auth from '@react-native-firebase/auth';
 
 import {setUser} from '../../../Redux/actions/AuthActions';
 import {AppDispatch} from '../../../Redux/store';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {v4 as uuid} from 'uuid';
 
 export const onGoogleButtonPress = async (dispatch: AppDispatch) => {
   try {
@@ -24,6 +27,14 @@ export const onAuth = async (dispatch: AppDispatch) => {
       await auth().signInWithCredential(googleCredentials);
       const user = await GoogleSignin.getCurrentUser();
       user && dispatch(setUser(user?.user));
+      analytics().setUserProperty('id_device', getUniqueId());
+
+      if (user?.user.email) {
+        await analytics().logLogin({
+          method: user?.user.email,
+        });
+        await analytics().setUserId(uuid());
+      }
     }
   } catch (error: any) {
     Alert.alert('Error: ', error);

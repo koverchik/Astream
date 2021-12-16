@@ -12,7 +12,9 @@ import {HomeSvg} from '../../Icons/HomeSvg';
 import {ScreenCalendar} from '../../Screens/Calendar';
 import {Home} from '../../Screens/Home';
 import {ProfileScreen} from '../../Screens/Profile';
-import {styles} from '../Stack/styles';
+import {MainStack} from '../Stack';
+import {eventChangeScreen} from './helpers';
+import {styles} from './styles';
 import {ScreenOptionsType, TabNavigation, TabParamList} from './types';
 
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -46,14 +48,15 @@ export const MainTab = () => {
   });
 
   return (
-    <Tab.Navigator screenOptions={screenOptions}>
-      <Tab.Screen
-        name={TabNavigation.Home}
-        component={Home}
-        options={options}
-      />
-      {/* // TODO: hide element for demo*/}
-      {/*<Stack.Screen
+    <NavigationContainer onStateChange={eventChangeScreen}>
+      <Tab.Navigator screenOptions={screenOptions}>
+        <Tab.Screen
+          name={TabNavigation.Main}
+          component={MainStack}
+          options={options}
+        />
+        {/* // TODO: hide element for demo*/}
+        {/*<Tab.Screen
           name={TabNavigation.Discover}
           component={ScreenCalendar}
           options={options}

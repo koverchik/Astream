@@ -1,12 +1,14 @@
 import React, {FC} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 
+import analytics from '@react-native-firebase/analytics';
 import auth from '@react-native-firebase/auth';
 
 import {DefaultAvatar} from '../../Icons/DefaultAvatar';
 import {setUser} from '../../Redux/actions/AuthActions';
 import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {selectUser} from '../../Redux/selectors/AuthSelectors';
+import {AnalyticsType} from '../../Types/universalTypes';
 import {styles} from './style';
 import {ProfileScreenProps} from './types';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
@@ -18,6 +20,8 @@ export const ProfileScreen: FC<ProfileScreenProps> = () => {
   const logoutHandler = async () => {
     await auth().signOut();
     await GoogleSignin.signOut();
+
+    await analytics().logEvent(AnalyticsType.SIGN_OUT);
     dispatch(setUser(null));
   };
 

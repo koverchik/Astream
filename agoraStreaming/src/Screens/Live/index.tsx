@@ -10,14 +10,19 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 
+import analytics from '@react-native-firebase/analytics';
+import database from '@react-native-firebase/database';
+
 import {ButtonBar} from '../../Components/ButtonBar';
 import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader';
 import {RemoteUser} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
-import {deleteChannelIdForEvent} from '../../Components/StreamEventsList/StreamEventItem/helpers/deleteChannelIdForEvent';
-import {findEventDate} from '../../Components/StreamEventsList/StreamEventItem/helpers/findEventDate';
-import {MainStackScreens} from '../../Navigation/Stack/types';
+import {HomeStackScreens} from '../../Navigation/Stack/types';
+import {setJoinedAction} from '../../Redux/actions/LiveActions';
+import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
+import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
+import {AnalyticsType} from '../../Types/universalTypes';
 import {cameraStyle} from './helpers/CameraStyle';
 import {addNewChannelInDB} from './helpers/addNewChannelInDB';
 import {errorAlert} from './helpers/alert';
@@ -197,10 +202,9 @@ export const Live: FC<LiveScreenProps> = (props) => {
           channelId,
           uuid(),
         );
-        if (name && coords) {
-          isBroadcaster &&
-            addNewChannelInDB({channelId, name, coords, isVideo});
-        }
+        const typeStream = isVideo ? AnalyticsType.VIDEO : AnalyticsType.AUDIO;
+        analytics().logEvent(AnalyticsType.CREATE_STREAM, {type: typeStream});
+        isBroadcaster ? addNewChannelInDB() : null;
       })
       .catch((e) => {
         setError(true);
