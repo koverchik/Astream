@@ -17,6 +17,8 @@ type CalendarStylesType = {
 
 const {WHITE, BITTERSWEET, BLACK, MINE_SHAFT} = COLORS;
 
+const ADD_EVENT_BUTTON_SIZE = 50;
+
 export const styles = StyleSheet.create<CalendarStylesType>({
   container: {
     flex: 1,
@@ -38,14 +40,15 @@ export const styles = StyleSheet.create<CalendarStylesType>({
   },
   addNewEvent: {
     position: 'absolute',
-    top: 14,
-    left: 10,
+    zIndex: 1,
+    bottom: 10,
+    right: 10,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: BITTERSWEET,
-    width: SIZE_BUTTON,
-    height: SIZE_BUTTON,
-    borderRadius: 8,
+    width: ADD_EVENT_BUTTON_SIZE,
+    height: ADD_EVENT_BUTTON_SIZE,
+    borderRadius: ADD_EVENT_BUTTON_SIZE / 2,
   },
   contentContainerStyle: {
     flexGrow: 1,

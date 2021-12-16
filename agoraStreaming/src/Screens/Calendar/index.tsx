@@ -153,21 +153,19 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
             style={styles.clearButton}
           />
         )}
-        <View>
-          {Date.parse(initDate) <= Date.parse(chosenDay) && (
-            <IconButton
-              icon={faPlus}
-              size={18}
-              color={COLORS.WHITE}
-              onPress={changeModalVisible}
-              style={styles.addNewEvent}
-            />
-          )}
-          <HorizontalCalendar
-            onDayPress={selectDay}
-            activeDayColor={COLORS.AZURE_RADIANCE}
+        <HorizontalCalendar
+          onDayPress={selectDay}
+          activeDayColor={COLORS.AZURE_RADIANCE}
+        />
+        {Date.parse(initDate) <= Date.parse(chosenDay) && (
+          <IconButton
+            icon={faPlus}
+            size={18}
+            color={COLORS.WHITE}
+            onPress={changeModalVisible}
+            style={styles.addNewEvent}
           />
-        </View>
+        )}
         <ModalCreatEvent
           day={chosenDay}
           changeModalVisible={changeModalVisible}
