@@ -5,12 +5,14 @@ import DatePicker from 'react-native-date-picker';
 import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
+import remoteConfig from '@react-native-firebase/remote-config';
 
 import {COLORS} from '../../Colors/colors';
 import {LiveType, MainStackScreens} from '../../Navigation/Stack/types';
 import {StackNavigationPropLive} from '../../Screens/Live/types';
 import {InputEventType} from '../../Types/universalTypes';
 import {SwitchVideo} from '../SwitchVideo';
+import {RemoteConfigService} from './remoteConfigService';
 import {styles} from './style';
 import {ModalCreatEventType} from './types';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
@@ -22,7 +24,9 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
 
   const [name, setName] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [isEnabled, setIsEnabled] = useState<boolean>(false);
+  const [isEnabled, setIsEnabled] = useState<boolean>(
+    RemoteConfigService.getRemoteValueBoolean('type_stream'),
+  );
 
   const [date, setDate] = useState(new Date());
 

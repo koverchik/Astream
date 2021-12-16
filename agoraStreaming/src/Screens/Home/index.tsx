@@ -58,7 +58,6 @@ export const Home: FC<HomeScreenProps> = () => {
   const channelsList = useAppSelector(selectChannelsList);
   const mapRef = useRef<Map | null>(null);
   const dispatch = useAppDispatch();
-
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [geolocation, setGeolocation] = useState<LatLng>(INITIAL_COORDS);
   const [channelListFirebase, setChannelListFirebase] = useState<
