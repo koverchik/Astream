@@ -58,29 +58,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const [isJoined, setIsJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [peerIds, setPeerIds] = useState<UserType[]>([
-    // {
-    //   userAccount: 'name',
-    //   uid: 2324,
-    //   camera: true,
-    //   voice: false,
-    //   activeVoice: false,
-    // },
-    // {
-    //   userAccount: 'sd',
-    //   uid: 242,
-    //   camera: true,
-    //   voice: false,
-    //   activeVoice: false,
-    // },
-    // {
-    //   userAccount: 'df',
-    //   uid: 2323424,
-    //   camera: true,
-    //   voice: false,
-    //   activeVoice: false,
-    // },
-  ]);
+  const [peerIds, setPeerIds] = useState<UserType[]>([]);
   const [myUserData, setMyUserData] = useState<LocalUserType>(INITIAL_DATA);
 
   const [stash, setStash] = useState<UserType[]>([]);
