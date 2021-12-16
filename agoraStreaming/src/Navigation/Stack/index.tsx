@@ -12,6 +12,7 @@ import {AuthScreen} from '../../Screens/Auth';
 import {getUserData} from '../../Screens/Auth/helpers/googleSignIn';
 import {Live} from '../../Screens/Live';
 import {MainTab} from '../Tab';
+import {eventChangeScreen} from '../Tab/helpers';
 import {MainStackScreens, RootStackParamList} from './types';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
@@ -36,7 +37,7 @@ export const NavigationStack = () => {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer onStateChange={eventChangeScreen}>
       <Stack.Navigator initialRouteName={'Main'}>
         <Stack.Screen
           name={MainStackScreens.Main}
