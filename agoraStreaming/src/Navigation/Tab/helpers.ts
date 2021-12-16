@@ -22,7 +22,7 @@ export const eventChangeScreen: NavigationContainerProps['onStateChange'] = (
 ) => {
   if (state) {
     analytics().logEvent(AnalyticsType.PASSAGE_TO_SCREEN, {
-      screan: takeNameScreen(state),
+      screen: takeNameScreen(state),
     });
   }
 };
