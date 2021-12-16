@@ -1,7 +1,7 @@
-import {ChannelsListFromFirebase, ListChannelsType} from '../types';
+import {ChannelFromFirebaseType, ListChannelsType} from '../types';
 
 export const addCallouts = (
-  channelListFirebase: ChannelsListFromFirebase[],
+  channelListFirebase: ChannelFromFirebaseType[],
   channelsList: ListChannelsType[],
 ) => {
   return channelListFirebase.map((channel) => {

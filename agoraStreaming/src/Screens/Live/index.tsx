@@ -16,7 +16,7 @@ import database from '@react-native-firebase/database';
 import {ButtonBar} from '../../Components/ButtonBar';
 import {LocalUser} from '../../Components/LocalUser';
 import {Preloader} from '../../Components/Preloader';
-import {RemoteUsers} from '../../Components/RemoteUsers';
+import {RemoteUser} from '../../Components/RemoteUsers';
 import {LocalUserType} from '../../Components/RemoteUsers/types';
 import {HomeStackScreens} from '../../Navigation/Stack/types';
 import {setJoinedAction} from '../../Redux/actions/LiveActions';
@@ -24,6 +24,7 @@ import {useAppDispatch, useAppSelector} from '../../Redux/hooks';
 import {getIsJoined} from '../../Redux/selectors/LiveSelectors';
 import {AnalyticsType} from '../../Types/universalTypes';
 import {cameraStyle} from './helpers/CameraStyle';
+import {addNewChannelInDB} from './helpers/addNewChannelInDB';
 import {errorAlert} from './helpers/alert';
 import {animationCircle} from './helpers/animationCircle';
 import {audioVolumeIndicationCallback} from './helpers/audioVolumeIndicationCallback';
@@ -46,7 +47,7 @@ import {
 import {v4 as uuid} from 'uuid';
 
 export const Live: FC<LiveScreenProps> = (props) => {
-  const {channelId, name, coords, isVideo} = props.route.params;
+  const {channelId, name, coords, isVideo, type} = props.route.params;
 
   const INITIAL_DATA: LocalUserType = {
     uid: 0,
@@ -60,23 +61,20 @@ export const Live: FC<LiveScreenProps> = (props) => {
   const {width} = useWindowDimensions();
   const styles = LiveStyles(width);
 
-  const dispatch = useAppDispatch();
-  const isJoined = useAppSelector(getIsJoined);
+  const [isJoined, setIsJoined] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [peerIds, setPeerIds] = useState<UserType[]>([]);
   const [myUserData, setMyUserData] = useState<LocalUserType>(INITIAL_DATA);
 
   const [stash, setStash] = useState<UserType[]>([]);
 
-  const isBroadcaster = isBroadcasterFunction(props.route.params.type);
+  const isBroadcaster = isBroadcasterFunction(type);
 
   const AgoraEngine = useRef<RtcEngine>();
 
-  const newReference = database().ref('/channels').push();
-
   const navigation = useNavigation<StackNavigationPropLive>();
 
-  const goHome = () => navigation.navigate(HomeStackScreens.Home);
+  const goHome = () => navigation.navigate(MainStackScreens.Main);
 
   const sizeUserPoint = useRef(new Animated.Value(5)).current;
   const wavesAroundUserPoint = useRef(new Animated.Value(3)).current;
@@ -84,7 +82,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
   animationCircle(sizeUserPoint, wavesAroundUserPoint).start();
 
   const userJoinedCallback = () => {
-    dispatch(setJoinedAction(true));
+    setIsJoined(true);
   };
 
   const userOfflineCallback: UserOfflineCallback = (uid) => {
@@ -94,18 +92,18 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const userMuteAudioCallback: UidWithMutedCallback = (uid, muted) => {
     setPeerIds((prevState) => {
-      return mute({uid, muted, device: Devices.VOICE}, prevState);
+      return muteDevice({uid, muted, device: Devices.VOICE}, prevState);
     });
   };
 
   const localUserRegisteredCallback: UserAccountCallback = (uid, userInfo) => {
     setMyUserData((prev) => ({
       ...prev,
-      uid: uid,
+      uid,
       userAccount: userInfo,
     }));
     const user: UserType = {
-      uid: uid,
+      uid,
       userAccount: userInfo,
       camera: false,
       voice: false,
@@ -144,7 +142,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
 
   const userMuteVideoCallback: UidWithMutedCallback = (uid, muted) => {
     setPeerIds((prevState) => {
-      return mute({uid, muted, device: Devices.CAMERA}, prevState);
+      return muteDevice({uid, muted, device: Devices.CAMERA}, prevState);
     });
   };
 
@@ -158,7 +156,7 @@ export const Live: FC<LiveScreenProps> = (props) => {
     AgoraEngine.current?.muteLocalAudioStream(!myUserData.voice);
   };
 
-  const mute = (settings: MuteSettingsType, data: UserType[]) => {
+  const muteDevice = (settings: MuteSettingsType, data: UserType[]) => {
     return data.map((userData) => {
       if (userData.uid === settings.uid) {
         return {...userData, [settings.device]: settings.muted};
@@ -168,21 +166,17 @@ export const Live: FC<LiveScreenProps> = (props) => {
     });
   };
 
-  const addNewChannelInDB = async () => {
-    await newReference.set({
-      name,
-      channelId,
-      coords,
-      isVideo,
-    });
-  };
-
   const userLeaveChannel = async () => {
     const keyChannel = await findKeyDataInDatabase(channelId);
-    dispatch(setJoinedAction(false));
+    const eventDate = await findEventDate(channelId);
+    setIsJoined(false);
 
     if (keyChannel) {
       await deleteChannel(keyChannel);
+    }
+
+    if (eventDate && keyChannel) {
+      await deleteChannelIdForEvent(eventDate, keyChannel);
     }
   };
 
@@ -222,49 +216,68 @@ export const Live: FC<LiveScreenProps> = (props) => {
     };
   }, []);
 
+  const renderUsers = peerIds.map((user, index, ids) => {
+    const remoteUserId = user.uid !== myUserData.uid;
+
+    if (remoteUserId) {
+      return (
+        <RemoteUser
+          index={index}
+          cameraStyle={cameraStyle(index, ids, styles)}
+          key={'RemoteUser' + user.uid}
+          uid={user.uid}
+          channelId={channelId}
+          countUsers={peerIds.length}
+          userAccount={user.userAccount}
+          voice={user.voice}
+          camera={user.camera}
+          activeVoice={user.activeVoice}
+          isVideo={isVideo}
+        />
+      );
+    }
+
+    if (!remoteUserId && isJoined) {
+      return (
+        <LocalUser
+          key={user.uid}
+          index={index}
+          cameraSize={cameraStyle(index, ids, styles)}
+          myUserData={myUserData}
+          channelId={channelId}
+          activeVoice={myUserData.activeVoice}
+          countUsers={peerIds.length}
+          sizeUserPoint={sizeUserPoint}
+          wavesAroundUserPoint={wavesAroundUserPoint}
+          isVideo={isVideo}
+        />
+      );
+    }
+  });
+
   if (!error && !isJoined) {
     return <Preloader text={'Joining Stream, Please Wait'} />;
   }
 
+  const getViewStyle = (usersCount: number) => {
+    switch (usersCount) {
+      case 1:
+      case 2: {
+        return styles.column;
+      }
+      case 3:
+      case 4: {
+        return styles.row;
+      }
+      default:
+        return styles.column;
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <View style={[styles.videoContainer, peerIds.length === 3 && styles.row]}>
-        <View style={peerIds.length === 2 ? styles.column : styles.row}>
-          {peerIds.map((user, index, ids) => {
-            if (user.uid !== myUserData.uid) {
-              return (
-                <RemoteUsers
-                  index={index}
-                  cameraStyle={cameraStyle(index, ids, styles)}
-                  key={'RemoteUsers' + user.uid}
-                  uid={user.uid}
-                  channelId={channelId}
-                  countUsers={peerIds.length}
-                  userAccount={user.userAccount}
-                  voice={user.voice}
-                  camera={user.camera}
-                  activeVoice={user.activeVoice}
-                  isVideo={isVideo}
-                />
-              );
-            } else if (isJoined) {
-              return (
-                <LocalUser
-                  key={user.uid}
-                  index={index}
-                  cameraSize={cameraStyle(index, ids, styles)}
-                  myUserData={myUserData}
-                  channelId={channelId}
-                  activeVoice={myUserData.activeVoice}
-                  countUsers={peerIds.length}
-                  sizeUserPoint={sizeUserPoint}
-                  wavesAroundUserPoint={wavesAroundUserPoint}
-                  isVideo={isVideo}
-                />
-              );
-            }
-          })}
-        </View>
+      <View style={[styles.videoContainer, getViewStyle(peerIds.length)]}>
+        <View style={getViewStyle(peerIds.length)}>{renderUsers}</View>
         <ButtonBar
           exitHandler={() => exitChannelHandler(AgoraEngine, navigation)}
           cameraHandler={cameraHandler}

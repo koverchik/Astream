@@ -4,15 +4,15 @@ import notifee, {
   TriggerType,
 } from '@notifee/react-native';
 
-import {EventInDatabases} from '../../../Components/ModalCreateEvent/types';
+import {PlannedLiveEvent} from '../../../Components/ModalCreateEvent/types';
 import {addZeroForMinutes} from './addZero';
 
 // Time notification in milliseconds (15 minutes)
 export const TIME_NOTIFICATION = 900000;
 
 export const onCreateTriggerNotification = async (
-  dataTime: EventInDatabases['dateTime'],
-  name: EventInDatabases['name'],
+  dataTime: PlannedLiveEvent['dateTime'],
+  name: PlannedLiveEvent['name'],
   key: string,
 ): Promise<void> => {
   const dateNotification = new Date(dataTime);

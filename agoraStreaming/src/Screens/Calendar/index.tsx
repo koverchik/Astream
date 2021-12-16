@@ -1,5 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Alert, View} from 'react-native';
+import Geolocation from 'react-native-geolocation-service';
+import {LatLng} from 'react-native-maps';
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -7,23 +9,25 @@ import Animated, {
 
 import database from '@react-native-firebase/database';
 
+import {COLORS} from '../../Colors/colors';
 import {CustomHeader} from '../../Components/Header';
 import {HorizontalCalendar} from '../../Components/HorizontalCalendar';
 import {DateInfoType} from '../../Components/HorizontalCalendar/types';
+import {IconButton} from '../../Components/IconButton';
 import {ModalCreatEvent} from '../../Components/ModalCreateEvent';
-import {EventInDatabases} from '../../Components/ModalCreateEvent/types';
-import {StreamEventItem} from '../../Components/StreamEventItem';
+import {PlannedLiveEvent} from '../../Components/ModalCreateEvent/types';
+import {StreamEventsList} from '../../Components/StreamEventsList';
 import {
   HeaderInputPlaceholders,
   TabNavigation,
 } from '../../Navigation/Tab/types';
 import {InputEventType} from '../../Types/universalTypes';
 import {arrayListData} from './helpers/arrayListData';
+import {deleteOldEvents} from './helpers/deleteOldEvents';
 import {getTriggerNotificationIds} from './helpers/getTriggerNotificationIds';
 import {styles} from './styles';
 import {CalendarScreenProps, StreamType} from './types';
 import {faPlus, faTimes} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 export const ScreenCalendar: FC<CalendarScreenProps> = () => {
   const dataSystem = new Date();
@@ -34,6 +38,10 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
   const [streams, setStreams] = useState<StreamType[]>([]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [chosenDay, setChoseDay] = useState<string>(initDate);
+  const [geolocation, setGeolocation] = useState<LatLng>({
+    latitude: 0,
+    longitude: 0,
+  });
 
   const [searchResult, setSearchResult] = useState<StreamType[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
@@ -69,7 +77,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     setSearchResult(result);
   };
 
-  const showData = () => {
+  const dataForStreamEventList = () => {
     if (searchResult.length > 0 || (!searchResult.length && searchValue)) {
       return searchResult;
     }
@@ -95,47 +103,12 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     setSearchResult([]);
   };
 
-  const renderClearButton = () => {
-    return (
-      !!searchValue && (
-        <TouchableOpacity
-          style={styles.clearButton}
-          onPress={onPressClearButton}>
-          <FontAwesomeIcon icon={faTimes} color={'white'} size={18} />
-        </TouchableOpacity>
-      )
-    );
-  };
-
-  const renderStreamEventItems = () => {
-    const streamsArrayIsNotEmpty = streams.length;
-
-    if (streamsArrayIsNotEmpty) {
-      return showData()?.map((item, index) => {
-        return (
-          <StreamEventItem
-            stream={item}
-            key={item.id}
-            translationY={translationY}
-            index={index}
-          />
-        );
-      });
-    } else {
-      return (
-        <View style={styles.titleForEmptyListContainer}>
-          <Text>No scheduled streams</Text>
-        </View>
-      );
-    }
-  };
-
   useEffect(() => {
     database()
       .ref(`/events/${chosenDay}`)
       .on('value', (snapshot) => {
-        const data: EventInDatabases[] = snapshot.val();
-        data ? setStreams(arrayListData(data)) : setStreams([]);
+        const data = snapshot.val();
+        data ? setStreams(arrayListData(data, chosenDay)) : setStreams([]);
       });
   }, [chosenDay]);
 
@@ -143,9 +116,22 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     database()
       .ref(`/events/${chosenDay}`)
       .on('value', (snapshot) => {
-        const data: EventInDatabases[] = snapshot.val();
+        const data: PlannedLiveEvent[] = snapshot.val();
         getTriggerNotificationIds(data);
       });
+
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const {latitude, longitude} = position.coords;
+        setGeolocation({latitude, longitude});
+      },
+      () => {
+        Alert.alert('Geolocation error');
+      },
+      {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+    );
+
+    deleteOldEvents();
   }, []);
 
   return (
@@ -158,16 +144,28 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
           searchMode={searchMode}
           onChangeSearchMode={activeSearchMode}
         />
-        {renderClearButton()}
+        {!!searchValue && (
+          <IconButton
+            icon={faTimes}
+            size={18}
+            color={COLORS.WHITE}
+            onPress={onPressClearButton}
+            style={styles.clearButton}
+          />
+        )}
         <View>
-          <TouchableOpacity
-            onPress={changeModalVisible}
-            style={styles.addNewEvent}>
-            <FontAwesomeIcon icon={faPlus} color={'white'} size={18} />
-          </TouchableOpacity>
+          {Date.parse(initDate) <= Date.parse(chosenDay) && (
+            <IconButton
+              icon={faPlus}
+              size={18}
+              color={COLORS.WHITE}
+              onPress={changeModalVisible}
+              style={styles.addNewEvent}
+            />
+          )}
           <HorizontalCalendar
             onDayPress={selectDay}
-            activeDayColor={'#007eff'}
+            activeDayColor={COLORS.AZURE_RADIANCE}
           />
         </View>
         <ModalCreatEvent
@@ -180,7 +178,12 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
           scrollEventThrottle={46}
           onScroll={scrollHandler}
           contentContainerStyle={styles.contentContainerStyle}>
-          {renderStreamEventItems()}
+          <StreamEventsList
+            streams={streams}
+            dataForStreamEventList={dataForStreamEventList()}
+            geolocation={geolocation}
+            translationY={translationY}
+          />
         </Animated.ScrollView>
       </View>
     </View>

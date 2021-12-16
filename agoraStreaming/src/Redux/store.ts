@@ -2,21 +2,17 @@ import {authReducer} from './reducers/Auth';
 import {AuthStateType} from './reducers/Auth/types';
 import {homeReducer} from './reducers/Home';
 import {HomeInitialStateType} from './reducers/Home/types';
-import {liveReducer} from './reducers/Live';
-import {LiveInitialStateType} from './reducers/Live/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {persistReducer, persistStore} from 'redux-persist';
 
 export type RootState = {
   auth: AuthStateType;
-  live: LiveInitialStateType;
   home: HomeInitialStateType;
 };
 
 const rootReducer = combineReducers<RootState>({
   auth: authReducer,
-  live: liveReducer,
   home: homeReducer,
 });
 

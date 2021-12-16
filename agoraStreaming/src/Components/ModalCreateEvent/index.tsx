@@ -1,21 +1,15 @@
 import React, {FC, useState} from 'react';
-import {
-  Modal,
-  NativeSyntheticEvent,
-  Text,
-  TextInput,
-  TextInputChangeEventData,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Modal, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
 import {useNavigation} from '@react-navigation/native';
 
 import database from '@react-native-firebase/database';
 
-import {HomeStackScreens, LiveType} from '../../Navigation/Stack/types';
-import {StackNavigationPropHome} from '../../Screens/Home/types';
+import {COLORS} from '../../Colors/colors';
+import {LiveType, MainStackScreens} from '../../Navigation/Stack/types';
+import {StackNavigationPropLive} from '../../Screens/Live/types';
+import {InputEventType} from '../../Types/universalTypes';
 import {SwitchVideo} from '../SwitchVideo';
 import {styles} from './style';
 import {ModalCreatEventType} from './types';
@@ -34,10 +28,10 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
 
   const newReference = database().ref(`/events/${day}`).push();
 
-  const navigation = useNavigation<StackNavigationPropHome>();
+  const navigation = useNavigation<StackNavigationPropLive>();
 
   const createLive = () => {
-    navigation.navigate(HomeStackScreens.Live, {
+    navigation.navigate(MainStackScreens.Live, {
       type: LiveType.CREATE,
       channelId: uuid(),
       coords: coordinates,
@@ -51,21 +45,27 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
       name,
       video: isEnabled,
       dateTime: date.toUTCString(),
+      eventIsOver: false,
     });
+  };
+
+  const closeModal = () => {
+    changeModalVisible();
+    setError('');
   };
 
   const pressStart = async () => {
     if (!name.trim()) {
       setError('Name is required field!');
     } else {
-      changeModalVisible();
+      closeModal();
       setName('');
       coordinates ? createLive() : await createEvent();
     }
   };
 
-  const onChangeTitle = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    setName(e.nativeEvent.text);
+  const onChangeTitle = (event: InputEventType) => {
+    setName(event.nativeEvent.text);
     setError('');
   };
 
@@ -84,10 +84,8 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
       onRequestClose={onRequestClose}>
       <View style={styles.wrapperModalView}>
         <View style={styles.modalView}>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={changeModalVisible}>
-            <FontAwesomeIcon icon={faPlus} color={'white'} size={20} />
+          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+            <FontAwesomeIcon icon={faPlus} color={COLORS.WHITE} size={20} />
           </TouchableOpacity>
           <Text style={styles.title}>Create new event</Text>
           <View style={styles.inputContainer}>

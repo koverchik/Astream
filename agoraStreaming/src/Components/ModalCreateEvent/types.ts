@@ -1,16 +1,19 @@
 import {DateData} from 'react-native-calendars/src/types';
-import {Region} from 'react-native-maps';
+import {LatLng} from 'react-native-maps';
 
 export type ModalCreatEventType = {
   isModalVisible: boolean;
   changeModalVisible: () => void;
 
   day?: DateData['dateString'];
-  coordinates?: Region;
+  coordinates?: LatLng;
 };
 
-export type EventInDatabases = {
+export type PlannedLiveEvent = {
   name: string;
   video: boolean;
   dateTime: string;
+  eventIsOver: boolean;
+
+  channelId?: string;
 };
