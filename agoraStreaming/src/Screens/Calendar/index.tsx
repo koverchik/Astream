@@ -107,7 +107,7 @@ export const ScreenCalendar: FC<CalendarScreenProps> = () => {
     database()
       .ref(`/events/${chosenDay}`)
       .on('value', (snapshot) => {
-        const data = snapshot.val();
+        const data: PlannedLiveEvent[] = snapshot.val();
         data ? setStreams(arrayListData(data, chosenDay)) : setStreams([]);
       });
   }, [chosenDay]);
