@@ -10,7 +10,7 @@ import {AnalyticsType} from '../../Types/universalTypes';
 const takeNameScreen = (state: NavigationState): string => {
   const {index, routeNames, routes} = state;
 
-  if (!Object.prototype.hasOwnProperty.call(routes[index], 'state')) {
+  if (!Object.hasOwnProperty.call(routes[index], 'state')) {
     return routeNames?.[index];
   }
 
