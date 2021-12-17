@@ -11,7 +11,7 @@ import {LiveType, MainStackScreens} from '../../Navigation/Stack/types';
 import {StackNavigationPropLive} from '../../Screens/Live/types';
 import {InputEventType} from '../../Types/universalTypes';
 import {SwitchVideo} from '../SwitchVideo';
-import {remoteConfigService} from './remoteConfigService';
+import {remoteConfigTypeStream} from './helper';
 import {styles} from './style';
 import {ModalCreatEventType} from './types';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
@@ -23,12 +23,12 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
 
   const [name, setName] = useState<string>('');
   const [error, setError] = useState<string>('');
-  remoteConfigService
-    .initialize()
-    .then(() =>
-      setIsEnabled(remoteConfigService.getRemoteValueBoolean('type_stream')),
-    );
+
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
+
+  remoteConfigTypeStream('type_stream').then((data) => {
+    setIsEnabled(data);
+  });
 
   const [date, setDate] = useState(new Date());
 
