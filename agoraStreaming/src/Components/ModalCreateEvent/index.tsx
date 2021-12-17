@@ -1,6 +1,7 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Modal, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import DatePicker from 'react-native-date-picker';
+import {log, useEvent} from 'react-native-reanimated';
 
 import {useNavigation} from '@react-navigation/native';
 
@@ -26,9 +27,13 @@ export const ModalCreatEvent: FC<ModalCreatEventType> = (props) => {
 
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
 
-  remoteConfigTypeStream('type_stream').then((data) => {
-    setIsEnabled(data);
-  });
+  useEffect(() => {
+    if (isModalVisible) {
+      remoteConfigTypeStream('type_stream').then((data) => {
+        setIsEnabled(data);
+      });
+    }
+  }, [isModalVisible]);
 
   const [date, setDate] = useState(new Date());
 
