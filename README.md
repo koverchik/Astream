@@ -1,1 +1,46 @@
-# agora-stream
+# Astream
+
+You can use app for create audio or video stream. Create event in calendar and app notification you about event before 15 minutes. You can see current strems on map and you can attached to stream.
+
+## How to install the app
+
+You can save project on you computer
+
+    git clone git@github.com:koverchik/Astream.git
+
+You need to set up the development environment. You can use this [guide](https://reactnative.dev/docs/environment-setup)
+
+You need to run
+
+    npm install
+
+    npm run react-native start
+
+    npm run react-native run-android
+
+# Main screan
+
+You have to use Google to log in.
+
+You can see current streams on map.
+
+You can find channels on the map using the search.
+
+You can create a channel on the main screen.
+Click button "Create channel" then you see modal window where you need to add name channel and choice type stream (video or audio). Click button "Create".
+
+# Stream screen
+
+If channel have one person in stream you see self. If another people add in you stream you will see another people on screen too. Use buttons for turn off and turn on audio and video stream.
+
+# Calendar screen
+
+Select Tab calendar.
+
+You can see on screen list with streams on one day. Select the day you want to view. Tub the plus button and you will see a modal window. Add name and choice type stream and time. After that you can see your event in the calendar.
+
+# Profile screen
+
+Select Tab profile.
+
+The screen displays data from your Google account.
