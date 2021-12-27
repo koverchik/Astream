@@ -30,6 +30,7 @@ You can see current streams on map.
 ![Screan_3](https://github.com/koverchik/Astream/blob/description/screenshots/Screenshot_20211227-152359.jpg)
 
 You can find channels on the map using the search.
+
 ![Screan_4](https://github.com/koverchik/Astream/blob/description/screenshots/Screenshot_20211227-152633.jpg)
 ![Screan_5](https://github.com/koverchik/Astream/blob/description/screenshots/Screenshot_20211227-152650.jpg)
 
@@ -43,7 +44,7 @@ Click button "Create channel" then you see modal window where you need to add na
 
 If channel have one person in stream you see self. If another people add in you stream you will see another people on screen too. Use buttons for turn off and turn on audio and video stream.
 
-![Screan_7](https://github.com/koverchik/Astream/blob/description/screenshots/Screenshot_20211227-192616.jpg)
+![Screan_7](https://github.com/koverchik/Astream/blob/description/screenshots/Screenshot_20211227-171022.jpg)
 ![Screan_8](https://github.com/koverchik/Astream/blob/description/screenshots/Screenshot_20211227-171147.jpg)
 
 # Calendar screen
