@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface agoraStreamingTests : XCTestCase
+@interface AstreamTests : XCTestCase
 
 @end
 
-@implementation agoraStreamingTests
+@implementation AstreamTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {
