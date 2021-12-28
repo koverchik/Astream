@@ -1,6 +1,6 @@
 # Astream
 
-You can use the app for creating audio or video stream. Create an event in the calendar and app notification you about the event before 15 minutes. You can see current streams on the map and you can be attached to the stream. to stream.
+You can use the app for creating audio or video stream. Create an event in the calendar and app notification you about the event before 15 minutes. You can see current streams on the map and you can be attached to the stream.
 
 ## How to install the app
 
